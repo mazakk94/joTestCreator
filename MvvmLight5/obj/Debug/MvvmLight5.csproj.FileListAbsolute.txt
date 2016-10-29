@@ -1,0 +1,95 @@
+D:\User Folders\Documents\Visual Studio 2012\Projects\SO\MvvmLight5\MvvmLight5\obj\Debug\MvvmLight5.csprojResolveAssemblyReference.cache
+D:\User Folders\Documents\Visual Studio 2012\Projects\SO\MvvmLight5\MvvmLight5\obj\Debug\Skins\MainSkin.baml
+D:\User Folders\Documents\Visual Studio 2012\Projects\SO\MvvmLight5\MvvmLight5\obj\Debug\App.g.cs
+D:\User Folders\Documents\Visual Studio 2012\Projects\SO\MvvmLight5\MvvmLight5\obj\Debug\GeneratedInternalTypeHelper.g.cs
+D:\User Folders\Documents\Visual Studio 2012\Projects\SO\MvvmLight5\MvvmLight5\obj\Debug\MvvmLight5_MarkupCompile.cache
+D:\User Folders\Documents\Visual Studio 2012\Projects\SO\MvvmLight5\MvvmLight5\obj\Debug\MvvmLight5_MarkupCompile.lref
+D:\User Folders\Documents\Visual Studio 2012\Projects\SO\MvvmLight5\MvvmLight5\bin\Debug\MvvmLight5.exe
+D:\User Folders\Documents\Visual Studio 2012\Projects\SO\MvvmLight5\MvvmLight5\bin\Debug\MvvmLight5.pdb
+D:\User Folders\Documents\Visual Studio 2012\Projects\SO\MvvmLight5\MvvmLight5\bin\Debug\MvvmLight5.exe.CodeAnalysisLog.xml
+D:\User Folders\Documents\Visual Studio 2012\Projects\SO\MvvmLight5\MvvmLight5\bin\Debug\MvvmLight5.exe.lastcodeanalysissucceeded
+D:\User Folders\Documents\Visual Studio 2012\Projects\SO\MvvmLight5\MvvmLight5\bin\Debug\GalaSoft.MvvmLight.Extras.WPF4.dll
+D:\User Folders\Documents\Visual Studio 2012\Projects\SO\MvvmLight5\MvvmLight5\bin\Debug\GalaSoft.MvvmLight.WPF4.dll
+D:\User Folders\Documents\Visual Studio 2012\Projects\SO\MvvmLight5\MvvmLight5\bin\Debug\Microsoft.Practices.ServiceLocation.dll
+D:\User Folders\Documents\Visual Studio 2012\Projects\SO\MvvmLight5\MvvmLight5\bin\Debug\System.Windows.Interactivity.dll
+D:\User Folders\Documents\Visual Studio 2012\Projects\SO\MvvmLight5\MvvmLight5\bin\Debug\GalaSoft.MvvmLight.WPF4.xml
+D:\User Folders\Documents\Visual Studio 2012\Projects\SO\MvvmLight5\MvvmLight5\bin\Debug\GalaSoft.MvvmLight.Extras.WPF4.xml
+D:\User Folders\Documents\Visual Studio 2012\Projects\SO\MvvmLight5\MvvmLight5\bin\Debug\Microsoft.Practices.ServiceLocation.xml
+D:\User Folders\Documents\Visual Studio 2012\Projects\SO\MvvmLight5\MvvmLight5\bin\Debug\System.Windows.Interactivity.xml
+D:\User Folders\Documents\Visual Studio 2012\Projects\SO\MvvmLight5\MvvmLight5\obj\Debug\MainWindow.baml
+D:\User Folders\Documents\Visual Studio 2012\Projects\SO\MvvmLight5\MvvmLight5\obj\Debug\MainWindow.g.cs
+D:\User Folders\Documents\Visual Studio 2012\Projects\SO\MvvmLight5\MvvmLight5\obj\Debug\App.baml
+D:\User Folders\Documents\Visual Studio 2012\Projects\SO\MvvmLight5\MvvmLight5\obj\Debug\MvvmLight5.g.resources
+D:\User Folders\Documents\Visual Studio 2012\Projects\SO\MvvmLight5\MvvmLight5\obj\Debug\MvvmLight5.Properties.Resources.resources
+D:\User Folders\Documents\Visual Studio 2012\Projects\SO\MvvmLight5\MvvmLight5\obj\Debug\MvvmLight5.csproj.GenerateResource.Cache
+D:\User Folders\Documents\Visual Studio 2012\Projects\SO\MvvmLight5\MvvmLight5\obj\Debug\MvvmLight5.exe
+D:\User Folders\Documents\Visual Studio 2012\Projects\SO\MvvmLight5\MvvmLight5\obj\Debug\MvvmLight5.pdb
+D:\User Folders\Documents\Visual Studio 2012\Projects\SO\MvvmLight5\MvvmLight5\obj\Debug\ModalWindow.baml
+D:\User Folders\Documents\Visual Studio 2012\Projects\SO\MvvmLight5\MvvmLight5\obj\Debug\NonModalWindow.baml
+D:\User Folders\Documents\Visual Studio 2012\Projects\SO\MvvmLight5\MvvmLight5\obj\Debug\ModalWindow.g.cs
+D:\User Folders\Documents\Visual Studio 2012\Projects\SO\MvvmLight5\MvvmLight5\obj\Debug\NonModalWindow.g.cs
+D:\Dump\Downloads\MvvmLight5\obj\Debug\MvvmLight5.exe
+D:\Dump\Downloads\MvvmLight5\obj\Debug\MvvmLight5.pdb
+D:\Dump\Downloads\MvvmLight5\bin\Debug\MvvmLight5.exe
+D:\Dump\Downloads\MvvmLight5\bin\Debug\MvvmLight5.pdb
+D:\Dump\Downloads\MvvmLight5\bin\Debug\MvvmLight5.exe.CodeAnalysisLog.xml
+D:\Dump\Downloads\MvvmLight5\bin\Debug\MvvmLight5.exe.lastcodeanalysissucceeded
+D:\Dump\Downloads\MvvmLight5\bin\Debug\GalaSoft.MvvmLight.Extras.WPF4.dll
+D:\Dump\Downloads\MvvmLight5\bin\Debug\GalaSoft.MvvmLight.WPF4.dll
+D:\Dump\Downloads\MvvmLight5\bin\Debug\Microsoft.Practices.ServiceLocation.dll
+D:\Dump\Downloads\MvvmLight5\bin\Debug\System.Windows.Interactivity.dll
+D:\Dump\Downloads\MvvmLight5\bin\Debug\GalaSoft.MvvmLight.WPF4.xml
+D:\Dump\Downloads\MvvmLight5\bin\Debug\GalaSoft.MvvmLight.Extras.WPF4.xml
+D:\Dump\Downloads\MvvmLight5\bin\Debug\Microsoft.Practices.ServiceLocation.xml
+D:\Dump\Downloads\MvvmLight5\bin\Debug\System.Windows.Interactivity.xml
+D:\Dump\Downloads\MvvmLight5\obj\Debug\MainWindow.baml
+D:\Dump\Downloads\MvvmLight5\obj\Debug\ModalWindow.baml
+D:\Dump\Downloads\MvvmLight5\obj\Debug\NonModalWindow.baml
+D:\Dump\Downloads\MvvmLight5\obj\Debug\Skins\MainSkin.baml
+D:\Dump\Downloads\MvvmLight5\obj\Debug\MainWindow.g.cs
+D:\Dump\Downloads\MvvmLight5\obj\Debug\ModalWindow.g.cs
+D:\Dump\Downloads\MvvmLight5\obj\Debug\NonModalWindow.g.cs
+D:\Dump\Downloads\MvvmLight5\obj\Debug\App.g.cs
+D:\Dump\Downloads\MvvmLight5\obj\Debug\GeneratedInternalTypeHelper.g.cs
+D:\Dump\Downloads\MvvmLight5\obj\Debug\MvvmLight5_MarkupCompile.cache
+D:\Dump\Downloads\MvvmLight5\obj\Debug\MvvmLight5_MarkupCompile.lref
+D:\Dump\Downloads\MvvmLight5\obj\Debug\App.baml
+D:\Dump\Downloads\MvvmLight5\obj\Debug\MvvmLight5.g.resources
+D:\Dump\Downloads\MvvmLight5\obj\Debug\MvvmLight5.Properties.Resources.resources
+D:\Dump\Downloads\MvvmLight5\obj\Debug\MvvmLight5.csproj.GenerateResource.Cache
+D:\Dump\Downloads\MvvmLight5\obj\Debug\MvvmLight5.csprojResolveAssemblyReference.cache
+C:\Users\Mazi\Desktop\MultiWindowMvvmLight\MvvmLight5\bin\Debug\MvvmLight5.exe
+C:\Users\Mazi\Desktop\MultiWindowMvvmLight\MvvmLight5\bin\Debug\MvvmLight5.pdb
+C:\Users\Mazi\Desktop\MultiWindowMvvmLight\MvvmLight5\bin\Debug\MvvmLight5.exe.CodeAnalysisLog.xml
+C:\Users\Mazi\Desktop\MultiWindowMvvmLight\MvvmLight5\bin\Debug\MvvmLight5.exe.lastcodeanalysissucceeded
+C:\Users\Mazi\Desktop\MultiWindowMvvmLight\MvvmLight5\bin\Debug\System.Windows.Interactivity.dll
+C:\Users\Mazi\Desktop\MultiWindowMvvmLight\MvvmLight5\bin\Debug\System.Windows.Interactivity.xml
+C:\Users\Mazi\Desktop\MultiWindowMvvmLight\MvvmLight5\bin\Debug\de\System.Windows.Interactivity.resources.dll
+C:\Users\Mazi\Desktop\MultiWindowMvvmLight\MvvmLight5\bin\Debug\en\System.Windows.Interactivity.resources.dll
+C:\Users\Mazi\Desktop\MultiWindowMvvmLight\MvvmLight5\bin\Debug\es\System.Windows.Interactivity.resources.dll
+C:\Users\Mazi\Desktop\MultiWindowMvvmLight\MvvmLight5\bin\Debug\fr\System.Windows.Interactivity.resources.dll
+C:\Users\Mazi\Desktop\MultiWindowMvvmLight\MvvmLight5\bin\Debug\it\System.Windows.Interactivity.resources.dll
+C:\Users\Mazi\Desktop\MultiWindowMvvmLight\MvvmLight5\bin\Debug\ja\System.Windows.Interactivity.resources.dll
+C:\Users\Mazi\Desktop\MultiWindowMvvmLight\MvvmLight5\bin\Debug\ko\System.Windows.Interactivity.resources.dll
+C:\Users\Mazi\Desktop\MultiWindowMvvmLight\MvvmLight5\bin\Debug\zh-Hans\System.Windows.Interactivity.resources.dll
+C:\Users\Mazi\Desktop\MultiWindowMvvmLight\MvvmLight5\bin\Debug\zh-Hant\System.Windows.Interactivity.resources.dll
+C:\Users\Mazi\Desktop\MultiWindowMvvmLight\MvvmLight5\obj\Debug\MvvmLight5.csprojResolveAssemblyReference.cache
+C:\Users\Mazi\Desktop\MultiWindowMvvmLight\MvvmLight5\obj\Debug\MainWindow.baml
+C:\Users\Mazi\Desktop\MultiWindowMvvmLight\MvvmLight5\obj\Debug\ModalWindow.baml
+C:\Users\Mazi\Desktop\MultiWindowMvvmLight\MvvmLight5\obj\Debug\NonModalWindow.baml
+C:\Users\Mazi\Desktop\MultiWindowMvvmLight\MvvmLight5\obj\Debug\Skins\MainSkin.baml
+C:\Users\Mazi\Desktop\MultiWindowMvvmLight\MvvmLight5\obj\Debug\MainWindow.g.cs
+C:\Users\Mazi\Desktop\MultiWindowMvvmLight\MvvmLight5\obj\Debug\ModalWindow.g.cs
+C:\Users\Mazi\Desktop\MultiWindowMvvmLight\MvvmLight5\obj\Debug\NonModalWindow.g.cs
+C:\Users\Mazi\Desktop\MultiWindowMvvmLight\MvvmLight5\obj\Debug\App.g.cs
+C:\Users\Mazi\Desktop\MultiWindowMvvmLight\MvvmLight5\obj\Debug\GeneratedInternalTypeHelper.g.cs
+C:\Users\Mazi\Desktop\MultiWindowMvvmLight\MvvmLight5\obj\Debug\MvvmLight5_MarkupCompile.cache
+C:\Users\Mazi\Desktop\MultiWindowMvvmLight\MvvmLight5\obj\Debug\MvvmLight5_MarkupCompile.lref
+C:\Users\Mazi\Desktop\MultiWindowMvvmLight\MvvmLight5\obj\Debug\App.baml
+C:\Users\Mazi\Desktop\MultiWindowMvvmLight\MvvmLight5\obj\Debug\MvvmLight5.g.resources
+C:\Users\Mazi\Desktop\MultiWindowMvvmLight\MvvmLight5\obj\Debug\MvvmLight5.Properties.Resources.resources
+C:\Users\Mazi\Desktop\MultiWindowMvvmLight\MvvmLight5\obj\Debug\MvvmLight5.csproj.GenerateResource.Cache
+C:\Users\Mazi\Desktop\MultiWindowMvvmLight\MvvmLight5\obj\Debug\MvvmLight5.exe
+C:\Users\Mazi\Desktop\MultiWindowMvvmLight\MvvmLight5\obj\Debug\MvvmLight5.pdb
+C:\Users\Mazi\Desktop\MultiWindowMvvmLight\MvvmLight5\obj\Debug\Overview.baml
+C:\Users\Mazi\Desktop\MultiWindowMvvmLight\MvvmLight5\obj\Debug\Overview.g.cs
