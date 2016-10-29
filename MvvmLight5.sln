@@ -1,7 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvvmLight5", "MvvmLight5\MvvmLight5.csproj", "{458EF5C0-3BB6-42D7-86C3-57FCD9573A7F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Interfaces", "Interfaces\Interfaces.csproj", "{6F37B727-EF1B-450A-A778-BA6735C5ADC2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,6 +17,10 @@ Global
 		{458EF5C0-3BB6-42D7-86C3-57FCD9573A7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{458EF5C0-3BB6-42D7-86C3-57FCD9573A7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{458EF5C0-3BB6-42D7-86C3-57FCD9573A7F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F37B727-EF1B-450A-A778-BA6735C5ADC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F37B727-EF1B-450A-A778-BA6735C5ADC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F37B727-EF1B-450A-A778-BA6735C5ADC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F37B727-EF1B-450A-A778-BA6735C5ADC2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

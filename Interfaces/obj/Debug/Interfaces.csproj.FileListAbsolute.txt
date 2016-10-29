@@ -1,0 +1,5 @@
+C:\Users\Mazi\Desktop\joWpfModalTest\Interfaces\bin\Debug\Interfaces.dll
+C:\Users\Mazi\Desktop\joWpfModalTest\Interfaces\bin\Debug\Interfaces.pdb
+C:\Users\Mazi\Desktop\joWpfModalTest\Interfaces\obj\Debug\Interfaces.dll
+C:\Users\Mazi\Desktop\joWpfModalTest\Interfaces\obj\Debug\Interfaces.pdb
+C:\Users\Mazi\Desktop\joWpfModalTest\Interfaces\obj\Debug\Interfaces.csprojResolveAssemblyReference.cache

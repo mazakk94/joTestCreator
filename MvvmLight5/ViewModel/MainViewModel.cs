@@ -2,85 +2,108 @@
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Ioc;
 using GalaSoft.MvvmLight.Messaging;
+using Interfaces;
 using MvvmLight5.Helpers;
 using MvvmLight5.Model;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 
-namespace MvvmLight5.ViewModel {
-  /// <summary>
-  /// This class contains properties that the main View can data bind to.
-  /// <para>
-  /// See http://www.galasoft.ch/mvvm
-  /// </para>
-  /// </summary>
-  public class MainViewModel : ViewModelBase {
-      
-    private readonly IDataService _dataService;
-
-    private string _someString;
-
-    public string SomeString {
-      get {
-        return _someString;
-      }
-
-      set {
-        if (_someString == value) {
-          return;
-        }
-
-        _someString = value;
-        RaisePropertyChanged(() => SomeString);
-      }
-    }
-
-    private string _result;
-
-    public string Result {
-      get {
-        return _result;
-      }
-
-      set {
-        if (_result == value) {
-          return;
-        }
-
-        _result = value;
-        RaisePropertyChanged(() => Result);
-      }
-    }
-
+namespace MvvmLight5.ViewModel
+{
     /// <summary>
-    /// Initializes a new instance of the MainViewModel class.
+    /// This class contains properties that the main View can data bind to.
+    /// <para>
+    /// See http://www.galasoft.ch/mvvm
+    /// </para>
     /// </summary>
-    public MainViewModel(IDataService dataService) {
-      _dataService = dataService;
-      _dataService.GetData(
-        (item, error) => {
-          if (error != null) {
-            // Report error here
-            return;
-          }
-        });
+    public class MainViewModel : ViewModelBase, INotifyPropertyChanged
+    {
 
-      SomeString = "Some Placeholder Text - modify if you want";
-      Result = "Output Placeholder Result";
+        private ObservableCollection<TestViewModel> _tests;
+        private ObservableCollection<IQuestion> _questions;
+        private IDAO _dao;
 
-      OpenModalDialog =
-        new RelayCommand(
-          () =>
-          Messenger.Default.Send<OpenWindowMessage>(
-            new OpenWindowMessage() {Type = WindowType.kModal, Argument = SomeString}));
-      OpenNonModalDialog =
-        new RelayCommand(
-          () =>
-          Messenger.Default.Send<OpenWindowMessage>(
-            new OpenWindowMessage() {Type = WindowType.kNonModal, Argument = SomeString}));
+        private RelayCommand _addTestCommand;
 
-      Messenger.Default.Register<string>(this, s => Result = s);
+
+        private readonly IDataService _dataService;
+
+        private string _someString;
+
+        public string SomeString
+        {
+            get
+            {
+                return _someString;
+            }
+
+            set
+            {
+                if (_someString == value)
+                {
+                    return;
+                }
+
+                _someString = value;
+                RaisePropertyChanged(() => SomeString);
+            }
+        }
+
+        private string _result;
+
+        public string Result
+        {
+            get
+            {
+                return _result;
+            }
+
+            set
+            {
+                if (_result == value)
+                {
+                    return;
+                }
+
+                _result = value;
+                RaisePropertyChanged(() => Result);
+            }
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the MainViewModel class.
+        /// </summary>
+        public MainViewModel(IDataService dataService)
+        {
+            _dataService = dataService;
+            _dataService.GetData(
+              (item, error) =>
+              {
+                  if (error != null)
+                  {
+                      // Report error here
+                      return;
+                  }
+              });
+
+            SomeString = "Some Placeholder Text - modify if you want";
+            Result = "Output Placeholder Result";
+
+            OpenModalDialog =
+              new RelayCommand(
+                () =>
+                Messenger.Default.Send<OpenWindowMessage>(
+                  new OpenWindowMessage() { Type = WindowType.kModal, Argument = SomeString }));
+            OpenNonModalDialog =
+              new RelayCommand(
+                () =>
+                Messenger.Default.Send<OpenWindowMessage>(
+                  new OpenWindowMessage() { Type = WindowType.kNonModal, Argument = SomeString }));
+
+            Messenger.Default.Register<string>(this, s => Result = s);
+        }
+
+        public RelayCommand OpenModalDialog { get; private set; }
+        public RelayCommand OpenNonModalDialog { get; private set; }
     }
-
-    public RelayCommand OpenModalDialog { get; private set; }
-    public RelayCommand OpenNonModalDialog { get; private set; }
-  }
 }
