@@ -51,6 +51,9 @@
     <Compile Include="DataObjects\Question.cs" />
     <Compile Include="DataObjects\Test.cs" />
     <Compile Include="DataObjects\User.cs" />
+    <Compile Include="Model\DataItem.cs" />
+    <Compile Include="Model\DataService.cs" />
+    <Compile Include="Model\IDataService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

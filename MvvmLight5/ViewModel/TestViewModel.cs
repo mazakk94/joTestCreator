@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MvvmLight5.ViewModel
 {
-    class TestViewModel
+    public class TestViewModel
     {
 
         

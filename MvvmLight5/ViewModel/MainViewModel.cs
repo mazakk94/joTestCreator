@@ -12,6 +12,7 @@ using System.ComponentModel;
 using System.Windows.Data;
 using System.Windows.Input;
 
+
 namespace MvvmLight5.ViewModel
 {
     /// <summary>
@@ -22,16 +23,17 @@ namespace MvvmLight5.ViewModel
     /// </summary>
     public class MainViewModel : ViewModelBase, INotifyPropertyChanged
     {
-
+        
         private ObservableCollection<TestViewModel> _tests;
         private ObservableCollection<IQuestion> _questions;
         private IDAO _dao;
 
-        private RelayCommand _addTestCommand;
+        private MyRelayCommand _addTestCommand;
+      
+      //  public event PropertyChangedEventHandler PropertyChanged;         ALE NAROBIŁ INBY
+       
 
-
-        /*
-
+        
         public ObservableCollection<TestViewModel> Tests
         {
             get { return _tests; }
@@ -41,6 +43,7 @@ namespace MvvmLight5.ViewModel
                 RaisePropertyChanged("Tests");
             }
         }
+         
 
         public ObservableCollection<IQuestion> Questions
         {
@@ -51,7 +54,7 @@ namespace MvvmLight5.ViewModel
                 RaisePropertyChanged("Questions");
             }
         }
-
+        
         private String _testText;
         public String TestText
         {
@@ -59,11 +62,12 @@ namespace MvvmLight5.ViewModel
             set
             {
                 _testText = value;
-                NotifyPropertyChanged("TestText");
+                //NotifyPropertyChanged("TestText");
                 RaisePropertyChanged("TestText");
             }
         }
 
+        /*
         private void NotifyPropertyChanged(String propertyName)
         {
             PropertyChangedEventHandler handler = PropertyChanged;
@@ -71,8 +75,8 @@ namespace MvvmLight5.ViewModel
             {
                 handler(this, new PropertyChangedEventArgs(propertyName));
             }
-        }
-
+        }*/
+        
         private void FillTestText()
         {
             _testText = "Init";
@@ -81,7 +85,7 @@ namespace MvvmLight5.ViewModel
         private void Print()
         {
             _testText += "String";
-            NotifyPropertyChanged("TestText");
+         //   NotifyPropertyChanged("TestText");
         }
 
         private void GetAllTests()
@@ -101,7 +105,7 @@ namespace MvvmLight5.ViewModel
         }
 
 
-
+       
         private int _selectedIndex;
 
         public int Index
@@ -133,124 +137,124 @@ namespace MvvmLight5.ViewModel
         }
 
 
+        
+       private void GetQuestions(List<int> questionsIds)
+       {
+           foreach (var id in questionsIds)
+           {
+               _questions.Add(_dao.GetQuestion(id));
+           }
+       }
 
-        private void GetQuestions(List<int> questionsIds)
-        {
-            foreach (var id in questionsIds)
-            {
-                _questions.Add(_dao.GetQuestion(id));
-            }
-        }
-
-        private List<int> GetQuestionsIds(int _selectedIndex)
-        {
-            List<int> ids = new List<int>();
-            foreach (var test in _dao.GetAllTests())
-            {
-                if (test.Id == _selectedIndex)
-                {
-                    ids = test.QuestionsIds;
-                }
-            }
-            return ids;
-        }
-
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void RaisePropertyChanged(string propertyName)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
-
-        public ICommand AddTestCommand
-        {
-            get { return _addTestCommand; }
-        }
-
-        private void AddTestToList()
-        {
-            ITest test = _dao.CreateNewTest();
-            TestViewModel qvm = new TestViewModel(test);
-            _dao.AddTest(test);
-            Tests.Add(qvm);
-            EditedTest = qvm;
-        }
-
-        private ICommand _saveNewTestCommand;
-
-        public ICommand SaveNewTestCommand
-        {
-            get { return _saveNewTestCommand; }
-        }
-
-        private TestViewModel _editedTest;
-
-        public TestViewModel EditedTest
-        {
-            get { return _editedTest; }
-            set
-            {
-                _editedTest = value;
-                RaisePropertyChanged("EditedTest");
-            }
-        }
-
-        private void SaveTest()
-        {
-            _tests.Add(_editedTest);
-        }
-
-        private bool CanSaveTest()
-        {
-            if (EditedTest == null)
-                return false;
-
-            if (EditedTest.HasErrors)
-                return false;
-
-            return true;
-        }
-
-        private RelayCommand _printTextCommand;
-
-        public RelayCommand PrintTextCommand
-        {
-            get { return _printTextCommand; }
-        }
+       private List<int> GetQuestionsIds(int _selectedIndex)
+       {
+           List<int> ids = new List<int>();
+           foreach (var test in _dao.GetAllTests())
+           {
+               if (test.Id == _selectedIndex)
+               {
+                   ids = test.QuestionsIds;
+               }
+           }
+           return ids;
+       }
 
 
-        private RelayCommand _filterDataCommand;
+        
+        /*
+       private void RaisePropertyChanged(string propertyName)
+       {
+           if (PropertyChanged != null)
+           {
+               PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+           }
+       }*/
 
-        public RelayCommand FilterDataCommand
-        {
-            get { return _filterDataCommand; }
-        }
+       public ICommand AddTestCommand
+       {
+           get { return _addTestCommand; }
+       }
 
-        private RelayCommand _selectedItemChangedCommand;
+       private void AddTestToList()
+       {
+           ITest test = _dao.CreateNewTest();
+           TestViewModel qvm = new TestViewModel(test);
+           _dao.AddTest(test);
+           Tests.Add(qvm);
+           EditedTest = qvm;
+       }
 
-        public RelayCommand SelectedItemChangedCommand
-        {
-            get { return _selectedItemChangedCommand; }
-        }
+       private ICommand _saveNewTestCommand;
 
-        private ListCollectionView _view;
+       public ICommand SaveNewTestCommand
+       {
+           get { return _saveNewTestCommand; }
+       }
 
-        private string _filterData;
+       private TestViewModel _editedTest;
 
-        public string FilterData
-        {
-            get { return _filterData; }
-            set
-            {
-                _filterData = value;
-                RaisePropertyChanged("FilterData");
-            }
-        }
-        */
+       public TestViewModel EditedTest
+       {
+           get { return _editedTest; }
+           set
+           {
+               _editedTest = value;
+               RaisePropertyChanged("EditedTest");
+           }
+       }
+
+       private void SaveTest()
+       {
+           _tests.Add(_editedTest);
+       }
+
+       private bool CanSaveTest()
+       {
+           if (EditedTest == null)
+               return false;
+
+           if (EditedTest.HasErrors)
+               return false;
+
+           return true;
+       }
+
+       private MyRelayCommand _printTextCommand;
+
+       public MyRelayCommand PrintTextCommand
+       {
+           get { return _printTextCommand; }
+       }
+
+
+       private MyRelayCommand _filterDataCommand;
+
+       public MyRelayCommand FilterDataCommand
+       {
+           get { return _filterDataCommand; }
+       }
+
+       private MyRelayCommand _selectedItemChangedCommand;
+
+       public MyRelayCommand SelectedItemChangedCommand
+       {
+           get { return _selectedItemChangedCommand; }
+       }
+
+       private ListCollectionView _view;
+
+       private string _filterData;
+
+       public string FilterData
+       {
+           get { return _filterData; }
+           set
+           {
+               _filterData = value;
+               RaisePropertyChanged("FilterData");
+           }
+       }
+        
         /*
         private void DoFilterData()
         {
@@ -330,7 +334,6 @@ namespace MvvmLight5.ViewModel
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public MainViewModel(IDataService dataService)
         {
             _dataService = dataService;
@@ -348,17 +351,35 @@ namespace MvvmLight5.ViewModel
             Result = "Output Placeholder Result";
 
             OpenModalDialog =
-              new RelayCommand(
+              new GalaSoft.MvvmLight.Command.RelayCommand(
                 () =>
                 Messenger.Default.Send<OpenWindowMessage>(
                   new OpenWindowMessage() { Type = WindowType.kModal, Argument = SomeString }));
             OpenNonModalDialog =
-              new RelayCommand(
+              new GalaSoft.MvvmLight.Command.RelayCommand(
                 () =>
                 Messenger.Default.Send<OpenWindowMessage>(
                   new OpenWindowMessage() { Type = WindowType.kNonModal, Argument = SomeString }));
-
+            
             Messenger.Default.Register<string>(this, s => Result = s);
+
+            _tests = new ObservableCollection<TestViewModel>();
+            _questions = new ObservableCollection<IQuestion>();
+            _dao = new DataAccessObject.DAO();
+            _view = (ListCollectionView)CollectionViewSource.GetDefaultView(_tests);
+            FilterData = "";
+            GetAllTests();
+            GetAllQuestions();
+            FillTestText();
+            _addTestCommand = new MyRelayCommand(param => this.AddTestToList());
+            _saveNewTestCommand = new MyRelayCommand(param => this.SaveTest(),
+                                                  param => this.CanSaveTest());
+            //_filterDataCommand = new RelayCommand(param => this.DoFilterData());
+            //_grouptestsCommand = new RelayCommand(param => this.GroupByPrice());
+            //_selectedItemChangedCommand = new MyRelayCommand(param => this.)
+            _printTextCommand = new MyRelayCommand(param => this.Print());
+
+
         }
 
         public RelayCommand OpenModalDialog { get; private set; }

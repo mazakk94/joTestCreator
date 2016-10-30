@@ -73,9 +73,6 @@
     <Compile Include="ModalWindow.xaml.cs">
       <DependentUpon>ModalWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Model\DataItem.cs" />
-    <Compile Include="Model\DataService.cs" />
-    <Compile Include="Model\IDataService.cs" />
     <Compile Include="NonModalWindow.xaml.cs">
       <DependentUpon>NonModalWindow.xaml</DependentUpon>
     </Compile>
@@ -85,6 +82,7 @@
     <Compile Include="ViewModel\NonModalWindowViewModel.cs" />
     <Compile Include="ViewModel\ModalWindowViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModel\MyRelayCommand.cs" />
     <Compile Include="ViewModel\TestViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Page Include="MainWindow.xaml">
