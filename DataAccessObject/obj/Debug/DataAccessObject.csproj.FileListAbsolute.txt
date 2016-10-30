@@ -1,0 +1,7 @@
+C:\Users\Mazi\Desktop\joWpfModalTest\DataAccessObject\bin\Debug\DataAccessObject.dll
+C:\Users\Mazi\Desktop\joWpfModalTest\DataAccessObject\bin\Debug\DataAccessObject.pdb
+C:\Users\Mazi\Desktop\joWpfModalTest\DataAccessObject\bin\Debug\Interfaces.dll
+C:\Users\Mazi\Desktop\joWpfModalTest\DataAccessObject\bin\Debug\Interfaces.pdb
+C:\Users\Mazi\Desktop\joWpfModalTest\DataAccessObject\obj\Debug\DataAccessObject.csprojResolveAssemblyReference.cache
+C:\Users\Mazi\Desktop\joWpfModalTest\DataAccessObject\obj\Debug\DataAccessObject.dll
+C:\Users\Mazi\Desktop\joWpfModalTest\DataAccessObject\obj\Debug\DataAccessObject.pdb

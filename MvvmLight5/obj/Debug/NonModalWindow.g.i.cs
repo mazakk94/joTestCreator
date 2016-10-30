@@ -59,7 +59,7 @@ namespace MvvmLight5 {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/MvvmLight5;component/nonmodalwindow.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/UserInterface;component/nonmodalwindow.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\NonModalWindow.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

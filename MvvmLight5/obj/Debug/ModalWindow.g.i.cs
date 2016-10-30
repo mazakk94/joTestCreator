@@ -59,7 +59,7 @@ namespace MvvmLight5 {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/MvvmLight5;component/modalwindow.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/UserInterface;component/modalwindow.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\ModalWindow.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

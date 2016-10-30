@@ -8,8 +8,8 @@
     <ProjectGuid>{458EF5C0-3BB6-42D7-86C3-57FCD9573A7F}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MvvmLight5</RootNamespace>
-    <AssemblyName>MvvmLight5</AssemblyName>
+    <RootNamespace>UserInterface</RootNamespace>
+    <AssemblyName>UserInterface</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
