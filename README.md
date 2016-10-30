@@ -1,4 +1,4 @@
-#joTestCreator
+#joTestCreator (in progress)
 Features: 
 - Create/edit/delete tests with multiple questions and options
 - Overview with statistics about solved tests
