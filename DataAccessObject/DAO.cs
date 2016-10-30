@@ -2,6 +2,7 @@
 using Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Data.SQLite;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,7 +11,7 @@ namespace DataAccessObject
 {
     public class DAO : IDAO
     {
-
+        
         private List<IProducer> _producers;
         private List<ICar> _cars;
         
@@ -21,10 +22,12 @@ namespace DataAccessObject
         private List<ITest> _tests;
         private List<IUser> _users;
 
-
+        SQLiteConnection conn;
         
         public DAO()
         {
+
+            conn = new SQLiteConnection("Data Source=Student.db");
             _producers = new List<IProducer>()
             {
                 new DataObjects.Producer(){ ProducerID = 1, Name = "one"},
