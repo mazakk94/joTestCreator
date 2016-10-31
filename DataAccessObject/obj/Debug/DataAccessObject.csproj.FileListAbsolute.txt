@@ -5,19 +5,3 @@ C:\Users\Mazi\Desktop\joWpfModalTest\DataAccessObject\bin\Debug\Interfaces.pdb
 C:\Users\Mazi\Desktop\joWpfModalTest\DataAccessObject\obj\Debug\DataAccessObject.csprojResolveAssemblyReference.cache
 C:\Users\Mazi\Desktop\joWpfModalTest\DataAccessObject\obj\Debug\DataAccessObject.dll
 C:\Users\Mazi\Desktop\joWpfModalTest\DataAccessObject\obj\Debug\DataAccessObject.pdb
-C:\Users\Mazi\Documents\Visual Studio 2013\siszarpProjects\joTestCreator\DataAccessObject\bin\Debug\DataAccessObject.dll.config
-C:\Users\Mazi\Documents\Visual Studio 2013\siszarpProjects\joTestCreator\DataAccessObject\bin\Debug\DataAccessObject.dll
-C:\Users\Mazi\Documents\Visual Studio 2013\siszarpProjects\joTestCreator\DataAccessObject\bin\Debug\DataAccessObject.pdb
-C:\Users\Mazi\Documents\Visual Studio 2013\siszarpProjects\joTestCreator\DataAccessObject\bin\Debug\EntityFramework.dll
-C:\Users\Mazi\Documents\Visual Studio 2013\siszarpProjects\joTestCreator\DataAccessObject\bin\Debug\EntityFramework.SqlServer.dll
-C:\Users\Mazi\Documents\Visual Studio 2013\siszarpProjects\joTestCreator\DataAccessObject\bin\Debug\Interfaces.dll
-C:\Users\Mazi\Documents\Visual Studio 2013\siszarpProjects\joTestCreator\DataAccessObject\bin\Debug\System.Data.SQLite.dll
-C:\Users\Mazi\Documents\Visual Studio 2013\siszarpProjects\joTestCreator\DataAccessObject\bin\Debug\System.Data.SQLite.EF6.dll
-C:\Users\Mazi\Documents\Visual Studio 2013\siszarpProjects\joTestCreator\DataAccessObject\bin\Debug\System.Data.SQLite.Linq.dll
-C:\Users\Mazi\Documents\Visual Studio 2013\siszarpProjects\joTestCreator\DataAccessObject\bin\Debug\Interfaces.pdb
-C:\Users\Mazi\Documents\Visual Studio 2013\siszarpProjects\joTestCreator\DataAccessObject\bin\Debug\EntityFramework.xml
-C:\Users\Mazi\Documents\Visual Studio 2013\siszarpProjects\joTestCreator\DataAccessObject\bin\Debug\EntityFramework.SqlServer.xml
-C:\Users\Mazi\Documents\Visual Studio 2013\siszarpProjects\joTestCreator\DataAccessObject\bin\Debug\System.Data.SQLite.xml
-C:\Users\Mazi\Documents\Visual Studio 2013\siszarpProjects\joTestCreator\DataAccessObject\obj\Debug\DataAccessObject.csprojResolveAssemblyReference.cache
-C:\Users\Mazi\Documents\Visual Studio 2013\siszarpProjects\joTestCreator\DataAccessObject\obj\Debug\DataAccessObject.dll
-C:\Users\Mazi\Documents\Visual Studio 2013\siszarpProjects\joTestCreator\DataAccessObject\obj\Debug\DataAccessObject.pdb
