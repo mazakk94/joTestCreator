@@ -2,3 +2,8 @@ C:\Users\Mazi\Desktop\joWpfModalTest\Interfaces\bin\Debug\Interfaces.dll
 C:\Users\Mazi\Desktop\joWpfModalTest\Interfaces\bin\Debug\Interfaces.pdb
 C:\Users\Mazi\Desktop\joWpfModalTest\Interfaces\obj\Debug\Interfaces.dll
 C:\Users\Mazi\Desktop\joWpfModalTest\Interfaces\obj\Debug\Interfaces.pdb
+C:\Users\Mazi\Documents\Visual Studio 2013\siszarpProjects\joTestCreator\Interfaces\bin\Debug\Interfaces.dll
+C:\Users\Mazi\Documents\Visual Studio 2013\siszarpProjects\joTestCreator\Interfaces\bin\Debug\Interfaces.pdb
+C:\Users\Mazi\Documents\Visual Studio 2013\siszarpProjects\joTestCreator\Interfaces\obj\Debug\Interfaces.csprojResolveAssemblyReference.cache
+C:\Users\Mazi\Documents\Visual Studio 2013\siszarpProjects\joTestCreator\Interfaces\obj\Debug\Interfaces.dll
+C:\Users\Mazi\Documents\Visual Studio 2013\siszarpProjects\joTestCreator\Interfaces\obj\Debug\Interfaces.pdb
