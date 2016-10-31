@@ -1,10 +1,10 @@
 ﻿using System.Windows;
 using GalaSoft.MvvmLight.Ioc;
 using GalaSoft.MvvmLight.Messaging;
-using MvvmLight5.Helpers;
-using MvvmLight5.ViewModel;
+using UserInterface.Helpers;
+using UserInterface.ViewModel;
 
-namespace MvvmLight5 {
+namespace UserInterface {
   /// <summary>
   /// Interaction logic for MainWindow.xaml
   /// </summary>

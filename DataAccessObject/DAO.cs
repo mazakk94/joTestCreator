@@ -2,8 +2,11 @@
 using Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SQLite;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,12 +25,12 @@ namespace DataAccessObject
         private List<ITest> _tests;
         private List<IUser> _users;
 
-        SQLiteConnection conn;
+        SQLiteConnection connection;
         
         public DAO()
         {
-
-            conn = new SQLiteConnection("Data Source=Student.db");
+            InitSQLite();
+            
             _producers = new List<IProducer>()
             {
                 new DataObjects.Producer(){ ProducerID = 1, Name = "one"},
@@ -107,6 +110,115 @@ namespace DataAccessObject
 
 
         }
+
+        private void InitSQLite()
+        {
+            //string path = System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+
+
+            if (!File.Exists("Tests.sqlite"))
+            {
+                SQLiteConnection.CreateFile("./Tests.sqlite");
+            }
+            
+
+            connection = new SQLiteConnection("Data Source=Tests.sqlite;Version=3;");
+
+            if(connection.State == ConnectionState.Open)
+            {
+                ;
+            }
+            connection.Open();
+
+            /*
+            //if not exists
+            string createString = "CREATE TABLE QUESTIONS "+
+                "(ID INT, "+
+                "CONTENT VARCHAR(20))";
+            SQLiteCommand createCommand = new SQLiteCommand(createString, connection);
+            createCommand.ExecuteNonQuery();
+
+            string insertString;
+            SQLiteCommand insertCommand;
+
+            insertString = "INSERT INTO QUESTIONS (ID, CONTENT) VALUES (0, 'What is the first question?')";
+            insertCommand = new SQLiteCommand(insertString, connection);
+            insertCommand.ExecuteNonQuery();
+
+            insertString = "INSERT INTO QUESTIONS (ID, CONTENT) VALUES (2, 'Name of main character?')";
+            insertCommand = new SQLiteCommand(insertString, connection);
+            insertCommand.ExecuteNonQuery();
+
+            insertString = "INSERT INTO QUESTIONS (ID, CONTENT) VALUES (1, 'Yellow electric mouse?')";            
+            insertCommand = new SQLiteCommand(insertString, connection);
+            insertCommand.ExecuteNonQuery();
+            */
+
+            string selectString = "select * from QUESTIONS order by ID desc";
+            SQLiteCommand selectCommand = new SQLiteCommand(selectString, connection);
+            SQLiteDataReader reader = selectCommand.ExecuteReader();
+
+            while (reader.Read())
+                Console.WriteLine("ID: " + reader["id"] + "\tContent: " + reader["content"]);
+
+            if (connection.State == ConnectionState.Open)
+            {
+                ;
+            }
+
+            connection.Close();
+
+            if (connection.State == ConnectionState.Open)
+            {
+                ;
+            }
+        }
+
+
+      //  private void InsertToDatabase(string tableName, )
+
+        public void transaction(string cs)
+        {
+            using (SQLiteConnection con = new SQLiteConnection(cs))
+            {
+                con.Open();
+
+                using (SQLiteTransaction tr = con.BeginTransaction())
+                {
+                    using (SQLiteCommand cmd = con.CreateCommand())
+                    {
+
+                        cmd.Transaction = tr;
+                        cmd.CommandText = "DROP TABLE IF EXISTS Friends";
+                        cmd.ExecuteNonQuery();
+                        cmd.CommandText = @"CREATE TABLE Friends(Id INTEGER PRIMARY KEY, 
+                                        Name TEXT)";
+                        cmd.ExecuteNonQuery();
+                        cmd.CommandText = "INSERT INTO Friends(Name) VALUES ('Tom')";
+                        cmd.ExecuteNonQuery();
+                        cmd.CommandText = "INSERT INTO Friends(Name) VALUES ('Rebecca')";
+                        cmd.ExecuteNonQuery();
+                        cmd.CommandText = "INSERT INTO Friends(Name) VALUES ('Jim')";
+                        cmd.ExecuteNonQuery();
+                        cmd.CommandText = "INSERT INTO Friends(Name) VALUES ('Robert')";
+                        cmd.ExecuteNonQuery();
+                        cmd.CommandText = "INSERT INTO Friends(Name) VALUES ('Julian')";
+                        cmd.ExecuteNonQuery();
+                        cmd.CommandText = "INSERT INTO Friends(Name) VALUES ('Jane')";
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    tr.Commit();
+                }
+
+                con.Close();
+            }
+        }
+        
+        
+    
+
+
 
         public IEnumerable<IProducer> GetAllProducers()
         {

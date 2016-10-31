@@ -1,8 +1,8 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using MvvmLight5.Model;
+using Interfaces;
 
-namespace MvvmLight5.ViewModel {
+namespace UserInterface.ViewModel {
   public class ModalWindowViewModel:ViewModelBase {
     private readonly IDataService _dataService;
 

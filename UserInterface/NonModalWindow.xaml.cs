@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using GalaSoft.MvvmLight.Messaging;
 
-namespace MvvmLight5 {
+namespace UserInterface {
   /// <summary>
   /// Interaction logic for NonModalWindow.xaml
   /// </summary>

@@ -1,6 +1,8 @@
-﻿namespace MvvmLight5.Helpers {
-  public enum WindowType {
-    kModal,
-    kNonModal
-  }
+﻿namespace UserInterface.Helpers
+{
+    public enum WindowType
+    {
+        kModal,
+        kNonModal
+    }
 }

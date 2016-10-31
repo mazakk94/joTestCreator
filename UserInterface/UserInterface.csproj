@@ -100,7 +100,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Design\DesignDataService.cs" />
     <Compile Include="Helpers\WindowType.cs" />
     <Compile Include="Helpers\OpenWindowMessage.cs" />
     <Compile Include="ModalWindow.xaml.cs">

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MvvmLight5.ViewModel
+namespace UserInterface.ViewModel
 {
     public class TestViewModel
     {

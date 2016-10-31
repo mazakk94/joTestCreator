@@ -1,9 +1,10 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
-using MvvmLight5.Model;
+using Interfaces;
 
-namespace MvvmLight5.ViewModel {
+
+namespace UserInterface.ViewModel {
   public class NonModalWindowViewModel:ViewModelBase {
     private readonly IDataService _dataService;
 

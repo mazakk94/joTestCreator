@@ -3,8 +3,6 @@ using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Ioc;
 using GalaSoft.MvvmLight.Messaging;
 using Interfaces;
-using MvvmLight5.Helpers;
-using MvvmLight5.Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,7 +11,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 
 
-namespace MvvmLight5.ViewModel
+namespace UserInterface.ViewModel
 {
     /// <summary>
     /// This class contains properties that the main View can data bind to.
@@ -353,13 +351,13 @@ namespace MvvmLight5.ViewModel
             OpenModalDialog =
               new GalaSoft.MvvmLight.Command.RelayCommand(
                 () =>
-                Messenger.Default.Send<OpenWindowMessage>(
-                  new OpenWindowMessage() { Type = WindowType.kModal, Argument = SomeString }));
+                Messenger.Default.Send<Helpers.OpenWindowMessage>(
+                  new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kModal, Argument = SomeString }));
             OpenNonModalDialog =
               new GalaSoft.MvvmLight.Command.RelayCommand(
                 () =>
-                Messenger.Default.Send<OpenWindowMessage>(
-                  new OpenWindowMessage() { Type = WindowType.kNonModal, Argument = SomeString }));
+                Messenger.Default.Send<Helpers.OpenWindowMessage>(
+                  new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kNonModal, Argument = SomeString }));
             
             Messenger.Default.Register<string>(this, s => Result = s);
 

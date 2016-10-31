@@ -42,6 +42,8 @@
     <Compile Include="IAnsweredQuestion.cs" />
     <Compile Include="ICar.cs" />
     <Compile Include="IDAO.cs" />
+    <Compile Include="IDataItem.cs" />
+    <Compile Include="IDataService.cs" />
     <Compile Include="IDialogResultVMHelper.cs" />
     <Compile Include="IHIstory.cs" />
     <Compile Include="IProducer.cs" />
