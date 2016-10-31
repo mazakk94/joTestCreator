@@ -28,8 +28,7 @@ namespace DataAccessObject
         SQLiteConnection connection;
         
         public DAO()
-        {
-            InitSQLite();
+        {           
             
             _producers = new List<IProducer>()
             {
@@ -49,7 +48,7 @@ namespace DataAccessObject
                 
             };
             
-            _questions = new List<IQuestion>()
+            _questions = new List<IQuestion>();/*
             {
                 new DataObjects.Question() 
                 { 
@@ -82,25 +81,24 @@ namespace DataAccessObject
                     }
                 }
 
+            };*/
+            InitSQLite();
 
-
-            };
-            
             _tests = new List<ITest>()
             {
                 new DataObjects.Test() { Id = 0, Name = "Pokemon Test", Length = new TimeSpan(1, 0, 0), MaximumPoints = 10, 
-                    QuestionsIds = new List<int>(){ 0, 1 }, 
+                    QuestionsIds = new List<int>(){ 0 }, 
                     Question = new List<IQuestion>()
                     {
-                        _questions[0], _questions[1]
+                        _questions[0] //, _questions[1]
                     }
 
                 }, 
                 new DataObjects.Test() { Id = 1, Name = "Driver's Test", Length = new TimeSpan(1, 15, 0), MaximumPoints = 18, 
-                    QuestionsIds = new List<int>(){ 2 }, 
+                    QuestionsIds = new List<int>(){ 1 }, 
                     Question = new List<IQuestion>()
                     {
-                        _questions[2]
+                        _questions[1]
                     }
 
                 }
@@ -115,64 +113,117 @@ namespace DataAccessObject
         {
             //string path = System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
 
-
+            bool newDB = false;
             if (!File.Exists("Tests.sqlite"))
             {
+                newDB = true;
                 SQLiteConnection.CreateFile("./Tests.sqlite");
             }
-            
 
             connection = new SQLiteConnection("Data Source=Tests.sqlite;Version=3;");
-
-            if(connection.State == ConnectionState.Open)
-            {
-                ;
-            }
             connection.Open();
-
-            /*
-            //if not exists
-            string createString = "CREATE TABLE QUESTIONS "+
-                "(ID INT, "+
-                "CONTENT VARCHAR(20))";
-            SQLiteCommand createCommand = new SQLiteCommand(createString, connection);
-            createCommand.ExecuteNonQuery();
-
-            string insertString;
-            SQLiteCommand insertCommand;
-
-            insertString = "INSERT INTO QUESTIONS (ID, CONTENT) VALUES (0, 'What is the first question?')";
-            insertCommand = new SQLiteCommand(insertString, connection);
-            insertCommand.ExecuteNonQuery();
-
-            insertString = "INSERT INTO QUESTIONS (ID, CONTENT) VALUES (2, 'Name of main character?')";
-            insertCommand = new SQLiteCommand(insertString, connection);
-            insertCommand.ExecuteNonQuery();
-
-            insertString = "INSERT INTO QUESTIONS (ID, CONTENT) VALUES (1, 'Yellow electric mouse?')";            
-            insertCommand = new SQLiteCommand(insertString, connection);
-            insertCommand.ExecuteNonQuery();
-            */
-
-            string selectString = "select * from QUESTIONS order by ID desc";
-            SQLiteCommand selectCommand = new SQLiteCommand(selectString, connection);
-            SQLiteDataReader reader = selectCommand.ExecuteReader();
-
-            while (reader.Read())
-                Console.WriteLine("ID: " + reader["id"] + "\tContent: " + reader["content"]);
+            
 
             if (connection.State == ConnectionState.Open)
             {
-                ;
-            }
+                if (newDB)
+                {
+                    string createString = "CREATE TABLE QUESTIONS " +
+                        "(" +
+                        "ID INT PRIMARY KEY, " +
+                        "POINTS INT, " +
+                        "CONTENT VARCHAR(100), " +
+                        "ANSWER1 VARCHAR(100), " +
+                        "ANSWER2 VARCHAR(100), " +
+                        "ANSWER3 VARCHAR(100), " +
+                        "ANSWER4 VARCHAR(100), " +
+                        "ANSWER5 VARCHAR(100))";
+                    SQLiteCommand createCommand = new SQLiteCommand(createString, connection);
+                    createCommand.ExecuteNonQuery();
 
+
+                    string insertString;
+                    SQLiteCommand insertCommand;
+
+                    insertString = "INSERT INTO QUESTIONS (ID, POINTS, CONTENT, ANSWER1, ANSWER2, ANSWER3, " +
+                        "ANSWER4, ANSWER5) VALUES (0, 10, 'What is the first question?', 'abc_1', 'def_0', '', '', '')";
+                    insertCommand = new SQLiteCommand(insertString, connection);
+                    insertCommand.ExecuteNonQuery();
+
+
+                    insertString = "INSERT INTO QUESTIONS (ID, POINTS, CONTENT, ANSWER1, ANSWER2, ANSWER3, " +
+                        "ANSWER4, ANSWER5) VALUES (1, 5, 'Yellow electric mouse?', 'Pika_0', 'Chu_1', 'Zapdos_0', '', '')";
+                    insertCommand = new SQLiteCommand(insertString, connection);
+                    insertCommand.ExecuteNonQuery();
+                }
+
+                string selectString = "select * from QUESTIONS order by ID desc";
+                SQLiteCommand selectCommand = new SQLiteCommand(selectString, connection);
+                SQLiteDataReader reader = selectCommand.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    //przypisuje do zmiennych dane z bazy
+                    Console.WriteLine("ID: " + reader["ID"] + "\tContent: " + reader["CONTENT"]);
+
+                    _questions.Add(
+                    new DataObjects.Question()
+                    {
+                        Id = Int32.Parse(reader["ID"].ToString()),
+                        Content = reader["CONTENT"].ToString(),
+                        Points = Int32.Parse(reader["POINTS"].ToString()),
+                        Answer = new List<Tuple<string, bool>>(ReadAnswers(reader))
+                    });
+
+                }
+
+            }
+                        
             connection.Close();
-
-            if (connection.State == ConnectionState.Open)
-            {
-                ;
-            }
         }
+
+        private List<Tuple<string, bool>> ReadAnswers(SQLiteDataReader reader)
+        {
+            List<Tuple<string, bool>> Answers = new List<Tuple<string,bool>>();
+
+            if (reader["ANSWER1"].ToString().Length != 0)
+                Answers.Add(ParseTuple(reader["ANSWER1"].ToString()));            
+            else
+                return Answers;
+
+            if (reader["ANSWER2"].ToString().Length != 0)
+                Answers.Add(ParseTuple(reader["ANSWER2"].ToString()));
+            else 
+                return Answers;
+
+            if (reader["ANSWER3"].ToString().Length != 0)
+                Answers.Add(ParseTuple(reader["ANSWER3"].ToString()));
+            else
+                return Answers;
+
+            if (reader["ANSWER4"].ToString().Length != 0)
+                Answers.Add(ParseTuple(reader["ANSWER4"].ToString()));
+            else
+                return Answers;
+
+            if (reader["ANSWER5"].ToString().Length != 0)
+                Answers.Add(ParseTuple(reader["ANSWER5"].ToString()));
+            else
+                return Answers;
+
+            return Answers;
+        }
+
+        private Tuple<string, bool> ParseTuple(string answer)
+        {            
+            char[] delimiterChar = {'_'};
+            string[] splitAnswer = answer.Split(delimiterChar);
+            bool isTrue = (splitAnswer[1] == "1") ? true : false;
+            Tuple<string, bool> tupleAnswer = new Tuple<string, bool>(splitAnswer[0], isTrue);
+            return tupleAnswer;            
+        }
+    
+    
 
 
       //  private void InsertToDatabase(string tableName, )

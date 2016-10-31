@@ -1,0 +1,18 @@
+﻿<Window x:Class="UserInterface.ModalWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="ModalWindow"
+        Width="500"
+        Height="300"
+        Background="CornflowerBlue"
+        WindowStartupLocation="CenterScreen">
+  <StackPanel>
+    <TextBlock Margin="0 15"
+               Text="I am a Modal Window" />
+    <TextBlock Margin="0 15"
+               Text="{Binding MyText}" />
+    <CheckBox x:Name="chkBox"
+              Margin="0 15"
+              Content="Check this to return true as result when closing this window" />
+  </StackPanel>
+</Window>
