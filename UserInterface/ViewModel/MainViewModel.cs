@@ -348,6 +348,13 @@ namespace UserInterface.ViewModel
             SomeString = "Some Placeholder Text - modify if you want";
             Result = "Output Placeholder Result";
 
+            CreateNewTestCommand =
+              new GalaSoft.MvvmLight.Command.RelayCommand(
+                () =>
+                Messenger.Default.Send<Helpers.OpenWindowMessage>(
+                  new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kNewTest, Argument = SomeString }));
+
+
             OpenModalDialog =
               new GalaSoft.MvvmLight.Command.RelayCommand(
                 () =>
@@ -380,6 +387,7 @@ namespace UserInterface.ViewModel
 
         }
 
+        public RelayCommand CreateNewTestCommand { get; private set; }
         public RelayCommand OpenModalDialog { get; private set; }
         public RelayCommand OpenNonModalDialog { get; private set; }
     }

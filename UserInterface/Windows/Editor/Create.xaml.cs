@@ -12,14 +12,17 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace UserInterface {
-  /// <summary>
-  /// Interaction logic for ModalWindow.xaml
-  /// </summary>
-  public partial class ModalWindow:Window {
-    public ModalWindow() {
-      InitializeComponent();
-      Closing += (sender, args) => DialogResult = chkBox.IsChecked;
+namespace UserInterface.Windows.Editor
+{
+    /// <summary>
+    /// Interaction logic for Create.xaml
+    /// </summary>
+    public partial class Create : Window
+    {
+        public Create()
+        {
+            InitializeComponent();
+            Closing += (sender, args) => DialogResult = chkBox.IsChecked;
+        }
     }
-  }
 }

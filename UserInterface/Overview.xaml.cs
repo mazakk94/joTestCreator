@@ -17,6 +17,7 @@ using GalaSoft.MvvmLight.Ioc;
 using GalaSoft.MvvmLight.Messaging;
 using UserInterface.Helpers;
 using UserInterface.ViewModel;
+using UserInterface.Windows.Editor;
 
 namespace UserInterface
 {
@@ -33,29 +34,47 @@ namespace UserInterface
               this,
               message =>
               {
-                  if (message.Type == WindowType.kModal)
-                  {
-                      var modalWindowVM = SimpleIoc.Default.GetInstance<ModalWindowViewModel>();
-                      modalWindowVM.MyText = message.Argument;
-                      var modalWindow = new ModalWindow()
-                      {
-                          DataContext = modalWindowVM
-                      };
-                      var result = modalWindow.ShowDialog() ?? false;
-                      Messenger.Default.Send(result ? "Accepted" : "Rejected");
-                  }
-                  else
-                  {
-                      var uniqueKey = System.Guid.NewGuid().ToString();
-                      var nonModalWindowVM = SimpleIoc.Default.GetInstance<NonModalWindowViewModel>(uniqueKey);
-                      nonModalWindowVM.MyText = message.Argument;
-                      var nonModalWindow = new NonModalWindow()
-                      {
-                          DataContext = nonModalWindowVM
-                      };
-                      nonModalWindow.Closed += (sender, args) => SimpleIoc.Default.Unregister(uniqueKey);
-                      nonModalWindow.Show();
-                  }
+                switch (message.Type)
+                {
+                    case WindowType.kModal:                          
+                        var modalWindowVM = SimpleIoc.Default.GetInstance<ModalWindowViewModel>();
+                        modalWindowVM.MyText = message.Argument;
+                        var modalWindow = new ModalWindow()
+                        {
+                            DataContext = modalWindowVM
+                        };
+                        var result = modalWindow.ShowDialog() ?? false;
+                        Messenger.Default.Send(result ? "Accepted" : "Rejected");                           
+                        break;
+                
+                    case WindowType.kNewTest:
+                        modalWindowVM = SimpleIoc.Default.GetInstance<ModalWindowViewModel>();
+                        modalWindowVM.MyText = message.Argument;
+                        var createNewTestWindow = new Create()
+                        {
+                            DataContext = modalWindowVM
+                        };
+                        result = createNewTestWindow.ShowDialog() ?? false;
+                        Messenger.Default.Send(result ? "Accepted" : "Rejected");                           
+                        break;
+
+
+                    default:
+                        var uniqueKey = System.Guid.NewGuid().ToString();
+                        var nonModalWindowVM = SimpleIoc.Default.GetInstance<NonModalWindowViewModel>(uniqueKey);
+                        nonModalWindowVM.MyText = message.Argument;
+                        var nonModalWindow = new NonModalWindow()
+                        {
+                            DataContext = nonModalWindowVM
+                        };
+                        nonModalWindow.Closed += (sender, args) => SimpleIoc.Default.Unregister(uniqueKey);
+                        nonModalWindow.Show();
+                        break;
+                }
+
+
+              
+                 
               });
         }
     }

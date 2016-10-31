@@ -1,0 +1,17 @@
+﻿<Window x:Class="UserInterface.Windows.Editor.Create"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Create New Test"
+        Width="640"
+        Height="480"
+        WindowStartupLocation="CenterScreen">
+    <StackPanel>
+        <TextBlock Margin="0 15"
+                Text="Create New test" />
+        <TextBlock Margin="0 15"
+                Text="{Binding MyText}" />
+        <CheckBox x:Name="chkBox"
+                Margin="0 15"
+                Content="Check this to return true as result when closing this window" />
+    </StackPanel>
+</Window>
