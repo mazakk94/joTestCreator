@@ -52,6 +52,20 @@ namespace UserInterface.ViewModel
                 RaisePropertyChanged("Questions");
             }
         }
+
+
+        private ObservableCollection<IQuestion> _resultQuestionList;
+
+        public ObservableCollection<IQuestion> ResultQuestionList
+        {
+            get { return _resultQuestionList; }
+            set
+            {
+                _resultQuestionList = value;
+                RaisePropertyChanged("Questions");
+            }
+        }
+
         
         private String _testText;
         public String TestText
@@ -309,6 +323,9 @@ namespace UserInterface.ViewModel
         }
 
         private string _result;
+        private string _resultv2;
+
+       
 
         public string Result
         {
@@ -329,6 +346,47 @@ namespace UserInterface.ViewModel
             }
         }
 
+
+        public string Resultv2
+        {
+            get
+            {
+                return _resultv2;
+            }
+
+            set
+            {
+                if (_resultv2 == value)
+                {
+                    return;
+                }
+
+                _resultv2 = value;
+                RaisePropertyChanged(() => Resultv2);
+            }
+        }
+
+        private List<Tuple<string, string>> _resultList;
+
+        public List<Tuple<string, string>> ResultList
+        {
+            get
+            {
+                return _resultList;
+            }
+
+            set
+            {
+                if (_resultList == value)
+                {
+                    return;
+                }
+
+                _resultList = value;
+                RaisePropertyChanged(() => ResultList);
+            }
+        }
+        
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
@@ -347,6 +405,17 @@ namespace UserInterface.ViewModel
 
             SomeString = "Some Placeholder Text - modify if you want";
             Result = "Output Placeholder Result";
+            Resultv2 = "Output v2";
+            ResultList = new List<Tuple<string, string>>();
+            ResultList.Add(new Tuple<string, string>("a", "1"));
+            //ResultList.Add(new Tuple<string, string>("b", "2"));
+
+            //może _resultList?
+            
+
+            _tests = new ObservableCollection<TestViewModel>();
+            _questions = new ObservableCollection<IQuestion>();
+            _resultQuestionList = new ObservableCollection<IQuestion>();
 
             CreateNewTestCommand =
               new GalaSoft.MvvmLight.Command.RelayCommand(
@@ -367,9 +436,11 @@ namespace UserInterface.ViewModel
                   new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kNonModal, Argument = SomeString }));
             
             Messenger.Default.Register<string>(this, s => Result = s);
+            Messenger.Default.Register<string>(this, "token", s => Resultv2 = s);
+            //Messenger.Default.Register<List<string>>(this, "list", s => ResultList = s);
+            Messenger.Default.Register<List<Tuple<string, string>>>(this, "tuplelist", s => ResultList = s);
+            Messenger.Default.Register<ObservableCollection<IQuestion>>(this, "questionList", s => ResultQuestionList = s);
 
-            _tests = new ObservableCollection<TestViewModel>();
-            _questions = new ObservableCollection<IQuestion>();
             _dao = new DataAccessObject.DAO();
             _view = (ListCollectionView)CollectionViewSource.GetDefaultView(_tests);
             FilterData = "";

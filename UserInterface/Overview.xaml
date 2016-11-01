@@ -56,6 +56,13 @@
                FontSize="12"
                Text="{Binding Result}" />
 
+            <TextBlock Grid.Row="3"
+               Grid.Column="2"
+               HorizontalAlignment="Center"
+               VerticalAlignment="Center"
+               FontSize="12"
+               Text="{Binding Resultv2}" />
+
             <ListBox Name="lstBox" SelectedIndex="{Binding Index}" 
                      ItemsSource="{Binding Tests}" Grid.Row="1" Grid.Column="1" >
                 <ListBox.GroupStyle>
@@ -128,8 +135,43 @@
                     </ContextMenu>
                 </ListBox.ContextMenu>
             </ListBox>
-          
-<!--
+
+            <ListBox Name="resultList" ItemsSource="{Binding ResultList}" Grid.Row="3" Grid.Column="1" >
+                <!--
+                <ListBox.GroupStyle>
+                    <GroupStyle>
+                        <GroupStyle.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=Tests}" FontWeight="Bold"
+                                       Foreground="White" Background="Black" Margin="2" />
+                            </DataTemplate>
+                        </GroupStyle.HeaderTemplate>
+                    </GroupStyle>
+                </ListBox.GroupStyle>
+                -->
+
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>                
+            </ListBox>
+
+
+            <ListBox Name="questionResult" ItemsSource="{Binding ResultQuestionList}" Grid.Row="3" Grid.Column="3" >
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Content}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+
+            <!--
             <ListBox x:Name="myListBox" ItemsSource="{Binding SomeCollection}" Grid.Row="3" Grid.Column="1">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectionChanged">

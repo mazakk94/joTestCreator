@@ -40,7 +40,7 @@
                     <Slider IsSnapToTickEnabled="True" TickFrequency="1" Minimum="1" 
                             Maximum="120" x:Name="mySlider" Width="100" HorizontalAlignment="Left" />
                 </StackPanel>
-                <Label Content="{Binding ElementName=mySlider, Path=Value}" VerticalAlignment="Center" />
+                <Label x:Name="Length" Content="{Binding ElementName=mySlider, Path=Value}" VerticalAlignment="Center" />
                 <Label Content="minutes" VerticalAlignment="Center" />
 
                 <!--<Button Command="{Binding CreateNewTestCommand}" Content="Create New Test" />
@@ -83,7 +83,8 @@
             <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Vertical">
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Max points" Margin="0 0 20 0" />
-                    <Label Content="{Binding MaxPoints}" />
+                    <!--Label Content="{Binding MaxPoints}" /-->
+                    <Label Content="100" x:Name="maxPoints" />
                 </StackPanel>
 
                 <TextBlock Margin="0 10"

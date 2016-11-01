@@ -4,6 +4,7 @@
     {
         kModal,
         kNonModal, 
-        kNewTest
+        kNewTest,
+        kNewQuestion
     }
 }

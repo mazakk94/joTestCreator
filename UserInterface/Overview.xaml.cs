@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Interfaces;
 
 
 using GalaSoft.MvvmLight.Ioc;
@@ -18,6 +19,7 @@ using GalaSoft.MvvmLight.Messaging;
 using UserInterface.Helpers;
 using UserInterface.ViewModel;
 using UserInterface.Windows.Editor;
+using System.Collections.ObjectModel;
 
 namespace UserInterface
 {
@@ -26,6 +28,8 @@ namespace UserInterface
     /// </summary>
     public partial class Overview : Window
     {
+
+
         public Overview()
         {
             InitializeComponent();
@@ -54,8 +58,24 @@ namespace UserInterface
                         {
                             DataContext = modalWindowVM
                         };
+                        
                         result = createNewTestWindow.ShowDialog() ?? false;
-                        Messenger.Default.Send(result ? "Accepted" : "Rejected");                           
+                        Messenger.Default.Send(result ? "Accepted" : "Rejected");
+                        var resultv2 = createNewTestWindow.maxPoints.Content.ToString();
+
+                        //List<List<string>> questionList = GetQuestionDataFromDialog(createNewTestWindow);
+                        
+                        List<Tuple<string, string>> list = GetTestDataFromDialog(createNewTestWindow);
+
+
+                        List<string> resultList = new List<string>();
+
+                        resultList.Add(result ? "Accepted" : "Rejected");
+                        resultList.Add(resultv2);
+                        Messenger.Default.Send(resultv2, "token");
+                        //Messenger.Default.Send(resultList, "list");
+                        Messenger.Default.Send(list, "tuplelist");
+                        //Messenger.Default.
                         break;
 
 
@@ -77,6 +97,23 @@ namespace UserInterface
                  
               });
         }
+
+        private List<List<string>> GetQuestionDataFromDialog(Create window)
+        {
+            throw new NotImplementedException();
+        }
+
+        List<Tuple<string, string>> GetTestDataFromDialog(Create window)
+        {       // name, value
+            List<Tuple<string, string>> list = new List<Tuple<string, string>>();
+            list.Add(new Tuple<string, string>("MaxPoints", window.maxPoints.Content.ToString()));
+            list.Add(new Tuple<string, string>("Length", window.Length.Content.ToString()));
+            
+            return list;
+        }
+
+
+
     }
 
 }
