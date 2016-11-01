@@ -287,6 +287,13 @@ namespace DataAccessObject
             return new DataObjects.Car();
         }
 
+        public IQuestion CreateNewQuestion(List<string> questionString)
+        {
+            string id = GetAllQuestions().Count().ToString();
+            questionString[7] = id;
+            return new DataObjects.Question(questionString);
+        }
+
         public void AddCar(ICar car)
         {
             _cars.Add(car);

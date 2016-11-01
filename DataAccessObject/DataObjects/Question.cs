@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DataAccessObject.DataObjects
 {
-    class Question: IQuestion
+    class Question : IQuestion
     {
         public int Id
         {
@@ -31,6 +31,24 @@ namespace DataAccessObject.DataObjects
         {
             get;
             set;
+        }
+
+        public Question() { }
+
+        public Question(List<string> questionString)
+        {
+            this.Id = Int32.Parse(questionString[7]);
+            this.Points = Int32.Parse(questionString[6]);/*
+            Content = "Yellow electric mouse?", Points = 1, Answer = new List<Tuple<string,bool>>
+                    { 
+                        new Tuple<string, bool>("Electabuzz", false), 
+                        new Tuple<string, bool>("Zapdos", false), 
+                        new Tuple<string, bool>("Pikachu", true)
+                    }
+        }
+            */
+
+
         }
     }
 }

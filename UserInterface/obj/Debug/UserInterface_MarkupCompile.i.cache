@@ -10,11 +10,11 @@ none
 false
 CODE_ANALYSIS;DEBUG;TRACE
 C:\Users\Mazi\Documents\Visual Studio 2013\siszarpProjects\joTestCreator\UserInterface\App.xaml
-6-171175490
+71916205720
 
-212130413220
+22276479534
 231133007432
-MainWindow.xaml;ModalWindow.xaml;NonModalWindow.xaml;Overview.xaml;Skins\MainSkin.xaml;Windows\Editor\Create.xaml;
+MainWindow.xaml;ModalWindow.xaml;NonModalWindow.xaml;Overview.xaml;Skins\MainSkin.xaml;Windows\Editor\CreateQuestion.xaml;Windows\Editor\CreateTest.xaml;
 
 False
 

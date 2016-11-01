@@ -2,12 +2,14 @@
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using Interfaces;
+using System.Collections.Generic;
 
 namespace UserInterface.ViewModel
 {
     public class ModalWindowViewModel : ViewModelBase
     {
         private readonly IDataService _dataService;
+        private IDAO _dao = new DataAccessObject.DAO();
 
         private int _questionCount;
 
@@ -51,6 +53,36 @@ namespace UserInterface.ViewModel
             }
         }
 
+        private List<string> _questionString;
+
+        public List<string> QuestionString
+        {
+            get
+            {
+                return _questionString;
+            }
+
+            set
+            {
+                if (_questionString == value)
+                {
+                    return;
+                }
+
+                _questionString = value;
+
+                //rozpakowanie i wpisanie do list
+                UnpackQuestionString();
+
+                RaisePropertyChanged(() => QuestionString);
+            }
+        }
+
+        private void UnpackQuestionString()
+        { // 0 - content, 1 .. 5 - answer, 6 - points, 7 - id
+            //int id = 
+        }
+
         
         public ModalWindowViewModel(IDataService dataService)
         {
@@ -65,6 +97,7 @@ namespace UserInterface.ViewModel
                     }
                 });
 
+            QuestionString = new List<string>();
 
             AddNewQuestionCommand =
               new GalaSoft.MvvmLight.Command.RelayCommand(
@@ -72,6 +105,7 @@ namespace UserInterface.ViewModel
                 Messenger.Default.Send<Helpers.OpenWindowMessage>(
                   new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kNewQuestion, Argument = QuestionsCount.ToString() }));
 
+            Messenger.Default.Register<List<string>>(this, "question", s => QuestionString = s);
             //OpenModalDialog
         }
 

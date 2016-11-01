@@ -54,7 +54,7 @@ namespace UserInterface
                     case WindowType.kNewTest:
                         modalWindowVM = SimpleIoc.Default.GetInstance<ModalWindowViewModel>();
                         modalWindowVM.MyText = message.Argument;
-                        var createNewTestWindow = new Create()
+                        var createNewTestWindow = new CreateTest()
                         {
                             DataContext = modalWindowVM
                         };
@@ -78,7 +78,7 @@ namespace UserInterface
                         //Messenger.Default.
                         break;
 
-
+                        /*
                     default:
                         var uniqueKey = System.Guid.NewGuid().ToString();
                         var nonModalWindowVM = SimpleIoc.Default.GetInstance<NonModalWindowViewModel>(uniqueKey);
@@ -89,7 +89,7 @@ namespace UserInterface
                         };
                         nonModalWindow.Closed += (sender, args) => SimpleIoc.Default.Unregister(uniqueKey);
                         nonModalWindow.Show();
-                        break;
+                        break;*/
                 }
 
 
@@ -98,12 +98,12 @@ namespace UserInterface
               });
         }
 
-        private List<List<string>> GetQuestionDataFromDialog(Create window)
+        private List<List<string>> GetQuestionDataFromDialog(CreateTest window)
         {
             throw new NotImplementedException();
         }
 
-        List<Tuple<string, string>> GetTestDataFromDialog(Create window)
+        List<Tuple<string, string>> GetTestDataFromDialog(CreateTest window)
         {       // name, value
             List<Tuple<string, string>> list = new List<Tuple<string, string>>();
             list.Add(new Tuple<string, string>("MaxPoints", window.maxPoints.Content.ToString()));

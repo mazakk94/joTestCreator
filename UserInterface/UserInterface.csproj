@@ -117,8 +117,11 @@
     <Compile Include="ViewModel\MyRelayCommand.cs" />
     <Compile Include="ViewModel\TestViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
-    <Compile Include="Windows\Editor\Create.xaml.cs">
-      <DependentUpon>Create.xaml</DependentUpon>
+    <Compile Include="Windows\Editor\CreateQuestion.xaml.cs">
+      <DependentUpon>CreateQuestion.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Editor\CreateTest.xaml.cs">
+      <DependentUpon>CreateTest.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -148,7 +151,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Windows\Editor\Create.xaml">
+    <Page Include="Windows\Editor\CreateQuestion.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\Editor\CreateTest.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
