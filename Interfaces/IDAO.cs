@@ -23,7 +23,7 @@ namespace Interfaces
         //IEnumerable<IUser> GetAllUsers();
         //IUser CreateNewUser();
 
-        ICar CreateNewCar();
+        IQuestion CreateNewQuestion(List<string> questionString);
         void AddCar(ICar car);
 
     }

@@ -19,8 +19,8 @@
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="0.5*" ></RowDefinition>
-                <RowDefinition Height="0.5*" ></RowDefinition>
-                <RowDefinition Height="2*"></RowDefinition>
+                <RowDefinition ></RowDefinition>
+                <RowDefinition Height="2.5*"></RowDefinition>
                 <RowDefinition ></RowDefinition>
                 <RowDefinition ></RowDefinition>
             </Grid.RowDefinitions>
@@ -57,8 +57,8 @@
                     <Label Content="Questions" VerticalAlignment="Center" />
                 </StackPanel>
                 
-                <ListBox MinHeight="100" Name="lstBox" SelectedIndex="{Binding Index}" 
-                     ItemsSource="{Binding Tests}" Grid.Row="2" Grid.Column="1" Margin="0 0 10 0" >
+                <ListBox  MinHeight="100" Name="lstBox" SelectedIndex="{Binding Index}" 
+                     ItemsSource="{Binding Questions}" Grid.Row="2" Grid.Column="1" Margin="0 0 10 0" >
                     <ListBox.GroupStyle>
                         <GroupStyle>
                             <GroupStyle.HeaderTemplate>
@@ -72,7 +72,7 @@
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <Label Content="{Binding Name }" />
+                                <Label Content="{Binding Content}" />
                             </StackPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
@@ -84,7 +84,7 @@
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Max points" Margin="0 0 20 0" />
                     <!--Label Content="{Binding MaxPoints}" /-->
-                    <Label Content="100" x:Name="maxPoints" />
+                    <Label x:Name="maxPoints" Content="{Binding MaxPoints}" />
                 </StackPanel>
 
                 <TextBlock Margin="0 10"
@@ -109,7 +109,7 @@
                     <Label Content="Answers" VerticalAlignment="Center" />
                 </StackPanel>
                 
-                <ListBox MinHeight="100" Name="lstBox2" ItemsSource="{Binding Questions}">
+                <ListBox MinHeight="100" Name="lstBox2" ItemsSource="{Binding AnswerList}">
                     <ListBox.GroupStyle>
                         <GroupStyle>
                             <GroupStyle.HeaderTemplate>
@@ -124,7 +124,7 @@
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <Label Content="{Binding Content}" />
+                                <Label Content="{Binding}" />
                             </StackPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>

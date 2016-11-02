@@ -3,6 +3,7 @@ using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using Interfaces;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace UserInterface.ViewModel
 {
@@ -31,7 +32,95 @@ namespace UserInterface.ViewModel
                 RaisePropertyChanged(() => QuestionsCount);
             }
         }
-        
+
+        private ObservableCollection<IQuestion> _questions;
+
+        public ObservableCollection<IQuestion> Questions
+        {
+            get { return _questions; }
+            set
+            {
+                _questions = value;
+                RaisePropertyChanged("Questions");
+            }
+        }
+
+
+        private List<int> _questionsIds;
+        private int _selectedIndex;
+        public int Index
+        {
+            get
+            {                    
+                return _selectedIndex;
+            }
+
+            set
+            {
+                if (_selectedIndex == value)
+                {
+                    //RaisePropertyChanged(() => Index);
+                    return;                    
+                }
+
+                _selectedIndex = value;
+                _answerList.Clear();
+                //pobieram id pytania po indeksie
+                //pobieram z listy pytań listę odpowiedzi szukając po id 
+                if (_questions.Count > 0)
+                {
+                    int id = _questionsIds[_selectedIndex];
+                    foreach (var answer in _questions[_selectedIndex].Answer)
+                    {
+                        _answerList.Add(answer.Item1);
+                    }
+                }
+                
+
+                //GetQuestions(_selectedIndex);
+                //GetAllQuestions();
+                //tutaj robie reset pytań i dodaje z aktualnego indeksu
+
+                //Items[_selectedIndex] = (Convert.ToInt32(Items[_selectedIndex]) + 1).ToString();
+                RaisePropertyChanged(() => Index);
+            }
+        }
+
+
+
+        private ObservableCollection<string> _answerList;
+        public ObservableCollection<string> AnswerList
+        {
+            get { return _answerList; }
+            set
+            {
+                _answerList = value;
+                RaisePropertyChanged("AnswerList");
+            }
+        }
+
+        private int _maxPoints;
+
+        public int MaxPoints
+        {
+            get
+            {
+                return _maxPoints;
+            }
+
+            set
+            {
+                if (_maxPoints == value)
+                {
+                    return;
+                }
+
+                _maxPoints = value;
+                RaisePropertyChanged(() => MaxPoints);
+            }
+        }
+
+
         private string _myText;
 
         public string MyText
@@ -72,15 +161,18 @@ namespace UserInterface.ViewModel
                 _questionString = value;
 
                 //rozpakowanie i wpisanie do list
-                UnpackQuestionString();
-
-                RaisePropertyChanged(() => QuestionString);
+                if(_questionString.Count > 6)
+                    UnpackQuestionString();
+                RaisePropertyChanged(() => Index);
+                RaisePropertyChanged(() => Questions);
             }
         }
 
         private void UnpackQuestionString()
-        { // 0 - content, 1 .. 5 - answer, 6 - points, 7 - id
-            //int id = 
+        {
+            IQuestion question = _dao.CreateNewQuestion(_questionString);
+            _questions.Add(question);
+            _questionsIds.Add(question.Id);
         }
 
         
@@ -96,7 +188,14 @@ namespace UserInterface.ViewModel
                         return;
                     }
                 });
-
+            _maxPoints = 0;
+            MaxPoints = 0;
+            _questionsIds = new List<int>();
+            _answerList = new ObservableCollection<string>();
+            AnswerList = new ObservableCollection<string>();
+            _questions = new ObservableCollection<IQuestion>();
+            Questions = new ObservableCollection<IQuestion>();
+            _questionString = new List<string>();
             QuestionString = new List<string>();
 
             AddNewQuestionCommand =

@@ -290,8 +290,10 @@ namespace DataAccessObject
         public IQuestion CreateNewQuestion(List<string> questionString)
         {
             string id = GetAllQuestions().Count().ToString();
-            questionString[7] = id;
-            return new DataObjects.Question(questionString);
+            questionString.Add(id.ToString());
+            IQuestion question = new DataObjects.Question(questionString);
+            AddQuestion(question);
+            return question;
         }
 
         public void AddCar(ICar car)
@@ -395,10 +397,7 @@ namespace DataAccessObject
             throw new NotImplementedException();
         }
 
-        ICar IDAO.CreateNewCar()
-        {
-            throw new NotImplementedException();
-        }
+        
 
         void IDAO.AddCar(ICar car)
         {
