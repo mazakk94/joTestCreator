@@ -265,9 +265,17 @@ namespace DataAccessObject
                 con.Close();
             }
         }
-        
-        
-    
+
+
+        private List<IQuestion> GetQuestionsByIds(List<int> questionsIds)
+        {
+            List<IQuestion> questions = new List<IQuestion>();
+            foreach (var id in questionsIds)
+            {
+                questions.Add(GetQuestion(id));
+            }
+            return questions;
+        }
 
 
 
@@ -289,11 +297,10 @@ namespace DataAccessObject
 
         public IQuestion CreateNewQuestion(List<string> questionString)
         {
-            string id = GetAllQuestions().Count().ToString();
-            questionString.Add(id.ToString());
+            questionString.Add(GetAllQuestions().Count().ToString());
             IQuestion question = new DataObjects.Question(questionString);
             AddQuestion(question);
-            return question;
+            return question;            
         }
 
         public void AddCar(ICar car)
@@ -350,6 +357,14 @@ namespace DataAccessObject
             return new DataObjects.Test();
         }
 
+        public ITest CreateNewTest(List<string> TestData, List<int> NewTestQuestionsIds)
+        {
+            int id = _tests.Count;
+            ITest test = new DataObjects.Test(TestData, GetQuestionsByIds(NewTestQuestionsIds), NewTestQuestionsIds, id);
+            _tests.Add(test);
+            return test;
+        }
+
         public void AddTest(ITest test)
         {
             _tests.Add(test);
@@ -403,5 +418,8 @@ namespace DataAccessObject
         {
             throw new NotImplementedException();
         }
+
+
+        
     }
 }

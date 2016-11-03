@@ -26,5 +26,7 @@ namespace Interfaces
         IQuestion CreateNewQuestion(List<string> questionString);
         void AddCar(ICar car);
 
+
+        ITest CreateNewTest(List<string> TestData, List<int> NewTestQuestionsIds);
     }
 }

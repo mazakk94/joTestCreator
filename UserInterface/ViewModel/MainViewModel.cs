@@ -124,6 +124,7 @@ namespace UserInterface.ViewModel
 
         private void GetAllTests()
         {
+            _tests.Clear();     //czy na pewno?
             foreach (var c in _dao.GetAllTests())
             {
                 _tests.Add(new TestViewModel(c));
@@ -161,12 +162,9 @@ namespace UserInterface.ViewModel
                 List<int> questionsIds = GetQuestionsIds(_selectedIndex);
 
                 GetQuestions(questionsIds);
-                //GetQuestions(_selectedIndex);
-                //GetAllQuestions();
-                //tutaj robie reset pytań i dodaje z aktualnego indeksu
 
-                //Items[_selectedIndex] = (Convert.ToInt32(Items[_selectedIndex]) + 1).ToString();
-                //RaisePropertyChanged(() => Index);
+                RaisePropertyChanged(() => Index);
+                RaisePropertyChanged(() => Questions);
             }
         }
 
@@ -501,8 +499,10 @@ namespace UserInterface.ViewModel
             Messenger.Default.Send<Helpers.OpenWindowMessage>(
                    new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kNewTest, Argument = SomeString });
 
+            _dao.CreateNewTest(TestData, NewTestQuestionsIds);
+            GetAllTests();
             //tu mozna dodac jeszcze działania po zamknieciu okna dodawania testu
-
+            
         }
 
         public RelayCommand CreateNewTestCommand { get; private set; }
