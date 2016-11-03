@@ -47,8 +47,8 @@ namespace UserInterface
                         {
                             DataContext = modalWindowVM
                         };
-                        var result = modalWindow.ShowDialog() ?? false;
-                        Messenger.Default.Send(result ? "Accepted" : "Rejected");                           
+                        var modalResult = modalWindow.ShowDialog() ?? false;
+                        Messenger.Default.Send(modalResult ? "Accepted" : "Rejected");                           
                         break;
                 
                     case WindowType.kNewTest:
@@ -58,60 +58,73 @@ namespace UserInterface
                         {
                             DataContext = modalWindowVM
                         };
-                        
+
+                        #region comment
+                        /*
                         result = createNewTestWindow.ShowDialog() ?? false;
                         Messenger.Default.Send(result ? "Accepted" : "Rejected");
                         var resultv2 = createNewTestWindow.maxPoints.Content.ToString();
-
-                        //List<List<string>> questionList = GetQuestionDataFromDialog(createNewTestWindow);
-                        
+                        List<List<string>> questionList = GetQuestionDataFromDialog(createNewTestWindow);                        
                         List<Tuple<string, string>> list = GetTestDataFromDialog(createNewTestWindow);
-
-
-                        List<string> resultList = new List<string>();
-
                         resultList.Add(result ? "Accepted" : "Rejected");
-                        resultList.Add(resultv2);
-                        Messenger.Default.Send(resultv2, "token");
+                        //resultList.Add(resultv2);
+                        //Messenger.Default.Send(resultv2, "token");
                         //Messenger.Default.Send(resultList, "list");
-                        Messenger.Default.Send(list, "tuplelist");
+                        //Messenger.Default.Send(list, "tuplelist");
+                        
                         //Messenger.Default.
-                        break;
+                        */
+                        #endregion
 
-                        /*
-                    default:
-                        var uniqueKey = System.Guid.NewGuid().ToString();
-                        var nonModalWindowVM = SimpleIoc.Default.GetInstance<NonModalWindowViewModel>(uniqueKey);
-                        nonModalWindowVM.MyText = message.Argument;
-                        var nonModalWindow = new NonModalWindow()
+                        //bool? result = createNewTestWindow.ShowDialog();// ?? false;
+                        
+                        //bool result = createNewTestWindow.ShowDialog() ?? true;
+                        bool? result = createNewTestWindow.ShowDialog();
+                        //if (result.HasValue && result.Value)
+                        //if (result)
+                        if (result.HasValue && result.Value)
+                        //if(createNewTestWindow.DialogResult.HasValue && createNewTestWindow.DialogResult.Value)
                         {
-                            DataContext = nonModalWindowVM
-                        };
-                        nonModalWindow.Closed += (sender, args) => SimpleIoc.Default.Unregister(uniqueKey);
-                        nonModalWindow.Show();
-                        break;*/
+                            result = true;
+                            List<int> questionsIds = FillQuestionsIds(createNewTestWindow);      
+                            List<string> resultList = GetTestDataFromDialog(createNewTestWindow);
+
+                            Messenger.Default.Send(questionsIds, "questionsIds");
+                            Messenger.Default.Send(resultList, "testData");
+                        }
+                        
+                        string resultString;
+                        if (result == true) resultString = "Accepted";
+                        else resultString = "Rejected";
+                        Messenger.Default.Send(resultString);
+                        
+                        break;      
+
                 }
-
-
-              
                  
               });
         }
 
-        private List<List<string>> GetQuestionDataFromDialog(CreateTest window)
+        private List<int> FillQuestionsIds(CreateTest window )
         {
-            throw new NotImplementedException();
+            List<int> list = new List<int>();
+            foreach (var item in window.questionsIds.Items)
+            {
+                list.Add(Int32.Parse(item.ToString()));
+            }
+            return list;            
         }
 
-        List<Tuple<string, string>> GetTestDataFromDialog(CreateTest window)
+
+        List<string> GetTestDataFromDialog(CreateTest window)
         {       // name, value
-            List<Tuple<string, string>> list = new List<Tuple<string, string>>();
-            list.Add(new Tuple<string, string>("MaxPoints", window.maxPoints.Content.ToString()));
-            list.Add(new Tuple<string, string>("Length", window.Length.Content.ToString()));
+            List<string> list = new List<string>();
+            list.Add(window.maxPoints.Content.ToString());
+            list.Add(window.Length.Content.ToString());
+            list.Add(window.Name.Text.ToString());
             
             return list;
         }
-
 
 
     }

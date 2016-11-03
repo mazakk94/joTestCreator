@@ -46,7 +46,27 @@ namespace UserInterface.ViewModel
         }
 
 
-        private List<int> _questionsIds;
+        private ObservableCollection<int> _questionsIds;
+
+        public ObservableCollection<int> QuestionsIds
+        {
+            get
+            {
+                return _questionsIds;
+            }
+
+            set
+            {
+                if (_questionsIds == value)
+                {
+                    return;
+                }
+
+                _questionsIds = value;
+                RaisePropertyChanged(() => QuestionsIds);
+            }
+        }   
+        
         private int _selectedIndex;
         public int Index
         {
@@ -85,7 +105,7 @@ namespace UserInterface.ViewModel
                 RaisePropertyChanged(() => Index);
             }
         }
-
+        
 
 
         private ObservableCollection<string> _answerList;
@@ -163,9 +183,15 @@ namespace UserInterface.ViewModel
                 //rozpakowanie i wpisanie do list
                 if(_questionString.Count > 6)
                     UnpackQuestionString();
+                
                 RaisePropertyChanged(() => Index);
                 RaisePropertyChanged(() => Questions);
             }
+        }
+
+        private void SetMaxPoints(int points)
+        {
+            MaxPoints += points;
         }
 
         private void UnpackQuestionString()
@@ -173,6 +199,7 @@ namespace UserInterface.ViewModel
             IQuestion question = _dao.CreateNewQuestion(_questionString);
             _questions.Add(question);
             _questionsIds.Add(question.Id);
+            SetMaxPoints(question.Points);
         }
 
         
@@ -190,7 +217,8 @@ namespace UserInterface.ViewModel
                 });
             _maxPoints = 0;
             MaxPoints = 0;
-            _questionsIds = new List<int>();
+            _questionsIds = new ObservableCollection<int>();
+            QuestionsIds = new ObservableCollection<int>();
             _answerList = new ObservableCollection<string>();
             AnswerList = new ObservableCollection<string>();
             _questions = new ObservableCollection<IQuestion>();

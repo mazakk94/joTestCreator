@@ -37,7 +37,6 @@ namespace UserInterface.ViewModel
             }
         }
          
-
         public ObservableCollection<IQuestion> Questions
         {
             get { return _questions; }
@@ -47,10 +46,8 @@ namespace UserInterface.ViewModel
                 RaisePropertyChanged("Questions");
             }
         }
-
-
+        
         private ObservableCollection<IQuestion> _resultQuestionList;
-
         public ObservableCollection<IQuestion> ResultQuestionList
         {
             get { return _resultQuestionList; }
@@ -60,8 +57,7 @@ namespace UserInterface.ViewModel
                 RaisePropertyChanged("Questions");
             }
         }
-
-        
+                
         private String _testText;
         public String TestText
         {
@@ -71,6 +67,37 @@ namespace UserInterface.ViewModel
                 _testText = value;
                 //NotifyPropertyChanged("TestText");
                 RaisePropertyChanged("TestText");
+            }
+        }
+
+        private List<int> _newTestQuestionsIds;
+        public List<int> NewTestQuestionsIds
+        {
+            get
+            {
+                return _newTestQuestionsIds;
+            }
+            set
+            {
+                _newTestQuestionsIds = value;
+                RaisePropertyChanged("NewTestQuestionsIds");
+            }
+        }
+
+        private List<string> _testData;
+        public List<string> TestData
+        {
+            get
+            {
+                return _testData;
+            }
+            set
+            {
+                _testData = value;
+
+
+
+                RaisePropertyChanged("TestData");
             }
         }
 
@@ -382,6 +409,8 @@ namespace UserInterface.ViewModel
             }
         }
         
+
+
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
@@ -411,12 +440,23 @@ namespace UserInterface.ViewModel
             _tests = new ObservableCollection<TestViewModel>();
             _questions = new ObservableCollection<IQuestion>();
             _resultQuestionList = new ObservableCollection<IQuestion>();
+            _newTestQuestionsIds = new List<int>();
+            _testData = new List<string>();
 
-            CreateNewTestCommand =
+            NewTestQuestionsIds = new List<int>();
+            TestData = new List<string>();
+
+            /*CreateNewTestCommand =
               new GalaSoft.MvvmLight.Command.RelayCommand(
                 () =>
                 Messenger.Default.Send<Helpers.OpenWindowMessage>(
-                  new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kNewTest, Argument = SomeString }));
+                  new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kNewTest, Argument = SomeString }));*/
+
+            CreateNewTestCommand =
+              new GalaSoft.MvvmLight.Command.RelayCommand(
+                () => CreateAndSaveTest());
+               // Messenger.Default.Send<Helpers.OpenWindowMessage>(
+              //    new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kNewTest, Argument = SomeString }));
 
 
             OpenModalDialog =
@@ -431,10 +471,13 @@ namespace UserInterface.ViewModel
                   new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kNonModal, Argument = SomeString }));
             
             Messenger.Default.Register<string>(this, s => Result = s);
-            Messenger.Default.Register<string>(this, "token", s => Resultv2 = s);
+            //Messenger.Default.Register<string>(this, "token", s => Resultv2 = s);
             //Messenger.Default.Register<List<string>>(this, "list", s => ResultList = s);
-            Messenger.Default.Register<List<Tuple<string, string>>>(this, "tuplelist", s => ResultList = s);
-            Messenger.Default.Register<ObservableCollection<IQuestion>>(this, "questionList", s => ResultQuestionList = s);
+           // Messenger.Default.Register<List<Tuple<string, string>>>(this, "tuplelist", s => ResultList = s);
+            //Messenger.Default.Register<ObservableCollection<IQuestion>>(this, "questionList", s => ResultQuestionList = s);
+
+            Messenger.Default.Register<List<int>>(this, "questionsIds", s => NewTestQuestionsIds = s);
+            Messenger.Default.Register<List<string>>(this, "testData", s => TestData = s);
 
             _dao = new DataAccessObject.DAO();
             _view = (ListCollectionView)CollectionViewSource.GetDefaultView(_tests);
@@ -453,8 +496,19 @@ namespace UserInterface.ViewModel
 
         }
 
+        private void CreateAndSaveTest()
+        {
+            Messenger.Default.Send<Helpers.OpenWindowMessage>(
+                   new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kNewTest, Argument = SomeString });
+
+            //tu mozna dodac jeszcze działania po zamknieciu okna dodawania testu
+
+        }
+
         public RelayCommand CreateNewTestCommand { get; private set; }
         public RelayCommand OpenModalDialog { get; private set; }
         public RelayCommand OpenNonModalDialog { get; private set; }
+
+        
     }
 }

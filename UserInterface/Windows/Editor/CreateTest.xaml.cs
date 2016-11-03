@@ -23,7 +23,7 @@ namespace UserInterface.Windows.Editor
         public CreateTest()
         {
             InitializeComponent();
-            Closing += (sender, args) => DialogResult = chkBox.IsChecked;
+            //Closing += (sender, args) => DialogResult = chkBox.IsChecked;
 
             
              Messenger.Default.Register<OpenWindowMessage>(
@@ -76,6 +76,11 @@ namespace UserInterface.Windows.Editor
             result.Add(window.points.Content.ToString());
 
             return result;
+        }
+
+        void acceptButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.DialogResult = true;
         }
 
 
