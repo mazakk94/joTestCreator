@@ -23,9 +23,6 @@ using System.Collections.ObjectModel;
 
 namespace UserInterface
 {
-    /// <summary>
-    /// Interaction logic for Overview.xaml
-    /// </summary>
     public partial class Overview : Window
     {
 
@@ -58,32 +55,9 @@ namespace UserInterface
                         {
                             DataContext = modalWindowVM
                         };
-
-                        #region comment
-                        /*
-                        result = createNewTestWindow.ShowDialog() ?? false;
-                        Messenger.Default.Send(result ? "Accepted" : "Rejected");
-                        var resultv2 = createNewTestWindow.maxPoints.Content.ToString();
-                        List<List<string>> questionList = GetQuestionDataFromDialog(createNewTestWindow);                        
-                        List<Tuple<string, string>> list = GetTestDataFromDialog(createNewTestWindow);
-                        resultList.Add(result ? "Accepted" : "Rejected");
-                        //resultList.Add(resultv2);
-                        //Messenger.Default.Send(resultv2, "token");
-                        //Messenger.Default.Send(resultList, "list");
-                        //Messenger.Default.Send(list, "tuplelist");
                         
-                        //Messenger.Default.
-                        */
-                        #endregion
-
-                        //bool? result = createNewTestWindow.ShowDialog();// ?? false;
-                        
-                        //bool result = createNewTestWindow.ShowDialog() ?? true;
                         bool? result = createNewTestWindow.ShowDialog();
-                        //if (result.HasValue && result.Value)
-                        //if (result)
                         if (result.HasValue && result.Value)
-                        //if(createNewTestWindow.DialogResult.HasValue && createNewTestWindow.DialogResult.Value)
                         {
                             result = true;
                             List<int> questionsIds = FillQuestionsIds(createNewTestWindow);      

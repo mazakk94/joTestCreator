@@ -9,32 +9,32 @@ namespace UserInterface.ViewModel
 {
     public class ModalWindowViewModel : ViewModelBase
     {
+        #region variables definitions
+
         private readonly IDataService _dataService;
         private IDAO _dao = new DataAccessObject.DAO();
 
-        private int _questionCount;
-
+        private int _questionsCount;
         public int QuestionsCount
         {
             get
             {
-                return _questionCount;
+                return _questionsCount;
             }
 
             set
             {
-                if (_questionCount == value)
+                if (_questionsCount == value)
                 {
                     return;
                 }
 
-                _questionCount = value;
+                _questionsCount = value;
                 RaisePropertyChanged(() => QuestionsCount);
             }
         }
 
         private ObservableCollection<IQuestion> _questions;
-
         public ObservableCollection<IQuestion> Questions
         {
             get { return _questions; }
@@ -47,7 +47,6 @@ namespace UserInterface.ViewModel
 
 
         private ObservableCollection<int> _questionsIds;
-
         public ObservableCollection<int> QuestionsIds
         {
             get
@@ -106,8 +105,6 @@ namespace UserInterface.ViewModel
             }
         }
         
-
-
         private ObservableCollection<string> _answerList;
         public ObservableCollection<string> AnswerList
         {
@@ -120,7 +117,6 @@ namespace UserInterface.ViewModel
         }
 
         private int _maxPoints;
-
         public int MaxPoints
         {
             get
@@ -140,9 +136,8 @@ namespace UserInterface.ViewModel
             }
         }
 
-
+        
         private string _myText;
-
         public string MyText
         {
             get
@@ -161,9 +156,8 @@ namespace UserInterface.ViewModel
                 RaisePropertyChanged(() => MyText);
             }
         }
-
-        private List<string> _questionString;
-
+        
+        private List<string> _questionString;  //contains question content, points, answers to unpack
         public List<string> QuestionString
         {
             get
@@ -189,6 +183,12 @@ namespace UserInterface.ViewModel
             }
         }
 
+        public RelayCommand AddNewQuestionCommand { get; private set; }
+
+        #endregion
+
+        #region methods 
+
         private void SetMaxPoints(int points)
         {
             MaxPoints += points;
@@ -202,19 +202,15 @@ namespace UserInterface.ViewModel
             SetMaxPoints(question.Points);
         }
 
-        
+        #endregion
+
+
         public ModalWindowViewModel(IDataService dataService)
         {
+            #region variables initialization
+
             _dataService = dataService;
-            _dataService.GetData(
-                (item, error) =>
-                {
-                    if (error != null)
-                    {
-                        // Report error here
-                        return;
-                    }
-                });
+            _dataService.GetData((item, error) => { if (error != null) return; });
             _maxPoints = 0;
             MaxPoints = 0;
             _questionsIds = new ObservableCollection<int>();
@@ -226,6 +222,8 @@ namespace UserInterface.ViewModel
             _questionString = new List<string>();
             QuestionString = new List<string>();
 
+            #endregion
+
             AddNewQuestionCommand =
               new GalaSoft.MvvmLight.Command.RelayCommand(
                 () =>
@@ -233,10 +231,9 @@ namespace UserInterface.ViewModel
                   new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kNewQuestion, Argument = QuestionsCount.ToString() }));
 
             Messenger.Default.Register<List<string>>(this, "question", s => QuestionString = s);
-            //OpenModalDialog
         }
 
-        public RelayCommand AddNewQuestionCommand { get; private set; }
+        
 
     }
 }

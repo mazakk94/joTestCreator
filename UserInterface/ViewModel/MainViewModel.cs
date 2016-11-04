@@ -16,17 +16,16 @@ namespace UserInterface.ViewModel
 
     public class MainViewModel : ViewModelBase, INotifyPropertyChanged
     {
-        
-        private ObservableCollection<TestViewModel> _tests;
-        private ObservableCollection<IQuestion> _questions;
+
+        #region variables
+
         private IDAO _dao;
+        private ListCollectionView _view;
+        private readonly IDataService _dataService;
 
-        private MyRelayCommand _addTestCommand;
-      
-      //  public event PropertyChangedEventHandler PropertyChanged;         ALE NAROBIŁ INBY
-       
+        //  public event PropertyChangedEventHandler PropertyChanged;         ALE NAROBIŁ INBY
 
-        
+        private ObservableCollection<TestViewModel> _tests;
         public ObservableCollection<TestViewModel> Tests
         {
             get { return _tests; }
@@ -36,7 +35,8 @@ namespace UserInterface.ViewModel
                 RaisePropertyChanged("Tests");
             }
         }
-         
+
+        private ObservableCollection<IQuestion> _questions;
         public ObservableCollection<IQuestion> Questions
         {
             get { return _questions; }
@@ -46,7 +46,7 @@ namespace UserInterface.ViewModel
                 RaisePropertyChanged("Questions");
             }
         }
-        
+
         private ObservableCollection<IQuestion> _resultQuestionList;
         public ObservableCollection<IQuestion> ResultQuestionList
         {
@@ -57,7 +57,8 @@ namespace UserInterface.ViewModel
                 RaisePropertyChanged("Questions");
             }
         }
-                
+
+        /*
         private String _testText;
         public String TestText
         {
@@ -69,9 +70,10 @@ namespace UserInterface.ViewModel
                 RaisePropertyChanged("TestText");
             }
         }
+         * */
 
         private List<int> _newTestQuestionsIds;
-        public List<int> NewTestQuestionsIds
+        public List<int> NewTestQuestionsIds //needed to know which questions view in listbox
         {
             get
             {
@@ -85,7 +87,7 @@ namespace UserInterface.ViewModel
         }
 
         private List<string> _testData;
-        public List<string> TestData
+        public List<string> TestData //contains data about test - name, length, maxpoints
         {
             get
             {
@@ -94,56 +96,12 @@ namespace UserInterface.ViewModel
             set
             {
                 _testData = value;
-
-
-
                 RaisePropertyChanged("TestData");
             }
         }
 
-        /*
-        private void NotifyPropertyChanged(String propertyName)
-        {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (null != handler)
-            {
-                handler(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }*/
-        
-        private void FillTestText()
-        {
-            _testText = "Init";
-        }
-
-        private void Print()
-        {
-            _testText += "String";
-         //   NotifyPropertyChanged("TestText");
-        }
-
-        private void GetAllTests()
-        {
-            _tests.Clear();     //czy na pewno?
-            foreach (var c in _dao.GetAllTests())
-            {
-                _tests.Add(new TestViewModel(c));
-            }
-        }
-
-        private void GetAllQuestions()
-        {
-            foreach (var c in _dao.GetAllQuestions())
-            {
-                _questions.Add(c);
-            }
-        }
-
-
-       
         private int _selectedIndex;
-
-        public int Index
+        public int Index //selected index to know which answers show in listbox next to questions list
         {
             get
             {
@@ -168,161 +126,18 @@ namespace UserInterface.ViewModel
             }
         }
 
-
-        
-       private void GetQuestions(List<int> questionsIds)
-       {
-           foreach (var id in questionsIds)
-           {
-               _questions.Add(_dao.GetQuestion(id));
-           }
-       }
-
-       private List<int> GetQuestionsIds(int _selectedIndex)
-       {
-           List<int> ids = new List<int>();
-           foreach (var test in _dao.GetAllTests())
-           {
-               if (test.Id == _selectedIndex)
-               {
-                   ids = test.QuestionsIds;
-               }
-           }
-           return ids;
-       }
-
-
-        
-        /*
-       private void RaisePropertyChanged(string propertyName)
-       {
-           if (PropertyChanged != null)
-           {
-               PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-           }
-       }*/
-
-       public ICommand AddTestCommand
-       {
-           get { return _addTestCommand; }
-       }
-
-       private void AddTestToList()
-       {
-           ITest test = _dao.CreateNewTest();
-           TestViewModel qvm = new TestViewModel(test);
-           _dao.AddTest(test);
-           Tests.Add(qvm);
-           EditedTest = qvm;
-       }
-
-       private ICommand _saveNewTestCommand;
-
-       public ICommand SaveNewTestCommand
-       {
-           get { return _saveNewTestCommand; }
-       }
-
-       private TestViewModel _editedTest;
-
-       public TestViewModel EditedTest
-       {
-           get { return _editedTest; }
-           set
-           {
-               _editedTest = value;
-               RaisePropertyChanged("EditedTest");
-           }
-       }
-
-       private void SaveTest()
-       {
-           _tests.Add(_editedTest);
-       }
-
-       private bool CanSaveTest()
-       {
-           if (EditedTest == null)
-               return false;
-
-           if (EditedTest.HasErrors)
-               return false;
-
-           return true;
-       }
-
-       private MyRelayCommand _printTextCommand;
-
-       public MyRelayCommand PrintTextCommand
-       {
-           get { return _printTextCommand; }
-       }
-
-
-       private MyRelayCommand _filterDataCommand;
-
-       public MyRelayCommand FilterDataCommand
-       {
-           get { return _filterDataCommand; }
-       }
-
-       private MyRelayCommand _selectedItemChangedCommand;
-
-       public MyRelayCommand SelectedItemChangedCommand
-       {
-           get { return _selectedItemChangedCommand; }
-       }
-
-       private ListCollectionView _view;
-
-       private string _filterData;
-
-       public string FilterData
-       {
-           get { return _filterData; }
-           set
-           {
-               _filterData = value;
-               RaisePropertyChanged("FilterData");
-           }
-       }
-        
-        /*
-        private void DoFilterData()
+        private TestViewModel _editedTest;
+        public TestViewModel EditedTest
         {
-            if (FilterData.Length > 0)
+            get { return _editedTest; }
+            set
             {
-                _view.Filter = (c) => ((testViewModel)c).Name.Contains(FilterData);
-            }
-            else
-            {
-                _view.Filter = null;
+                _editedTest = value;
+                RaisePropertyChanged("EditedTest");
             }
         }
-         * */
 
-        private RelayCommand _grouptestsCommand;
-
-        public RelayCommand GrouptestsCommand
-        {
-            get { return _grouptestsCommand; }
-        }
-
-        /*
-        private void GroupByPrice()
-        {
-            _view.SortDescriptions.Add(new SortDescription("Price", 
-                ListSortDirection.Ascending));
-            _view.GroupDescriptions.Add(new PropertyGroupDescription("Price"));
-        }
-         * */
-
-
-
-        private readonly IDataService _dataService;
-
-        private string _someString;
-
+        private string _someString; //string that is passed to dialog window
         public string SomeString
         {
             get
@@ -343,11 +158,7 @@ namespace UserInterface.ViewModel
         }
 
         private string _result;
-        private string _resultv2;
-
-       
-
-        public string Result
+        public string Result //accepted or rejected
         {
             get
             {
@@ -366,96 +177,141 @@ namespace UserInterface.ViewModel
             }
         }
 
+        #endregion
 
-        public string Resultv2
+        #region methods
+
+        private void GetAllTests()
         {
-            get
+            _tests.Clear();     //czy na pewno?
+            foreach (var c in _dao.GetAllTests())
             {
-                return _resultv2;
-            }
-
-            set
-            {
-                if (_resultv2 == value)
-                {
-                    return;
-                }
-
-                _resultv2 = value;
-                RaisePropertyChanged(() => Resultv2);
+                _tests.Add(new TestViewModel(c));
             }
         }
 
-        private List<Tuple<string, string>> _resultList;
-
-        public List<Tuple<string, string>> ResultList
+        private void GetAllQuestions()
         {
-            get
+            foreach (var c in _dao.GetAllQuestions())
             {
-                return _resultList;
-            }
-
-            set
-            {
-                if (_resultList == value)
-                {
-                    return;
-                }
-
-                _resultList = value;
-                RaisePropertyChanged(() => ResultList);
+                _questions.Add(c);
             }
         }
-        
 
+        private void GetQuestions(List<int> questionsIds)
+        {
+            foreach (var id in questionsIds)
+            {
+                _questions.Add(_dao.GetQuestion(id));
+            }
+        }
 
-        /// <summary>
-        /// Initializes a new instance of the MainViewModel class.
-        /// </summary>
+        private List<int> GetQuestionsIds(int _selectedIndex)
+        {
+            List<int> ids = new List<int>();
+            foreach (var test in _dao.GetAllTests())
+            {
+                if (test.Id == _selectedIndex)
+                {
+                    ids = test.QuestionsIds;
+                }
+            }
+            return ids;
+        }
+
+        private void AddTestToList()
+        {
+            ITest test = _dao.CreateNewTest();
+            TestViewModel qvm = new TestViewModel(test);
+            _dao.AddTest(test);
+            Tests.Add(qvm);
+            EditedTest = qvm;
+        }
+
+        private void SaveTest()
+        {
+            _tests.Add(_editedTest);
+        }
+
+        private bool CanSaveTest()
+        {
+            if (EditedTest == null)
+                return false;
+
+            if (EditedTest.HasErrors)
+                return false;
+
+            return true;
+        }
+
+        private void CreateAndSaveTest()
+        {
+            Messenger.Default.Send<Helpers.OpenWindowMessage>(
+                   new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kNewTest, Argument = SomeString });
+
+            _dao.CreateNewTest(TestData, NewTestQuestionsIds);
+            GetAllTests();
+            //tu mozna dodac jeszcze działania po zamknieciu okna dodawania testu
+
+        }
+        #endregion
+
+        #region commands
+
+        public RelayCommand CreateNewTestCommand { get; private set; }
+        public RelayCommand OpenModalDialog { get; private set; }
+        public RelayCommand OpenNonModalDialog { get; private set; }
+
+        private MyRelayCommand _addTestCommand;
+        public ICommand AddTestCommand
+        {
+            get { return _addTestCommand; }
+        }
+
+        private ICommand _saveNewTestCommand;
+        public ICommand SaveNewTestCommand
+        {
+            get { return _saveNewTestCommand; }
+        }
+
+        private MyRelayCommand _filterDataCommand;
+        public MyRelayCommand FilterDataCommand
+        {
+            get { return _filterDataCommand; }
+        }
+
+        private MyRelayCommand _selectedItemChangedCommand;
+        public MyRelayCommand SelectedItemChangedCommand
+        {
+            get { return _selectedItemChangedCommand; }
+        }
+
+        #endregion
+
         public MainViewModel(IDataService dataService)
         {
             _dataService = dataService;
-            _dataService.GetData(
-              (item, error) =>
-              {
-                  if (error != null)
-                  {
-                      // Report error here
-                      return;
-                  }
-              });
+            _dataService.GetData((item, error) => { if (error != null) return; });
 
             SomeString = "Some Placeholder Text - modify if you want";
             Result = "Output Placeholder Result";
-            Resultv2 = "Output v2";
-            ResultList = new List<Tuple<string, string>>();
-            ResultList.Add(new Tuple<string, string>("a", "1"));
-            //ResultList.Add(new Tuple<string, string>("b", "2"));
-
-            //może _resultList?
-            
 
             _tests = new ObservableCollection<TestViewModel>();
             _questions = new ObservableCollection<IQuestion>();
             _resultQuestionList = new ObservableCollection<IQuestion>();
             _newTestQuestionsIds = new List<int>();
             _testData = new List<string>();
+            _dao = new DataAccessObject.DAO();
+            _view = (ListCollectionView)CollectionViewSource.GetDefaultView(_tests);
+            GetAllTests();
+            GetAllQuestions();
 
             NewTestQuestionsIds = new List<int>();
             TestData = new List<string>();
 
-            /*CreateNewTestCommand =
-              new GalaSoft.MvvmLight.Command.RelayCommand(
-                () =>
-                Messenger.Default.Send<Helpers.OpenWindowMessage>(
-                  new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kNewTest, Argument = SomeString }));*/
-
             CreateNewTestCommand =
               new GalaSoft.MvvmLight.Command.RelayCommand(
                 () => CreateAndSaveTest());
-               // Messenger.Default.Send<Helpers.OpenWindowMessage>(
-              //    new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kNewTest, Argument = SomeString }));
-
 
             OpenModalDialog =
               new GalaSoft.MvvmLight.Command.RelayCommand(
@@ -467,48 +323,16 @@ namespace UserInterface.ViewModel
                 () =>
                 Messenger.Default.Send<Helpers.OpenWindowMessage>(
                   new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kNonModal, Argument = SomeString }));
-            
-            Messenger.Default.Register<string>(this, s => Result = s);
-            //Messenger.Default.Register<string>(this, "token", s => Resultv2 = s);
-            //Messenger.Default.Register<List<string>>(this, "list", s => ResultList = s);
-           // Messenger.Default.Register<List<Tuple<string, string>>>(this, "tuplelist", s => ResultList = s);
-            //Messenger.Default.Register<ObservableCollection<IQuestion>>(this, "questionList", s => ResultQuestionList = s);
 
+            Messenger.Default.Register<string>(this, s => Result = s);
             Messenger.Default.Register<List<int>>(this, "questionsIds", s => NewTestQuestionsIds = s);
             Messenger.Default.Register<List<string>>(this, "testData", s => TestData = s);
 
-            _dao = new DataAccessObject.DAO();
-            _view = (ListCollectionView)CollectionViewSource.GetDefaultView(_tests);
-            FilterData = "";
-            GetAllTests();
-            GetAllQuestions();
-            FillTestText();
+
             _addTestCommand = new MyRelayCommand(param => this.AddTestToList());
             _saveNewTestCommand = new MyRelayCommand(param => this.SaveTest(),
                                                   param => this.CanSaveTest());
-            //_filterDataCommand = new RelayCommand(param => this.DoFilterData());
-            //_grouptestsCommand = new RelayCommand(param => this.GroupByPrice());
-            //_selectedItemChangedCommand = new MyRelayCommand(param => this.)
-            _printTextCommand = new MyRelayCommand(param => this.Print());
-
-
         }
 
-        private void CreateAndSaveTest()
-        {
-            Messenger.Default.Send<Helpers.OpenWindowMessage>(
-                   new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kNewTest, Argument = SomeString });
-
-            _dao.CreateNewTest(TestData, NewTestQuestionsIds);
-            GetAllTests();
-            //tu mozna dodac jeszcze działania po zamknieciu okna dodawania testu
-            
-        }
-
-        public RelayCommand CreateNewTestCommand { get; private set; }
-        public RelayCommand OpenModalDialog { get; private set; }
-        public RelayCommand OpenNonModalDialog { get; private set; }
-
-        
     }
 }
