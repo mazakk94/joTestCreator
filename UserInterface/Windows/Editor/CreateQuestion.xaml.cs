@@ -14,9 +14,6 @@ using System.Windows.Shapes;
 
 namespace UserInterface.Windows.Editor
 {
-    /// <summary>
-    /// Interaction logic for CreateQuestion.xaml
-    /// </summary>
     public partial class CreateQuestion : Window
     {
         public CreateQuestion()

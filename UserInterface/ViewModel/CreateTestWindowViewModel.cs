@@ -7,7 +7,7 @@ using System.Collections.ObjectModel;
 
 namespace UserInterface.ViewModel
 {
-    public class ModalWindowViewModel : ViewModelBase
+    public class CreateTestWindowViewModel : ViewModelBase
     {
         #region variables definitions
 
@@ -186,26 +186,8 @@ namespace UserInterface.ViewModel
         public RelayCommand AddNewQuestionCommand { get; private set; }
 
         #endregion
-
-        #region methods 
-
-        private void SetMaxPoints(int points)
-        {
-            MaxPoints += points;
-        }
-
-        private void UnpackQuestionString()
-        {
-            IQuestion question = _dao.CreateNewQuestion(_questionString);
-            _questions.Add(question);
-            _questionsIds.Add(question.Id);
-            SetMaxPoints(question.Points);
-        }
-
-        #endregion
-
-
-        public ModalWindowViewModel(IDataService dataService)
+        
+        public CreateTestWindowViewModel(IDataService dataService)
         {
             #region variables initialization
 
@@ -233,7 +215,22 @@ namespace UserInterface.ViewModel
             Messenger.Default.Register<List<string>>(this, "question", s => QuestionString = s);
         }
 
-        
+        #region methods 
 
+        private void SetMaxPoints(int points)
+        {
+            MaxPoints += points;
+        }
+
+        private void UnpackQuestionString()
+        {
+            IQuestion question = _dao.CreateNewQuestion(_questionString);
+            _questions.Add(question);
+            _questionsIds.Add(question.Id);
+            SetMaxPoints(question.Points);
+        }
+
+        #endregion
+                        
     }
 }

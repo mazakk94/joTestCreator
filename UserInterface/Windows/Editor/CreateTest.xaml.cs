@@ -33,7 +33,7 @@ namespace UserInterface.Windows.Editor
                 switch (message.Type)
                 {
                     case WindowType.kNewQuestion:                          
-                        var modalWindowVM = SimpleIoc.Default.GetInstance<ModalWindowViewModel>();
+                        var modalWindowVM = SimpleIoc.Default.GetInstance<CreateTestWindowViewModel>();
                         modalWindowVM.MyText = message.Argument;
                         var modalWindow = new CreateQuestion()
                         {

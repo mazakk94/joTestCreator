@@ -10,20 +10,11 @@ namespace UserInterface.ViewModel
 {
     public class TestViewModel
     {
+        #region variables
 
-        
         private ITest _test;
-       // private List<IQuestion> _questions;
-
-        public TestViewModel(ITest test)
-        {
-            _test = test;
-        }
-
-       /* public TestViewModel(IQuestion question)
-        {
-            
-        }*/
+        public event PropertyChangedEventHandler PropertyChanged;
+        public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
 
         public int Id
         {
@@ -31,17 +22,17 @@ namespace UserInterface.ViewModel
             set
             {
                 _test.Id = value;
-                //RaisePropertyChanged("testId");
+                RaisePropertyChanged("Id");
             }
-        }        
-        
+        }
+
         public string Name
         {
             get { return _test.Name; }
             set
             {
                 _test.Name = value;
-                //RaisePropertyChanged("Coor");
+                RaisePropertyChanged("Name");
             }
         }
 
@@ -63,7 +54,7 @@ namespace UserInterface.ViewModel
                 _test.MaximumPoints = value;
                 //RaisePropertyChanged("testId");
             }
-        }        
+        }
 
         public List<IQuestion> Question
         {
@@ -74,9 +65,15 @@ namespace UserInterface.ViewModel
                 //RaisePropertyChanged("Producent");
             }
         }
-
-
         
+        #endregion
+        
+        public TestViewModel(ITest test)
+        {
+            _test = test;
+        }
+
+        #region methods
 
         private void RaisePropertyChanged(string propertyName)
         {
@@ -86,10 +83,7 @@ namespace UserInterface.ViewModel
                 //Validate();
             }
         }
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
-
+               
         public System.Collections.IEnumerable GetErrors(string propertyName)
         {
             throw new NotImplementedException();
@@ -99,5 +93,7 @@ namespace UserInterface.ViewModel
         {
             get { throw new NotImplementedException(); }
         }
+        
+        #endregion
     }
 }

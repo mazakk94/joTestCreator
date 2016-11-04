@@ -69,7 +69,6 @@ namespace DataAccessObject.DataObjects
             
             return tupleAnswer;
         }
-
-
+        
     }
 }

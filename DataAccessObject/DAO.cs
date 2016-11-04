@@ -15,17 +15,18 @@ namespace DataAccessObject
     public class DAO : IDAO
     {
         
-        private List<IProducer> _producers;
-        private List<ICar> _cars;
-        
+        #region variable definitions
 
+        private List<IProducer> _producers;
+        private List<ICar> _cars;     
         private List<IAnsweredQuestion> _answeredQuestions;
         private List<IHistory> _histories;
         private List<IQuestion> _questions;
         private List<ITest> _tests;
         private List<IUser> _users;
-
         SQLiteConnection connection;
+
+        #endregion
         
         public DAO()
         {           
@@ -108,7 +109,130 @@ namespace DataAccessObject
 
 
         }
+        
+      //  private void InsertToDatabase(string tableName, )
 
+        public void transaction(string cs)
+        {
+            using (SQLiteConnection con = new SQLiteConnection(cs))
+            {
+                con.Open();
+
+                using (SQLiteTransaction tr = con.BeginTransaction())
+                {
+                    using (SQLiteCommand cmd = con.CreateCommand())
+                    {
+
+                        cmd.Transaction = tr;
+                        cmd.CommandText = "DROP TABLE IF EXISTS Friends";
+                        cmd.ExecuteNonQuery();
+                        cmd.CommandText = @"CREATE TABLE Friends(Id INTEGER PRIMARY KEY, 
+                                        Name TEXT)";
+                        cmd.ExecuteNonQuery();
+                        cmd.CommandText = "INSERT INTO Friends(Name) VALUES ('Tom')";
+                        cmd.ExecuteNonQuery();
+                        cmd.CommandText = "INSERT INTO Friends(Name) VALUES ('Rebecca')";
+                        cmd.ExecuteNonQuery();
+                        cmd.CommandText = "INSERT INTO Friends(Name) VALUES ('Jim')";
+                        cmd.ExecuteNonQuery();
+                        cmd.CommandText = "INSERT INTO Friends(Name) VALUES ('Robert')";
+                        cmd.ExecuteNonQuery();
+                        cmd.CommandText = "INSERT INTO Friends(Name) VALUES ('Julian')";
+                        cmd.ExecuteNonQuery();
+                        cmd.CommandText = "INSERT INTO Friends(Name) VALUES ('Jane')";
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    tr.Commit();
+                }
+
+                con.Close();
+            }
+        }
+
+        #region getters
+
+        public IEnumerable<ICar> GettAllCars()
+        {
+            return _cars;
+        }
+
+        private List<IQuestion> GetQuestionsByIds(List<int> questionsIds)
+        {
+            List<IQuestion> questions = new List<IQuestion>();
+            foreach (var id in questionsIds)
+            {
+                questions.Add(GetQuestion(id));
+            }
+            return questions;
+        }
+
+        public IEnumerable<IProducer> GetAllProducers()
+        {
+            return _producers;
+        }
+
+
+        public IEnumerable<IAnsweredQuestion> GetAllAnsweredQuestions()
+        {
+            return _answeredQuestions;
+        }
+
+        public IEnumerable<IHistory> GetAllHistories()
+        {
+            return _histories;
+        }
+
+        public IEnumerable<IQuestion> GetAllQuestions()
+        {
+            return _questions;
+        }
+
+        public IEnumerable<ITest> GetAllTests()
+        {
+            return _tests;
+        }
+
+        public IQuestion GetQuestion(int questionId)
+        {
+            return _questions.Find(x => x.Id == questionId);
+        }
+
+        public ITest GetTest(int id)
+        {
+            return _tests.Find(test => test.Id == id);
+        }
+
+        public IEnumerable<IUser> GetAllUsers()
+        {
+            return _users;
+        }
+
+
+        IEnumerable<IProducer> IDAO.GetAllProducers()
+        {
+            throw new NotImplementedException();
+        }
+
+        IEnumerable<ICar> IDAO.GettAllCars()
+        {
+            throw new NotImplementedException();
+        }
+
+        IEnumerable<ITest> IDAO.GetAllTests()
+        {
+            return GetAllTests();
+        }
+
+        IEnumerable<IQuestion> IDAO.GetAllQuestions()
+        {
+            return GetAllQuestions();
+        }
+
+        #endregion
+
+        #region sql methods
+        
         private void InitSQLite()
         {
             //string path = System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
@@ -122,7 +246,7 @@ namespace DataAccessObject
 
             connection = new SQLiteConnection("Data Source=Tests.sqlite;Version=3;");
             connection.Open();
-            
+
 
             if (connection.State == ConnectionState.Open)
             {
@@ -178,22 +302,22 @@ namespace DataAccessObject
                 }
 
             }
-                        
+
             connection.Close();
         }
-
+        
         private List<Tuple<string, bool>> ReadAnswers(SQLiteDataReader reader)
         {
-            List<Tuple<string, bool>> Answers = new List<Tuple<string,bool>>();
+            List<Tuple<string, bool>> Answers = new List<Tuple<string, bool>>();
 
             if (reader["ANSWER1"].ToString().Length != 0)
-                Answers.Add(ParseTuple(reader["ANSWER1"].ToString()));            
+                Answers.Add(ParseTuple(reader["ANSWER1"].ToString()));
             else
                 return Answers;
 
             if (reader["ANSWER2"].ToString().Length != 0)
                 Answers.Add(ParseTuple(reader["ANSWER2"].ToString()));
-            else 
+            else
                 return Answers;
 
             if (reader["ANSWER3"].ToString().Length != 0)
@@ -214,81 +338,18 @@ namespace DataAccessObject
             return Answers;
         }
 
+        #endregion
+                       
+        #region dao methods
+
         private Tuple<string, bool> ParseTuple(string answer)
-        {            
-            char[] delimiterChar = {'_'};
+        {
+            char[] delimiterChar = { '_' };
             string[] splitAnswer = answer.Split(delimiterChar);
             bool isTrue = (splitAnswer[1] == "1") ? true : false;
             Tuple<string, bool> tupleAnswer = new Tuple<string, bool>(splitAnswer[0], isTrue);
-            return tupleAnswer;            
+            return tupleAnswer;
         }
-    
-    
-
-
-      //  private void InsertToDatabase(string tableName, )
-
-        public void transaction(string cs)
-        {
-            using (SQLiteConnection con = new SQLiteConnection(cs))
-            {
-                con.Open();
-
-                using (SQLiteTransaction tr = con.BeginTransaction())
-                {
-                    using (SQLiteCommand cmd = con.CreateCommand())
-                    {
-
-                        cmd.Transaction = tr;
-                        cmd.CommandText = "DROP TABLE IF EXISTS Friends";
-                        cmd.ExecuteNonQuery();
-                        cmd.CommandText = @"CREATE TABLE Friends(Id INTEGER PRIMARY KEY, 
-                                        Name TEXT)";
-                        cmd.ExecuteNonQuery();
-                        cmd.CommandText = "INSERT INTO Friends(Name) VALUES ('Tom')";
-                        cmd.ExecuteNonQuery();
-                        cmd.CommandText = "INSERT INTO Friends(Name) VALUES ('Rebecca')";
-                        cmd.ExecuteNonQuery();
-                        cmd.CommandText = "INSERT INTO Friends(Name) VALUES ('Jim')";
-                        cmd.ExecuteNonQuery();
-                        cmd.CommandText = "INSERT INTO Friends(Name) VALUES ('Robert')";
-                        cmd.ExecuteNonQuery();
-                        cmd.CommandText = "INSERT INTO Friends(Name) VALUES ('Julian')";
-                        cmd.ExecuteNonQuery();
-                        cmd.CommandText = "INSERT INTO Friends(Name) VALUES ('Jane')";
-                        cmd.ExecuteNonQuery();
-                    }
-
-                    tr.Commit();
-                }
-
-                con.Close();
-            }
-        }
-
-
-        private List<IQuestion> GetQuestionsByIds(List<int> questionsIds)
-        {
-            List<IQuestion> questions = new List<IQuestion>();
-            foreach (var id in questionsIds)
-            {
-                questions.Add(GetQuestion(id));
-            }
-            return questions;
-        }
-
-
-
-        public IEnumerable<IProducer> GetAllProducers()
-        {
-            return _producers;
-        }
-
-        public IEnumerable<ICar> GettAllCars()
-        {
-            return _cars;
-        }
-
 
         public ICar CreateNewCar()
         {
@@ -300,52 +361,13 @@ namespace DataAccessObject
             questionString.Add(GetAllQuestions().Count().ToString());
             IQuestion question = new DataObjects.Question(questionString);
             AddQuestion(question);
-            return question;            
+            return question;
         }
 
         public void AddCar(ICar car)
         {
             _cars.Add(car);
         }
-
-
-        public IEnumerable<IAnsweredQuestion> GetAllAnsweredQuestions()
-        {
-            return _answeredQuestions;
-        }
-
-        public IEnumerable<IHistory> GetAllHistories()
-        {
-            return _histories;
-        }
-        
-        public IEnumerable<IQuestion> GetAllQuestions()
-        {
-            return _questions;
-        }
-
-        public IEnumerable<ITest> GetAllTests()
-        {
-            return _tests;
-        }
-
-        public IQuestion GetQuestion(int questionId)
-        {
-            return _questions.Find(x => x.Id == questionId);
-        }
-
-        
-        public ITest GetTest(int id)
-        {
-            return _tests.Find(test => test.Id == id);
-        }
-        
-
-        public IEnumerable<IUser> GetAllUsers()
-        {
-            return _users;
-        }
-
 
         public IQuestion CreateNewQuestion()
         {
@@ -377,29 +399,7 @@ namespace DataAccessObject
 
         public void AddQuestionToTest(ITest test, IQuestion question)
         {
-            
-        }
-
-
-
-        IEnumerable<IProducer> IDAO.GetAllProducers()
-        {
-            throw new NotImplementedException();
-        }
-
-        IEnumerable<ICar> IDAO.GettAllCars()
-        {
-            throw new NotImplementedException();
-        }
-
-        IEnumerable<ITest> IDAO.GetAllTests()
-        {
-            return GetAllTests();
-        }
-
-        IEnumerable<IQuestion> IDAO.GetAllQuestions()
-        {
-            return GetAllQuestions();
+            //TODO OR NOT
         }
 
         ITest IDAO.CreateNewTest()
@@ -410,16 +410,14 @@ namespace DataAccessObject
         void IDAO.AddTest(ITest test)
         {
             throw new NotImplementedException();
-        }
-
-        
+        }        
 
         void IDAO.AddCar(ICar car)
         {
             throw new NotImplementedException();
         }
 
+        #endregion
 
-        
     }
 }

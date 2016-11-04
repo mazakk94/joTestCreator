@@ -25,8 +25,6 @@ namespace UserInterface
 {
     public partial class Overview : Window
     {
-
-
         public Overview()
         {
             InitializeComponent();
@@ -38,7 +36,7 @@ namespace UserInterface
                 switch (message.Type)
                 {
                     case WindowType.kModal:                          
-                        var modalWindowVM = SimpleIoc.Default.GetInstance<ModalWindowViewModel>();
+                        var modalWindowVM = SimpleIoc.Default.GetInstance<CreateTestWindowViewModel>();
                         modalWindowVM.MyText = message.Argument;
                         var modalWindow = new ModalWindow()
                         {
@@ -49,7 +47,7 @@ namespace UserInterface
                         break;
                 
                     case WindowType.kNewTest:
-                        modalWindowVM = SimpleIoc.Default.GetInstance<ModalWindowViewModel>();
+                        modalWindowVM = SimpleIoc.Default.GetInstance<CreateTestWindowViewModel>();
                         modalWindowVM.MyText = message.Argument;
                         var createNewTestWindow = new CreateTest()
                         {
@@ -79,6 +77,8 @@ namespace UserInterface
               });
         }
 
+        #region methods
+
         private List<int> FillQuestionsIds(CreateTest window )
         {
             List<int> list = new List<int>();
@@ -88,8 +88,7 @@ namespace UserInterface
             }
             return list;            
         }
-
-
+        
         List<string> GetTestDataFromDialog(CreateTest window)
         {       // name, value
             List<string> list = new List<string>();
@@ -100,7 +99,6 @@ namespace UserInterface
             return list;
         }
 
-
+        #endregion
     }
-
 }

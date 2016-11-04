@@ -57,21 +57,7 @@ namespace UserInterface.ViewModel
                 RaisePropertyChanged("Questions");
             }
         }
-
-        /*
-        private String _testText;
-        public String TestText
-        {
-            get { return _testText; }
-            set
-            {
-                _testText = value;
-                //NotifyPropertyChanged("TestText");
-                RaisePropertyChanged("TestText");
-            }
-        }
-         * */
-
+        
         private List<int> _newTestQuestionsIds;
         public List<int> NewTestQuestionsIds //needed to know which questions view in listbox
         {
@@ -178,6 +164,52 @@ namespace UserInterface.ViewModel
         }
 
         #endregion
+
+        public MainViewModel(IDataService dataService)
+        {
+            _dataService = dataService;
+            _dataService.GetData((item, error) => { if (error != null) return; });
+
+            SomeString = "Some Placeholder Text - modify if you want";
+            Result = "Output Placeholder Result";
+
+            _tests = new ObservableCollection<TestViewModel>();
+            _questions = new ObservableCollection<IQuestion>();
+            _resultQuestionList = new ObservableCollection<IQuestion>();
+            _newTestQuestionsIds = new List<int>();
+            _testData = new List<string>();
+            _dao = new DataAccessObject.DAO();
+            _view = (ListCollectionView)CollectionViewSource.GetDefaultView(_tests);
+            GetAllTests();
+            GetAllQuestions();
+
+            NewTestQuestionsIds = new List<int>();
+            TestData = new List<string>();
+
+            CreateNewTestCommand =
+              new GalaSoft.MvvmLight.Command.RelayCommand(
+                () => CreateAndSaveTest());
+
+            OpenModalDialog =
+              new GalaSoft.MvvmLight.Command.RelayCommand(
+                () =>
+                Messenger.Default.Send<Helpers.OpenWindowMessage>(
+                  new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kModal, Argument = SomeString }));
+            OpenNonModalDialog =
+              new GalaSoft.MvvmLight.Command.RelayCommand(
+                () =>
+                Messenger.Default.Send<Helpers.OpenWindowMessage>(
+                  new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kNonModal, Argument = SomeString }));
+
+            Messenger.Default.Register<string>(this, s => Result = s);
+            Messenger.Default.Register<List<int>>(this, "questionsIds", s => NewTestQuestionsIds = s);
+            Messenger.Default.Register<List<string>>(this, "testData", s => TestData = s);
+
+
+            _addTestCommand = new MyRelayCommand(param => this.AddTestToList());
+            _saveNewTestCommand = new MyRelayCommand(param => this.SaveTest(),
+                                                  param => this.CanSaveTest());
+        }
 
         #region methods
 
@@ -288,51 +320,7 @@ namespace UserInterface.ViewModel
 
         #endregion
 
-        public MainViewModel(IDataService dataService)
-        {
-            _dataService = dataService;
-            _dataService.GetData((item, error) => { if (error != null) return; });
 
-            SomeString = "Some Placeholder Text - modify if you want";
-            Result = "Output Placeholder Result";
-
-            _tests = new ObservableCollection<TestViewModel>();
-            _questions = new ObservableCollection<IQuestion>();
-            _resultQuestionList = new ObservableCollection<IQuestion>();
-            _newTestQuestionsIds = new List<int>();
-            _testData = new List<string>();
-            _dao = new DataAccessObject.DAO();
-            _view = (ListCollectionView)CollectionViewSource.GetDefaultView(_tests);
-            GetAllTests();
-            GetAllQuestions();
-
-            NewTestQuestionsIds = new List<int>();
-            TestData = new List<string>();
-
-            CreateNewTestCommand =
-              new GalaSoft.MvvmLight.Command.RelayCommand(
-                () => CreateAndSaveTest());
-
-            OpenModalDialog =
-              new GalaSoft.MvvmLight.Command.RelayCommand(
-                () =>
-                Messenger.Default.Send<Helpers.OpenWindowMessage>(
-                  new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kModal, Argument = SomeString }));
-            OpenNonModalDialog =
-              new GalaSoft.MvvmLight.Command.RelayCommand(
-                () =>
-                Messenger.Default.Send<Helpers.OpenWindowMessage>(
-                  new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kNonModal, Argument = SomeString }));
-
-            Messenger.Default.Register<string>(this, s => Result = s);
-            Messenger.Default.Register<List<int>>(this, "questionsIds", s => NewTestQuestionsIds = s);
-            Messenger.Default.Register<List<string>>(this, "testData", s => TestData = s);
-
-
-            _addTestCommand = new MyRelayCommand(param => this.AddTestToList());
-            _saveNewTestCommand = new MyRelayCommand(param => this.SaveTest(),
-                                                  param => this.CanSaveTest());
-        }
 
     }
 }

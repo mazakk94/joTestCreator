@@ -5,12 +5,6 @@ namespace DataAccessObject.DataObjects
 {
     public class DesignDataService : IDataService
     {
-        /*public void GetData(Action<DataItem, Exception> callback)
-        {
-            // Use this to create design time data
-            
-        }*/
-
         public void GetData(Action<IDataItem, Exception> callback)
         {
             var item = new DataObjects.DataItem("Welcome to MVVM Light [design]");
