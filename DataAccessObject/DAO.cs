@@ -338,6 +338,82 @@ namespace DataAccessObject
             return Answers;
         }
 
+        private bool InsertTest(ITest test)
+        {
+            return false;
+        }
+
+        private bool InsertQuestion(IQuestion question)
+        {
+            connection = new SQLiteConnection("Data Source=Tests.sqlite;Version=3;");
+            connection.Open();
+
+            if (connection.State == ConnectionState.Open)
+            {
+                string insertString = CreateQuestionString(question);
+                SQLiteCommand insertCommand;
+                /*
+                insertString = "INSERT INTO QUESTIONS (ID, POINTS, CONTENT, ANSWER1, ANSWER2, ANSWER3, " +
+                    "ANSWER4, ANSWER5) VALUES (0, 10, 'What is the first question?', 'abc_1', 'def_0', '', '', '')";
+                */
+                insertCommand = new SQLiteCommand(insertString, connection);
+                insertCommand.ExecuteNonQuery();
+
+                connection.Close();
+                return true;
+            } 
+            else
+            {
+                return false;
+            }
+        }
+
+        private string CreateQuestionString(IQuestion question)
+        {
+            string result = "";
+            string init = "INSERT INTO QUESTIONS (ID, POINTS, CONTENT, ANSWER1, ANSWER2, ANSWER3, ANSWER4, ANSWER5) VALUES (";            
+            result += init;
+            result += question.Id.ToString() + ", ";
+            result += question.Points.ToString() + ", ";
+            result += "'" + question.Content + "', ";
+
+            for (int item = 0; item < 5; item++) 
+            {
+                if (question.Answer[item].Item1.Length == 0)
+                    result += (item == 4) ? "'')" : "'', ";
+                else
+                {
+                    result += "'" + question.Answer[item].Item1 + ((question.Answer[item].Item2 == true) ? "_1'" : "_0'");                    
+                    result += (item == 4) ? ")" : ", ";
+                }
+            }
+            return result;
+        }
+
+        private string CreateTestString(ITest test)
+        {
+
+            string result = "";
+            /*
+            string init = "INSERT INTO QUESTIONS (ID, POINTS, CONTENT, ANSWER1, ANSWER2, ANSWER3, ANSWER4, ANSWER5) VALUES (";
+            result += init;
+            result += question.Id.ToString() + ", ";
+            result += question.Points.ToString() + ", ";
+            result += "'" + question.Content + "', ";
+
+            for (int item = 0; item < 5; item++)
+            {
+                if (question.Answer[item].Item1.Length == 0)
+                    result += (item == 4) ? "'')" : "'', ";
+                else
+                {
+                    result += "'" + question.Answer[item].Item1 + ((question.Answer[item].Item2 == true) ? "_1'" : "_0'");
+                    result += (item == 4) ? ")" : ", ";
+                }
+            }*/
+            return result;
+        }
+
         #endregion
                        
         #region dao methods
@@ -361,8 +437,9 @@ namespace DataAccessObject
             questionString.Add(GetAllQuestions().Count().ToString());
             IQuestion question = new DataObjects.Question(questionString);
             AddQuestion(question);
+            InsertQuestion(question);
             return question;
-        }
+        }                
 
         public void AddCar(ICar car)
         {
@@ -383,9 +460,15 @@ namespace DataAccessObject
         {
             int id = _tests.Count;
             ITest test = new DataObjects.Test(TestData, GetQuestionsByIds(NewTestQuestionsIds), NewTestQuestionsIds, id);
-            _tests.Add(test);
+            AddTest(test); //to tylko dodaje do DAO
+            if (!InsertTest(test))
+            {
+                //raise error
+            }
+                
+
             return test;
-        }
+        }        
 
         public void AddTest(ITest test)
         {

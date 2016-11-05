@@ -17,7 +17,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="0.5*" ></RowDefinition>
                 <RowDefinition ></RowDefinition>
-                <RowDefinition Height="2.5*"></RowDefinition>
+                <RowDefinition Height="3.5*"></RowDefinition>
                 <RowDefinition ></RowDefinition>
                 <RowDefinition ></RowDefinition>
             </Grid.RowDefinitions>
@@ -65,6 +65,18 @@
                             </StackPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
+                    <ListBox.ContextMenu>
+                        <ContextMenu>
+                            <!-- TODO -->
+                            <MenuItem Command="Cut">
+                                <!--<MenuItem.Icon>
+                                <Image Source="Images/cut.png" />
+                            </MenuItem.Icon>-->
+                            </MenuItem>
+                            <MenuItem Command="Copy"/>
+                            <MenuItem Command="Paste"/>
+                        </ContextMenu>
+                    </ListBox.ContextMenu>
                 </ListBox>
 
             </StackPanel>
@@ -72,11 +84,10 @@
             <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Vertical">
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Max points" Margin="0 0 20 0" />
-                    <!--Label Content="{Binding MaxPoints}" /-->
                     <Label x:Name="maxPoints" Content="{Binding MaxPoints}" />
                 </StackPanel>
 
-                <TextBlock Margin="0 10"
+                <TextBlock Visibility="Hidden" Margin="0 10"
                 Text="{Binding MyText}" />
                 <CheckBox Visibility="Hidden" x:Name="chkBox"                
                 Content="Check this to return true as result when closing this window" />
@@ -92,30 +103,14 @@
                 <StackPanel Height="40" Orientation="Horizontal" HorizontalAlignment="Center">
                     <Label Content="Answers" VerticalAlignment="Center" />
                 </StackPanel>
-                
-                <ListBox MinHeight="100" Name="lstBox2" ItemsSource="{Binding AnswerList}">                    
+                <ListBox MinHeight="100" x:Name="lstBox2" ItemsSource="{Binding AnswerList}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="{Binding}" />
                             </StackPanel>
                         </DataTemplate>
-                    </ListBox.ItemTemplate>
-                    <ListBox.ContextMenu>
-                    <ContextMenu>
-                        <!-- TODO -->
-                        <MenuItem Command="Cut">
-                            <!--<MenuItem.Icon>
-                                <Image Source="Images/cut.png" />
-                            </MenuItem.Icon>-->
-                        </MenuItem>
-                        <MenuItem Command="Copy">
-                        </MenuItem>
-                        <MenuItem Command="Paste">
-
-                        </MenuItem>
-                    </ContextMenu>
-                </ListBox.ContextMenu>
+                    </ListBox.ItemTemplate>                    
                 </ListBox>
             </StackPanel>
             

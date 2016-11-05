@@ -281,7 +281,8 @@ namespace UserInterface.ViewModel
             Messenger.Default.Send<Helpers.OpenWindowMessage>(
                    new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kNewTest, Argument = SomeString });
 
-            _dao.CreateNewTest(TestData, NewTestQuestionsIds);
+            if(Result == "Accepted")
+                _dao.CreateNewTest(TestData, NewTestQuestionsIds);
             GetAllTests();
             //tu mozna dodac jeszcze działania po zamknieciu okna dodawania testu
 
