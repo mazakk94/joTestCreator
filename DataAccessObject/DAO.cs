@@ -200,6 +200,8 @@ namespace DataAccessObject
 
         public IQuestion GetQuestion(int questionId)
         {
+            _questions.Clear();
+            _questions = SelectAllQuestions();
             return _questions.Find(x => x.Id == questionId);
         }
 
@@ -319,6 +321,8 @@ namespace DataAccessObject
 
                 }
 
+                connection.Close();
+
                 List<IQuestion> questions = SelectAllQuestions();
                 _questions = questions;
 
@@ -330,15 +334,15 @@ namespace DataAccessObject
 
             }
 
-            connection.Close();
+            
         }
 
         private List<ITest> SelectAllTests()
         {
             List<ITest> tests = new List<ITest>();
-            string selectString = "select * from TESTS order by ID desc";
+            string selectString = "select * from TESTS order by id";
 
-            //connection.Open();
+            connection.Open();
             if (connection.State == ConnectionState.Open)
             {
                 SQLiteCommand selectCommand = new SQLiteCommand(selectString, connection);
@@ -361,6 +365,7 @@ namespace DataAccessObject
                         QuestionsIds = questionsIds
                     });
                 }
+                connection.Close();
             }
             //connection.Close();
             return tests;
@@ -393,9 +398,10 @@ namespace DataAccessObject
         private List<IQuestion> SelectAllQuestions()
         {
             List<IQuestion> questions = new List<IQuestion>();
-            string selectString = "select * from QUESTIONS order by ID desc";            
+            string selectString = "select * from QUESTIONS order by ID desc";
+
             
-            //connection.Open();
+            connection.Open();
             if (connection.State == ConnectionState.Open)
             {
                 SQLiteCommand selectCommand = new SQLiteCommand(selectString, connection);
@@ -416,8 +422,9 @@ namespace DataAccessObject
                     });
 
                 }
+                connection.Close();
             }
-            //connection.Close();
+            
             return questions;
         }
         
@@ -462,6 +469,7 @@ namespace DataAccessObject
             {
                 string insertString = CreateTestString(test);
                 SQLiteCommand insertCommand = new SQLiteCommand(insertString, connection);
+                insertCommand.ExecuteNonQuery();
                 connection.Close();
                 return true;
             }
@@ -562,6 +570,7 @@ namespace DataAccessObject
             result += "INSERT INTO TESTS (ID, NAME, LENGTH, MAXPOINTS) VALUES (";
             result += test.Id.ToString() + ", ";
             result += "'" + test.Name.ToString() + "', ";
+            result += (test.Length.Minutes + test.Length.Hours * 60).ToString() + ", ";
             result += test.MaximumPoints.ToString() + ")";
 
             return result;

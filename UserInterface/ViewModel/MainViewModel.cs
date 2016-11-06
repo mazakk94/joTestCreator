@@ -104,6 +104,7 @@ namespace UserInterface.ViewModel
                 _selectedIndex = value;
                 _questions.Clear();
                 //pobieram z testu liste numerów pytań i pobieram te pytania z DAO
+                //GetTestId(_selectedIndex);
                 List<int> questionsIds = GetQuestionsIds(_selectedIndex);
 
                 GetQuestions(questionsIds);
@@ -111,7 +112,7 @@ namespace UserInterface.ViewModel
                 RaisePropertyChanged(() => Index);
                 RaisePropertyChanged(() => Questions);
             }
-        }
+        }        
 
         private TestViewModel _editedTest;
         public TestViewModel EditedTest
@@ -223,6 +224,11 @@ namespace UserInterface.ViewModel
             }
         }
 
+        private void GetTestId(int _selectedIndex)
+        {
+            throw new NotImplementedException();
+        }
+
         private void GetAllQuestions()
         {
             foreach (var c in _dao.GetAllQuestions())
@@ -239,12 +245,12 @@ namespace UserInterface.ViewModel
             }
         }
 
-        private List<int> GetQuestionsIds(int _selectedIndex)
+        private List<int> GetQuestionsIds(int testId)
         {
             List<int> ids = new List<int>();
             foreach (var test in _dao.GetAllTests())
             {
-                if (test.Id == _selectedIndex)
+                if (test.Id == testId)
                 {
                     ids = test.QuestionsIds;
                 }
