@@ -103,6 +103,7 @@ namespace UserInterface.ViewModel
 
                 _selectedIndex = value;
                 _questions.Clear();
+                //pobieram z testu liste numerów pytań i pobieram te pytania z DAO
                 List<int> questionsIds = GetQuestionsIds(_selectedIndex);
 
                 GetQuestions(questionsIds);

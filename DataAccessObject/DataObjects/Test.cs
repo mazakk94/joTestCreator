@@ -9,6 +9,12 @@ namespace DataAccessObject.DataObjects
 {
     class Test : ITest
     {
+        public int Id
+        {
+            get;
+            set;
+        }
+
         public string Name
         {
             get;
@@ -39,11 +45,7 @@ namespace DataAccessObject.DataObjects
             set;
         }
 
-        public int Id
-        {
-            get;
-            set;
-        }
+        
 
         public Test() { }
 

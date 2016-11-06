@@ -29,8 +29,8 @@ namespace DataAccessObject
         #endregion
         
         public DAO()
-        {           
-            
+        {
+            #region old
             _producers = new List<IProducer>()
             {
                 new DataObjects.Producer(){ ProducerID = 1, Name = "one"},
@@ -48,8 +48,11 @@ namespace DataAccessObject
                 new DataObjects.Car() { CarID = 5, Name = "Polo5", Producer = _producers[1], Price = 45, Color = "Red"}
                 
             };
-            
-            _questions = new List<IQuestion>();/*
+            #endregion
+
+            _questions = new List<IQuestion>();
+            #region comment
+            /*
             {
                 new DataObjects.Question() 
                 { 
@@ -83,10 +86,11 @@ namespace DataAccessObject
                 }
 
             };*/
-            InitSQLite();
+            #endregion
 
-            _tests = new List<ITest>()
-            {
+            _tests = new List<ITest>();
+            #region comment
+            /*  {
                 new DataObjects.Test() { Id = 0, Name = "Pokemon Test", Length = new TimeSpan(1, 0, 0), MaximumPoints = 10, 
                     QuestionsIds = new List<int>(){ 0 }, 
                     Question = new List<IQuestion>()
@@ -103,9 +107,10 @@ namespace DataAccessObject
                     }
 
                 }
-            };
+            };*/
+            #endregion
 
-
+            InitSQLite();
 
 
         }
@@ -252,11 +257,8 @@ namespace DataAccessObject
             {
                 if (newDB)
                 {
-                    string createString = "CREATE TABLE QUESTIONS " +
-                        "(" +
-                        "ID INT PRIMARY KEY, " +
-                        "POINTS INT, " +
-                        "CONTENT VARCHAR(100), " +
+                    string createString = "CREATE TABLE QUESTIONS (" +
+                        "ID INT PRIMARY KEY, POINTS INT, CONTENT VARCHAR(100), " +
                         "ANSWER1 VARCHAR(100), " +
                         "ANSWER2 VARCHAR(100), " +
                         "ANSWER3 VARCHAR(100), " +
@@ -265,6 +267,13 @@ namespace DataAccessObject
                     SQLiteCommand createCommand = new SQLiteCommand(createString, connection);
                     createCommand.ExecuteNonQuery();
 
+                    createString = "CREATE TABLE TESTS (ID INT PRIMARY KEY, NAME VARCHAR(100), LENGTH INT, MAXPOINTS INT)";
+                    createCommand = new SQLiteCommand(createString, connection);
+                    createCommand.ExecuteNonQuery();
+
+                    createString = "CREATE TABLE QUESTIONSIDS (TESTID INT, QUESTIONID INT)";
+                    createCommand = new SQLiteCommand(createString, connection);
+                    createCommand.ExecuteNonQuery();
 
                     string insertString;
                     SQLiteCommand insertCommand;
@@ -279,9 +288,116 @@ namespace DataAccessObject
                         "ANSWER4, ANSWER5) VALUES (1, 5, 'Yellow electric mouse?', 'Pika_0', 'Chu_1', 'Zapdos_0', '', '')";
                     insertCommand = new SQLiteCommand(insertString, connection);
                     insertCommand.ExecuteNonQuery();
+                    
+                    insertString = "INSERT INTO QUESTIONS (ID, POINTS, CONTENT, ANSWER1, ANSWER2, ANSWER3, " +
+                        "ANSWER4, ANSWER5) VALUES (2, 15, 'Name of main character?', 'Ash_1', 'Brock_0', 'Giovanni_0', 'Misty_0', '')";
+                    insertCommand = new SQLiteCommand(insertString, connection);
+                    insertCommand.ExecuteNonQuery();
+
+                    insertString = "INSERT INTO TESTS (ID, NAME, LENGTH, MAXPOINTS) VALUES (" +
+                        "0, 'Pokemon Test', 60, 10)";
+                    insertCommand = new SQLiteCommand(insertString, connection);
+                    insertCommand.ExecuteNonQuery();
+
+                    insertString = "INSERT INTO TESTS (ID, NAME, LENGTH, MAXPOINTS) VALUES (" +
+                        "1, 'Drivers test', 75, 18)";
+                    insertCommand = new SQLiteCommand(insertString, connection);
+                    insertCommand.ExecuteNonQuery();
+
+                    insertString = "INSERT INTO QUESTIONSIDS (TESTID, QUESTIONID) VALUES (1, 1)";
+                    insertCommand = new SQLiteCommand(insertString, connection);
+                    insertCommand.ExecuteNonQuery();
+
+                    insertString = "INSERT INTO QUESTIONSIDS (TESTID, QUESTIONID) VALUES (0, 0)";
+                    insertCommand = new SQLiteCommand(insertString, connection);
+                    insertCommand.ExecuteNonQuery();
+
+                    insertString = "INSERT INTO QUESTIONSIDS (TESTID, QUESTIONID) VALUES (1, 2)";
+                    insertCommand = new SQLiteCommand(insertString, connection);
+                    insertCommand.ExecuteNonQuery();
+                    
+
                 }
 
-                string selectString = "select * from QUESTIONS order by ID desc";
+                List<IQuestion> questions = SelectAllQuestions();
+                _questions = questions;
+
+                List<ITest> tests = SelectAllTests();
+                _tests = tests;
+
+                
+                                
+
+            }
+
+            connection.Close();
+        }
+
+        private List<ITest> SelectAllTests()
+        {
+            List<ITest> tests = new List<ITest>();
+            string selectString = "select * from TESTS order by ID desc";
+
+            //connection.Open();
+            if (connection.State == ConnectionState.Open)
+            {
+                SQLiteCommand selectCommand = new SQLiteCommand(selectString, connection);
+                SQLiteDataReader reader = selectCommand.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    //przypisuje do zmiennych dane z bazy
+                    //Console.WriteLine("ID: " + reader["ID"] + "\tContent: " + reader["CONTENT"]);
+                    int id = Int32.Parse(reader["ID"].ToString());
+                    List<int> questionsIds = SelectQuestionsIds(id);
+
+                    tests.Add(
+                    new DataObjects.Test()
+                    {
+                        Id = id,
+                        Name = reader["NAME"].ToString(),                        
+                        Length = new TimeSpan(Int32.Parse(reader["LENGTH"].ToString())/60, Int32.Parse(reader["LENGTH"].ToString()) % 60, 0),
+                        MaximumPoints = Int32.Parse(reader["MAXPOINTS"].ToString()), 
+                        QuestionsIds = questionsIds
+                    });
+                }
+            }
+            //connection.Close();
+            return tests;
+        }
+
+        private List<int> SelectQuestionsIds(int id)
+        {
+            List<int> ids = new List<int>();
+            string selectString = "select * from QUESTIONSIDS where TESTID = "+id.ToString();
+
+            //connection.Open();
+            if (connection.State == ConnectionState.Open)
+            {
+
+                SQLiteCommand selectCommand = new SQLiteCommand(selectString, connection);
+                SQLiteDataReader reader = selectCommand.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    //przypisuje do zmiennych dane z bazy
+                    //Console.WriteLine("ID: " + reader["ID"] + "\tContent: " + reader["CONTENT"]);
+                    int questionId = Int32.Parse(reader["QUESTIONID"].ToString());        
+                    ids.Add(questionId);
+                }
+            }
+            //connection.Close();
+            return ids;
+        }
+
+        private List<IQuestion> SelectAllQuestions()
+        {
+            List<IQuestion> questions = new List<IQuestion>();
+            string selectString = "select * from QUESTIONS order by ID desc";            
+            
+            //connection.Open();
+            if (connection.State == ConnectionState.Open)
+            {
                 SQLiteCommand selectCommand = new SQLiteCommand(selectString, connection);
                 SQLiteDataReader reader = selectCommand.ExecuteReader();
 
@@ -290,7 +406,7 @@ namespace DataAccessObject
                     //przypisuje do zmiennych dane z bazy
                     Console.WriteLine("ID: " + reader["ID"] + "\tContent: " + reader["CONTENT"]);
 
-                    _questions.Add(
+                    questions.Add(
                     new DataObjects.Question()
                     {
                         Id = Int32.Parse(reader["ID"].ToString()),
@@ -300,10 +416,9 @@ namespace DataAccessObject
                     });
 
                 }
-
             }
-
-            connection.Close();
+            //connection.Close();
+            return questions;
         }
         
         private List<Tuple<string, bool>> ReadAnswers(SQLiteDataReader reader)
@@ -340,7 +455,21 @@ namespace DataAccessObject
 
         private bool InsertTest(ITest test)
         {
-            return false;
+            connection = new SQLiteConnection("Data Source=Tests.sqlite;Version=3;");
+            connection.Open();
+
+            if (connection.State == ConnectionState.Open)
+            {
+                string insertString = CreateTestString(test);
+                SQLiteCommand insertCommand = new SQLiteCommand(insertString, connection);
+                connection.Close();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+            
         }
 
         private bool InsertQuestion(IQuestion question)
@@ -351,12 +480,7 @@ namespace DataAccessObject
             if (connection.State == ConnectionState.Open)
             {
                 string insertString = CreateQuestionString(question);
-                SQLiteCommand insertCommand;
-                /*
-                insertString = "INSERT INTO QUESTIONS (ID, POINTS, CONTENT, ANSWER1, ANSWER2, ANSWER3, " +
-                    "ANSWER4, ANSWER5) VALUES (0, 10, 'What is the first question?', 'abc_1', 'def_0', '', '', '')";
-                */
-                insertCommand = new SQLiteCommand(insertString, connection);
+                SQLiteCommand insertCommand = new SQLiteCommand(insertString, connection);
                 insertCommand.ExecuteNonQuery();
 
                 connection.Close();
@@ -367,6 +491,48 @@ namespace DataAccessObject
                 return false;
             }
         }
+
+        private bool InsertQuestionsIds(int id, List<int> NewTestQuestionsIds)
+        {
+            connection = new SQLiteConnection("Data Source=Tests.sqlite;Version=3;");
+            connection.Open();
+
+            if (connection.State == ConnectionState.Open)
+            {
+                List<string> insertStringList = CreateQuestionsIdsString(id, NewTestQuestionsIds);
+
+                using (var command = new SQLiteCommand(connection))
+                {
+                    using (var transaction = connection.BeginTransaction())
+                    {
+                        for (int i = 0; i < insertStringList.Count; i++)
+                        {
+                            command.CommandText = insertStringList[i];                                
+                            command.ExecuteNonQuery();
+                        }
+                        transaction.Commit();
+                    }
+                }
+
+                connection.Close();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private List<string> CreateQuestionsIdsString(int id, List<int> NewTestQuestionsIds)
+        {
+            List<string> result = new List<string>();
+            string init = "INSERT INTO QUESTIONSIDS (TESTID, QUESTIONID) VALUES (";  
+            for (int i = 0; i < NewTestQuestionsIds.Count; i++)
+            {
+                result.Add(init+id.ToString()+", "+NewTestQuestionsIds[i]+")");
+            }
+            return result;
+        }    
 
         private string CreateQuestionString(IQuestion question)
         {
@@ -392,25 +558,12 @@ namespace DataAccessObject
 
         private string CreateTestString(ITest test)
         {
-
             string result = "";
-            /*
-            string init = "INSERT INTO QUESTIONS (ID, POINTS, CONTENT, ANSWER1, ANSWER2, ANSWER3, ANSWER4, ANSWER5) VALUES (";
-            result += init;
-            result += question.Id.ToString() + ", ";
-            result += question.Points.ToString() + ", ";
-            result += "'" + question.Content + "', ";
+            result += "INSERT INTO TESTS (ID, NAME, LENGTH, MAXPOINTS) VALUES (";
+            result += test.Id.ToString() + ", ";
+            result += "'" + test.Name.ToString() + "', ";
+            result += test.MaximumPoints.ToString() + ")";
 
-            for (int item = 0; item < 5; item++)
-            {
-                if (question.Answer[item].Item1.Length == 0)
-                    result += (item == 4) ? "'')" : "'', ";
-                else
-                {
-                    result += "'" + question.Answer[item].Item1 + ((question.Answer[item].Item2 == true) ? "_1'" : "_0'");
-                    result += (item == 4) ? ")" : ", ";
-                }
-            }*/
             return result;
         }
 
@@ -465,10 +618,15 @@ namespace DataAccessObject
             {
                 //raise error
             }
-                
+            else //insert successfull
+            {
+                InsertQuestionsIds(id, NewTestQuestionsIds);
+            }   
 
             return test;
-        }        
+        }
+
+            
 
         public void AddTest(ITest test)
         {
