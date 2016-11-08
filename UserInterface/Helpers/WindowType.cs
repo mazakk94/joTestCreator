@@ -5,6 +5,7 @@
         kModal,
         kNonModal, 
         kNewTest,
+        kEditTest,
         kNewQuestion
     }
 }

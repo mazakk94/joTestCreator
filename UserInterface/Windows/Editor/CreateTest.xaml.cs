@@ -48,8 +48,6 @@ namespace UserInterface.Windows.Editor
                             Messenger.Default.Send(resultList, "question");
                         }
 
-                        
-
                         string resultString;
                         if (result == true) resultString = "Accepted";
                         else resultString = "Rejected";

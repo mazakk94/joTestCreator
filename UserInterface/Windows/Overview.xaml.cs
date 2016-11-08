@@ -52,7 +52,9 @@ namespace UserInterface
                         var createNewTestWindow = new CreateTest()
                         {
                             DataContext = modalWindowVM
+                            
                         };
+                        modalWindowVM.ClearWindow();
                         
                         bool? result = createNewTestWindow.ShowDialog();
                         if (result.HasValue && result.Value)
@@ -63,6 +65,7 @@ namespace UserInterface
 
                             Messenger.Default.Send(questionsIds, "questionsIds");
                             Messenger.Default.Send(resultList, "testData");
+                            modalWindowVM.UpdateQuestions();
                         }
                         
                         string resultString;
@@ -70,6 +73,38 @@ namespace UserInterface
                         else resultString = "Rejected";
                         Messenger.Default.Send(resultString);
                         
+                        break;
+
+                    case WindowType.kEditTest:
+
+                        //TODO
+                        modalWindowVM = SimpleIoc.Default.GetInstance<CreateTestWindowViewModel>();                        
+                        var createEditTestWindow = new CreateTest()
+                        {
+                            DataContext = modalWindowVM
+                        };
+                        modalWindowVM.ClearWindow();
+                        modalWindowVM.TestId = Int32.Parse(message.Argument);
+                        modalWindowVM.RefreshDAO();
+                        modalWindowVM.LoadData();
+
+                        result = createEditTestWindow.ShowDialog();
+                        if (result.HasValue && result.Value)
+                        {
+                            result = true;
+                            List<int> questionsIds = FillQuestionsIds(createEditTestWindow);
+                            List<string> resultList = GetTestDataFromDialog(createEditTestWindow);
+
+                            Messenger.Default.Send(questionsIds, "questionsIds");
+                            Messenger.Default.Send(resultList, "testData");
+                            modalWindowVM.UpdateQuestions(); //insert and delete from DB questions and Ids !
+                        }
+
+                        //resultString;
+                        if (result == true) resultString = "Accepted";
+                        else resultString = "Rejected";
+                        Messenger.Default.Send(resultString);
+
                         break;      
 
                 }

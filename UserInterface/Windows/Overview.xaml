@@ -59,20 +59,9 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
                 <ListBox.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Command="Cut">
-
-                            <!--<MenuItem.Icon>
-                                <Image Source="Images/cut.png" />
-                            </MenuItem.Icon>-->
-
-                        </MenuItem>
-                        <MenuItem Command="Copy">
-
-                        </MenuItem>
-                        <MenuItem Command="Paste">
-
-                        </MenuItem>
+                    <ContextMenu>                        
+                        <MenuItem Header="Edit" Command="{Binding EditTestCommand}" />
+                        <MenuItem Header="Delete" Command="{Binding DeleteTestCommand}" />
                     </ContextMenu>
                 </ListBox.ContextMenu>
             </ListBox>            

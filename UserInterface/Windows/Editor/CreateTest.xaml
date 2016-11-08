@@ -24,13 +24,13 @@
 
             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1" Margin="0">
                 <Label VerticalAlignment="Center" Content="Name" Margin="0 0 20 0" />
-                <TextBox VerticalAlignment="Center" MinWidth="150" x:Name="Name" />
+                <TextBox VerticalAlignment="Center" MinWidth="150" x:Name="Name" Text="{Binding Name}" />
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
                 <StackPanel Orientation="Vertical">
                     <Label Content="Time for test" />
-                    <Slider IsSnapToTickEnabled="True" TickFrequency="1" Minimum="1" 
+                    <Slider Value="{Binding Length}" IsSnapToTickEnabled="True" TickFrequency="1" Minimum="1" 
                             Maximum="120" x:Name="mySlider" Width="100" HorizontalAlignment="Left" />
                 </StackPanel>
                 <Label x:Name="Length" Content="{Binding ElementName=mySlider, Path=Value}" VerticalAlignment="Center" />

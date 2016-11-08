@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,7 +27,17 @@ namespace Interfaces
         IQuestion CreateNewQuestion(List<string> questionString);
         void AddCar(ICar car);
 
-
+        
         ITest CreateNewTest(List<string> TestData, List<int> NewTestQuestionsIds);
+        List<int> SelectQuestionsIds(int testId);
+        List<string> GetTestData(int testId);
+        ObservableCollection<IQuestion> GetQuestionsByIds(ObservableCollection<int> observableCollection);
+        void DeleteQuestion(int id);
+        void DeleteQuestionId(int id);
+        void InsertQuestionId(int testId, int questionId);
+        bool InsertQuestion(IQuestion question);
+
+        void UpdateTest(int testId, List<string> TestData, List<int> NewTestQuestionsIds);
+        void InitDAO();
     }
 }

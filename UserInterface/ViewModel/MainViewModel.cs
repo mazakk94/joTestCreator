@@ -73,7 +73,7 @@ namespace UserInterface.ViewModel
         }
 
         private List<string> _testData;
-        public List<string> TestData //contains data about test - name, length, maxpoints
+        public List<string> TestData //contains data about test - [0]maxpoints, [1]length, [2]name
         {
             get
             {
@@ -192,6 +192,10 @@ namespace UserInterface.ViewModel
               new GalaSoft.MvvmLight.Command.RelayCommand(
                 () => CreateAndSaveTest());
 
+            EditTestCommand =
+                new GalaSoft.MvvmLight.Command.RelayCommand(
+                () => EditTest(GetSelectedTestId()));
+
             OpenModalDialog =
               new GalaSoft.MvvmLight.Command.RelayCommand(
                 () =>
@@ -211,6 +215,11 @@ namespace UserInterface.ViewModel
             _addTestCommand = new MyRelayCommand(param => this.AddTestToList());
             _saveNewTestCommand = new MyRelayCommand(param => this.SaveTest(),
                                                   param => this.CanSaveTest());
+        }
+
+        private int GetSelectedTestId()
+        {
+            return _selectedIndex;
         }
 
         #region methods
@@ -283,6 +292,22 @@ namespace UserInterface.ViewModel
             return true;
         }
 
+        private void EditTest(int testId)
+        {
+            Messenger.Default.Send<Helpers.OpenWindowMessage>(
+                   new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kEditTest, Argument = testId.ToString() });
+
+            if (Result == "Accepted")
+            {
+                _dao.UpdateTest(testId, TestData, NewTestQuestionsIds);
+                _dao.InitDAO();
+            }
+                
+            GetAllTests();
+            //tu mozna dodac jeszcze działania po zamknieciu okna dodawania testu
+
+        }
+
         private void CreateAndSaveTest()
         {
             Messenger.Default.Send<Helpers.OpenWindowMessage>(
@@ -299,6 +324,7 @@ namespace UserInterface.ViewModel
         #region commands
 
         public RelayCommand CreateNewTestCommand { get; private set; }
+        public RelayCommand EditTestCommand { get; private set; }
         public RelayCommand OpenModalDialog { get; private set; }
         public RelayCommand OpenNonModalDialog { get; private set; }
 
@@ -329,6 +355,6 @@ namespace UserInterface.ViewModel
         #endregion
 
 
-
+        
     }
 }
