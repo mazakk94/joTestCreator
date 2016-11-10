@@ -86,6 +86,34 @@ namespace UserInterface.ViewModel
             }
         }
 
+        private string _maxPoints;
+        public string MaxPoints 
+        {
+            get
+            {
+                return _maxPoints;
+            }
+            set
+            {
+                _maxPoints = value;
+                RaisePropertyChanged("MaxPoints");
+            }
+        }
+
+        private string _length;
+        public string Length 
+        {
+            get
+            {
+                return _length;
+            }
+            set
+            {
+                _length = value;
+                RaisePropertyChanged("Length");
+            }
+        }
+
         private int _selectedIndex;
         public int Index //selected index to know which answers show in listbox next to questions list
         {
@@ -106,11 +134,14 @@ namespace UserInterface.ViewModel
                 //pobieram z testu liste numerów pytań i pobieram te pytania z DAO
                 //GetTestId(_selectedIndex);
                 List<int> questionsIds = GetQuestionsIds(_selectedIndex);
-
+                _length = (Tests[_selectedIndex].Length.Hours*60 + Tests[_selectedIndex].Length.Minutes).ToString();
+                _maxPoints = Tests[_selectedIndex].MaximumPoints.ToString();
                 GetQuestions(questionsIds);
 
                 RaisePropertyChanged(() => Index);
                 RaisePropertyChanged(() => Questions);
+                RaisePropertyChanged(() => MaxPoints);
+                RaisePropertyChanged(() => Length);
             }
         }        
 
@@ -217,12 +248,14 @@ namespace UserInterface.ViewModel
                                                   param => this.CanSaveTest());
         }
 
+        
+
+        #region methods
+
         private int GetSelectedTestId()
         {
             return _selectedIndex;
         }
-
-        #region methods
 
         private void GetAllTests()
         {
@@ -232,12 +265,7 @@ namespace UserInterface.ViewModel
                 _tests.Add(new TestViewModel(c));
             }
         }
-
-        private void GetTestId(int _selectedIndex)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         private void GetAllQuestions()
         {
             foreach (var c in _dao.GetAllQuestions())
@@ -311,7 +339,7 @@ namespace UserInterface.ViewModel
         private void CreateAndSaveTest()
         {
             Messenger.Default.Send<Helpers.OpenWindowMessage>(
-                   new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kNewTest, Argument = SomeString });
+                   new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kNewTest, Argument = _tests.Count.ToString() });
 
             if(Result == "Accepted")
                 _dao.CreateNewTest(TestData, NewTestQuestionsIds);

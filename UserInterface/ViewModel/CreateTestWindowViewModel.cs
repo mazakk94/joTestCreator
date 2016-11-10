@@ -305,17 +305,26 @@ namespace UserInterface.ViewModel
         {
             //pobieram na nowo z bazy wszystkie testy, pytania i ids
             _dao.InitDAO();
-
         }
 
         internal void LoadData()
         {            
             List<string> testData = _dao.GetTestData(this.TestId);
             this.Name = testData[0];
-            this.Length = ParseTimeSpan(testData[1]);
-            this.MaxPoints = Int32.Parse(testData[2]);
+            this.Length = ParseTimeSpan(testData[1]);            
             this.QuestionsIds = new ObservableCollection<int>(_dao.SelectQuestionsIds(this.TestId));
             this.Questions = _dao.GetQuestionsByIds(this.QuestionsIds);
+            this.MaxPoints = CalculateMaxPoints(Questions);
+        }
+
+        private int CalculateMaxPoints(ObservableCollection<IQuestion> Questions)
+        {
+            int maxpoints = 0;
+            foreach(var question in Questions)
+            {
+                maxpoints += question.Points;
+            }
+            return maxpoints;
         }
 
         private int ParseTimeSpan(string timeSpan)

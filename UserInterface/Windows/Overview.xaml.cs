@@ -55,6 +55,7 @@ namespace UserInterface
                             
                         };
                         modalWindowVM.ClearWindow();
+                        modalWindowVM.TestId = Int32.Parse(message.Argument);
                         
                         bool? result = createNewTestWindow.ShowDialog();
                         if (result.HasValue && result.Value)
