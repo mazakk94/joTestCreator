@@ -15,6 +15,28 @@ namespace UserInterface.ViewModel
         private readonly IDataService _dataService;
         private IDAO _dao = new DataAccessObject.DAO();
 
+        private List<string> _answers;
+        public List<string> Answers
+        {
+            get { return _answers; }
+            set
+            {
+                _answers = value;
+                RaisePropertyChanged("Answers");
+            }
+        }
+
+        private List<bool> _correctAnswer;
+        public List<bool> CorrectAnswer
+        {
+            get { return _correctAnswer; }
+            set
+            {
+                _correctAnswer = value;
+                RaisePropertyChanged("CorrectAnswer");
+            }
+        }
+
         private int _testId;
         public int TestId
         {
@@ -72,6 +94,7 @@ namespace UserInterface.ViewModel
 
                 _name = value;
                 RaisePropertyChanged(() => Name);
+                RaisePropertyChanged("Name");
             }
         }
 
@@ -236,8 +259,10 @@ namespace UserInterface.ViewModel
                 _questionString = value;
 
                 //rozpakowanie i wpisanie do list
-                if(_questionString.Count > 6)
-                    UnpackQuestionString();
+                if (_questionString.Count > 7 && !_questionString[_questionString.Count].Contains("-")) // edit
+                    UnpackQuestionString(true);
+                else if(_questionString.Count > 6 && !_questionString[_questionString.Count].Contains("-")) // new
+                    UnpackQuestionString(false);
                 
                 RaisePropertyChanged(() => Index);
                 RaisePropertyChanged(() => Questions);
@@ -245,6 +270,7 @@ namespace UserInterface.ViewModel
         }
 
         public RelayCommand AddNewQuestionCommand { get; private set; }
+        public RelayCommand EditQuestionCommand { get; private set; }
 
         #endregion
         
@@ -265,7 +291,59 @@ namespace UserInterface.ViewModel
                 Messenger.Default.Send<Helpers.OpenWindowMessage>(
                   new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kNewQuestion, Argument = QuestionsCount.ToString() }));
 
-            Messenger.Default.Register<List<string>>(this, "question", s => QuestionString = s);
+            EditQuestionCommand = new GalaSoft.MvvmLight.Command.RelayCommand(
+                () => EditAndSaveQuestion());
+
+            Messenger.Default.Register<List<string>>(this, "question", 
+                s => { QuestionString.Clear(); foreach (var item in s) QuestionString.Add(item); });
+            //Messenger.Default.Register<List<string>>(this, "question", s => QuestionString = s);
+        }
+
+        
+
+        private void EditAndSaveQuestion()
+        {
+            PrepareQuestionString();
+            string arg = ParseQuestionString(QuestionString);
+            Messenger.Default.Send<Helpers.OpenWindowMessage>(
+                  new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kEditQuestion, Argument = arg });
+            
+            //trzeba nadpisać istniejące pytanie -> info siedzi w questionstring, powinien sam sie odpakować
+            
+        }
+
+        private void PrepareQuestionString()
+        {
+            /* * 0 - content, 1 .. 5 - answer, 6 - points, 7 - id*/
+
+            QuestionString.Clear();
+            QuestionString.Add(_questions[_selectedIndex].Content);
+
+            for (int i = 0; i < 5; i++)
+            {
+                if (_questions[_selectedIndex].Answer.Count > i)
+                    QuestionString.Add(UnParseAnswer(_questions[_selectedIndex].Answer[i]));
+                else
+                    QuestionString.Add("");
+            }
+            
+            QuestionString.Add(_questions[_selectedIndex].Points.ToString());
+            QuestionString.Add("");
+        }
+
+        private string UnParseAnswer(Tuple<string, bool> answer)
+        {
+            return answer.Item1 + ((answer.Item2 == true) ? "_1" : "_0");              
+        }
+     
+        private string ParseQuestionString(List<string> questionString)
+        {
+            string parsed = "";
+            for (int i = 0; i < questionString.Count-1; i++)
+            {
+                parsed += (i == questionString.Count - 2) ? questionString[i] : (questionString[i] + ";");
+            }
+            return parsed;
         }
         
         #region methods
@@ -286,6 +364,10 @@ namespace UserInterface.ViewModel
             Questions = new ObservableCollection<IQuestion>();
             _questionString = new List<string>();
             QuestionString = new List<string>();
+            _answers = new List<string>();
+            Answers = new List<string>();
+            _correctAnswer = new List<bool>();
+            CorrectAnswer = new List<bool>();
         }        
 
         private void SetMaxPoints(int points)
@@ -293,12 +375,23 @@ namespace UserInterface.ViewModel
             MaxPoints += points;
         }
 
-        private void UnpackQuestionString()
+        private void UnpackQuestionString(bool isEdit)
         {
-            IQuestion question = _dao.CreateNewQuestion(_questionString);
-            _questions.Add(question);
-            _questionsIds.Add(question.Id);
-            SetMaxPoints(question.Points);
+            if (isEdit == false)
+            {
+                IQuestion question = _dao.CreateNewQuestion(_questionString);
+                _questions.Add(question);
+                _questionsIds.Add(question.Id);
+                SetMaxPoints(question.Points);
+            }
+            else
+            {
+                // no new question in dao, no new id, replacement of question.points
+                SetMaxPoints(-_questions[_selectedIndex].Points);
+                IQuestion question = _dao.CreateTempQuestion(_questionString);
+                _questions[_selectedIndex] = question;
+                SetMaxPoints(_questions[_selectedIndex].Points);
+            }
         }
 
         internal void RefreshDAO()
@@ -352,8 +445,30 @@ namespace UserInterface.ViewModel
                 this._dao.InsertQuestionId(TestId, question.Id);
             }
 
+        }              
+            
+        internal void FillDialog()
+        {
+            /* * 0 - content, 1 .. 5 - answer, 6 - points, 7 - id*/
+            Name = QuestionString[0];
+            for (int i = 0; i < 5; i++)
+            {
+                string [] splitted = QuestionString[i + 1].Split('_');
+                if (splitted.Length == 2)
+                {
+                    Answers.Add(splitted[0]);
+                    CorrectAnswer.Add(splitted[1] == "1" ? true : false);
+                }
+                else
+                {
+                    Answers.Add("");
+                    CorrectAnswer.Add(false);
+                }                
+            }
+            
+            Length = Int32.Parse(QuestionString[6].Replace("-", ""));            
         }
 
-        #endregion           
+        #endregion
     }
 }

@@ -737,6 +737,14 @@ namespace DataAccessObject
             return new DataObjects.Question();
         }
 
+        public IQuestion CreateTempQuestion(List<string> questionString)
+        {
+            // no new id added
+            IQuestion question = new DataObjects.Question(questionString);
+            //no adding question to dao
+            return question;
+        }
+
         public IQuestion CreateNewQuestion(List<string> questionString)
         {
             //questionString.Add(GetAllQuestions().Count().ToString()); //add ID to question

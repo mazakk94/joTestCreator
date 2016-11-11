@@ -3,9 +3,10 @@
     public enum WindowType
     {
         kModal,
-        kNonModal, 
+        kNonModal,
         kNewTest,
         kEditTest,
-        kNewQuestion
+        kNewQuestion,
+        kEditQuestion
     }
 }

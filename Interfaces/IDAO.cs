@@ -25,6 +25,7 @@ namespace Interfaces
         //IUser CreateNewUser();
 
         IQuestion CreateNewQuestion(List<string> questionString);
+        IQuestion CreateTempQuestion(List<string> _questionString);
         void AddCar(ICar car);
 
         
@@ -39,5 +40,6 @@ namespace Interfaces
 
         void UpdateTest(int testId, List<string> TestData, List<int> NewTestQuestionsIds);
         void InitDAO();
+
     }
 }

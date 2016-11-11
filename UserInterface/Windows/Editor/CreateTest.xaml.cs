@@ -32,7 +32,7 @@ namespace UserInterface.Windows.Editor
               {
                 switch (message.Type)
                 {
-                    case WindowType.kNewQuestion:                          
+                    case WindowType.kNewQuestion:
                         var modalWindowVM = SimpleIoc.Default.GetInstance<CreateTestWindowViewModel>();
                         modalWindowVM.MyText = message.Argument;
                         var modalWindow = new CreateQuestion()
@@ -52,12 +52,51 @@ namespace UserInterface.Windows.Editor
                         if (result == true) resultString = "Accepted";
                         else resultString = "Rejected";
 
+                        Messenger.Default.Send(resultString);                        
+                        break;
+
+                    case WindowType.kEditQuestion:
+                        
+                        var EditQuestionWindowVM = SimpleIoc.Default.GetInstance<CreateTestWindowViewModel>();
+                        List<string> unparsed = UnParseQuestionString(message.Argument);
+                        EditQuestionWindowVM.QuestionString = new List<string>();
+                        foreach(var item in unparsed)
+                        {
+                            EditQuestionWindowVM.QuestionString.Add(item);
+                        }
+                        //EditQuestionWindowVM.QuestionString = unparsed; //questionString
+
+                        var EditQuestionWindow = new CreateQuestion()
+                        {
+                            DataContext = EditQuestionWindowVM
+                        };
+                        
+                        EditQuestionWindowVM.FillDialog(); //fill dialog with questionString
+                        result = EditQuestionWindow.ShowDialog();
+
+                        if (result.HasValue && result.Value)
+                        {
+                            List<string> resultList = GetQuestionDataFromDialog(EditQuestionWindow);
+                            Messenger.Default.Send(resultList, "question"); 
+                        }
+
+                        if (result == true) resultString = "Accepted";
+                        else resultString = "Rejected";
+
                         Messenger.Default.Send(resultString);
                         
-                        break;                        
+                        break;                   
                 }             
               });
              
+        }
+
+        private List<string> UnParseQuestionString(string parsed)
+        {
+            string[] unParsed = parsed.Split(';');
+            List<string> list = new List<string>(unParsed);
+            list[list.Count-1] += "-";
+            return list;
         }
 
         private List<string> GetQuestionDataFromDialog(CreateQuestion window)
