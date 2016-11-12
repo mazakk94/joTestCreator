@@ -24,7 +24,7 @@ namespace UserInterface
               {
                   if (message.Type == WindowType.kModal)
                   {
-                      var modalWindowVM = SimpleIoc.Default.GetInstance<CreateTestWindowViewModel>();
+                      var modalWindowVM = SimpleIoc.Default.GetInstance<CreateTestViewModel>();
                       modalWindowVM.MyText = message.Argument;
                       var modalWindow = new ModalWindow()
                       {

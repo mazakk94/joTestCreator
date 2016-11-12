@@ -108,11 +108,12 @@
     <Compile Include="NonModalWindow.xaml.cs">
       <DependentUpon>NonModalWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\CreateQuestionViewModel.cs" />
     <Compile Include="Windows\Overview.xaml.cs">
       <DependentUpon>Overview.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\NonModalWindowViewModel.cs" />
-    <Compile Include="ViewModel\CreateTestWindowViewModel.cs" />
+    <Compile Include="ViewModel\CreateTestViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\MyRelayCommand.cs" />
     <Compile Include="ViewModel\TestViewModel.cs" />

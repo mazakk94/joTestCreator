@@ -23,6 +23,7 @@ namespace UserInterface.Windows.Editor
         public CreateTest()
         {
             InitializeComponent();
+            //Closing += (s, e) => ViewModelLocator.Cleanup();
             //Closing += (sender, args) => DialogResult = chkBox.IsChecked;
 
             
@@ -33,13 +34,14 @@ namespace UserInterface.Windows.Editor
                 switch (message.Type)
                 {
                     case WindowType.kNewQuestion:
-                        var modalWindowVM = SimpleIoc.Default.GetInstance<CreateTestWindowViewModel>();
-                        modalWindowVM.MyText = message.Argument;
+                        //var modalWindowVM = SimpleIoc.Default.GetInstance<CreateTestViewModel>();
+                        var modalWindowVM = SimpleIoc.Default.GetInstance<CreateQuestionViewModel>();
+                        //modalWindowVM.MyText = message.Argument;
                         var modalWindow = new CreateQuestion()
                         {
                             DataContext = modalWindowVM
                         };
-
+                        modalWindowVM.ClearWindow();
                         bool? result = modalWindow.ShowDialog();// ?? false;
 
                         if (result.HasValue && result.Value)
@@ -57,15 +59,16 @@ namespace UserInterface.Windows.Editor
 
                     case WindowType.kEditQuestion:
                         
-                        var EditQuestionWindowVM = SimpleIoc.Default.GetInstance<CreateTestWindowViewModel>();
+                        var EditQuestionWindowVM = SimpleIoc.Default.GetInstance<CreateQuestionViewModel>();
                         List<string> unparsed = UnParseQuestionString(message.Argument);
+                        
                         EditQuestionWindowVM.QuestionString = new List<string>();
                         foreach(var item in unparsed)
                         {
                             EditQuestionWindowVM.QuestionString.Add(item);
                         }
                         //EditQuestionWindowVM.QuestionString = unparsed; //questionString
-
+                        
                         var EditQuestionWindow = new CreateQuestion()
                         {
                             DataContext = EditQuestionWindowVM

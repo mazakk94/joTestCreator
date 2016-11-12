@@ -8,13 +8,14 @@ using System.Collections.ObjectModel;
 
 namespace UserInterface.ViewModel
 {
-    public class CreateTestWindowViewModel : ViewModelBase
+    public class CreateTestViewModel : ViewModelBase
     {
         #region variables definitions
 
         private readonly IDataService _dataService;
         private IDAO _dao = new DataAccessObject.DAO();
 
+        /*
         private List<string> _answers;
         public List<string> Answers
         {
@@ -36,7 +37,8 @@ namespace UserInterface.ViewModel
                 RaisePropertyChanged("CorrectAnswer");
             }
         }
-
+        */
+        
         private int _testId;
         public int TestId
         {
@@ -271,10 +273,11 @@ namespace UserInterface.ViewModel
 
         public RelayCommand AddNewQuestionCommand { get; private set; }
         public RelayCommand EditQuestionCommand { get; private set; }
+        public RelayCommand DeleteQuestionCommand { get; private set; }
 
         #endregion
         
-        public CreateTestWindowViewModel(IDataService dataService)
+        public CreateTestViewModel(IDataService dataService)
         {
             #region variables initialization
 
@@ -285,21 +288,36 @@ namespace UserInterface.ViewModel
 
             #endregion
 
-            AddNewQuestionCommand =
-              new GalaSoft.MvvmLight.Command.RelayCommand(
-                () =>
-                Messenger.Default.Send<Helpers.OpenWindowMessage>(
-                  new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kNewQuestion, Argument = QuestionsCount.ToString() }));
+            AddNewQuestionCommand = new GalaSoft.MvvmLight.Command.RelayCommand(
+                () => CreateAndSaveQuestion());
 
             EditQuestionCommand = new GalaSoft.MvvmLight.Command.RelayCommand(
                 () => EditAndSaveQuestion());
+
+            DeleteQuestionCommand = new GalaSoft.MvvmLight.Command.RelayCommand(
+                () => DeleteQuestion());
 
             Messenger.Default.Register<List<string>>(this, "question", 
                 s => { QuestionString.Clear(); foreach (var item in s) QuestionString.Add(item); });
             //Messenger.Default.Register<List<string>>(this, "question", s => QuestionString = s);
         }
 
-        
+        private void DeleteQuestion()
+        {
+            SetMaxPoints(-_questions[_selectedIndex].Points);
+            _questionsIds.RemoveAt(_selectedIndex);
+            _questions.RemoveAt(_selectedIndex);
+        }
+
+        private void CreateAndSaveQuestion()
+        {
+            Messenger.Default.Send<Helpers.OpenWindowMessage>(
+                new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kNewQuestion, Argument = QuestionsCount.ToString() });
+            if (QuestionString.Count > 6)
+                UnpackQuestionString(false);
+            else
+                ;
+        }
 
         private void EditAndSaveQuestion()
         {
@@ -307,9 +325,11 @@ namespace UserInterface.ViewModel
             string arg = ParseQuestionString(QuestionString);
             Messenger.Default.Send<Helpers.OpenWindowMessage>(
                   new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kEditQuestion, Argument = arg });
-            
-            //trzeba nadpisać istniejące pytanie -> info siedzi w questionstring, powinien sam sie odpakować
-            
+            if (QuestionString.Count > 6)
+                UnpackQuestionString(true);
+            else
+                ;
+            //trzeba nadpisać istniejące pytanie -> info siedzi w questionstring, powinien sam sie odpakować            
         }
 
         private void PrepareQuestionString()
@@ -364,10 +384,6 @@ namespace UserInterface.ViewModel
             Questions = new ObservableCollection<IQuestion>();
             _questionString = new List<string>();
             QuestionString = new List<string>();
-            _answers = new List<string>();
-            Answers = new List<string>();
-            _correctAnswer = new List<bool>();
-            CorrectAnswer = new List<bool>();
         }        
 
         private void SetMaxPoints(int points)
@@ -384,13 +400,14 @@ namespace UserInterface.ViewModel
                 _questionsIds.Add(question.Id);
                 SetMaxPoints(question.Points);
             }
-            else
-            {
-                // no new question in dao, no new id, replacement of question.points
-                SetMaxPoints(-_questions[_selectedIndex].Points);
+            else // question Edit           
+            {   //  no new question in dao, no new id, replacement of question.points 
+                int selectedIndex = _selectedIndex;
+                _questionString.Add(_questionsIds[selectedIndex].ToString());
+                SetMaxPoints(-_questions[selectedIndex].Points);
                 IQuestion question = _dao.CreateTempQuestion(_questionString);
-                _questions[_selectedIndex] = question;
-                SetMaxPoints(_questions[_selectedIndex].Points);
+                _questions[selectedIndex] = question;
+                SetMaxPoints(_questions[selectedIndex].Points);
             }
         }
 
@@ -446,10 +463,10 @@ namespace UserInterface.ViewModel
             }
 
         }              
-            
+            /*
         internal void FillDialog()
         {
-            /* * 0 - content, 1 .. 5 - answer, 6 - points, 7 - id*/
+            /* * 0 - content, 1 .. 5 - answer, 6 - points, 7 - id
             Name = QuestionString[0];
             for (int i = 0; i < 5; i++)
             {
@@ -467,8 +484,9 @@ namespace UserInterface.ViewModel
             }
             
             Length = Int32.Parse(QuestionString[6].Replace("-", ""));            
-        }
+        }*/
 
         #endregion
+
     }
 }

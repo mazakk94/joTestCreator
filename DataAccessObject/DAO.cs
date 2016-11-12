@@ -657,6 +657,11 @@ namespace DataAccessObject
              */
 
             string result = "";
+            for (var i = 0; i < TestData.Count; i++)
+            {
+                TestData[i] = TestData[i].Replace("\'", "");
+            }
+            
             result += "UPDATE TESTS SET NAME = '" + TestData[2] + "', LENGTH = " + Int32.Parse(TestData[1]) + ", " +
                 "MAXPOINTS = " + Int32.Parse(TestData[0]) + " WHERE ID = " + testId.ToString();
             return result;
