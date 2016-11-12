@@ -599,6 +599,68 @@ namespace DataAccessObject
             
         }
 
+        public void DeleteTest(int testId)
+        {
+            List<int> ids = SelectQuestionsIds(testId);
+            foreach (var id in ids)
+            {
+                DeleteQuestion(id);
+                DeleteQuestionId(id);
+            }
+
+            connection = new SQLiteConnection("Data Source=Tests.sqlite;Version=3;");
+            connection.Open();
+
+            if (connection.State == ConnectionState.Open)
+            {
+                string result = "DELETE FROM TESTS WHERE ID = " + testId.ToString();
+                SQLiteCommand deleteCommand = new SQLiteCommand(result, connection);
+                deleteCommand.ExecuteNonQuery();
+                connection.Close();
+                //return true;
+            }
+            else
+            {
+                //return false;
+            }
+
+            if (testId != _tests.Count-1)
+                FixTestsIds(testId);
+
+            InitDAO();
+        }
+
+        private void FixTestsIds(int testId)
+        {
+            connection = new SQLiteConnection("Data Source=Tests.sqlite;Version=3;");
+            connection.Open();
+            int oldId = _tests.Count - 1;
+            if (connection.State == ConnectionState.Open)
+            {
+                string insertString = "UPDATE TESTS SET ID = " + testId.ToString() + " WHERE ID = " + oldId.ToString();
+                SQLiteCommand insertCommand = new SQLiteCommand(insertString, connection);
+                insertCommand.ExecuteNonQuery();
+                connection.Close();
+            }
+
+            //pobieram QIds te, które mają oldId w testId i zamieniam ich testId z oldId na testId
+
+            List<int> questionsIds = SelectQuestionsIds(oldId);
+            foreach (var id in questionsIds)
+            {
+                connection = new SQLiteConnection("Data Source=Tests.sqlite;Version=3;");
+                connection.Open();
+                if (connection.State == ConnectionState.Open)
+                {
+                    string insertString = "UPDATE QUESTIONSIDS SET TESTID = " + testId.ToString() + " WHERE TESTID = " + oldId.ToString();
+                    SQLiteCommand insertCommand = new SQLiteCommand(insertString, connection);
+                    insertCommand.ExecuteNonQuery();
+                    connection.Close();
+                }
+            }
+
+        }
+
         public void InsertQuestionId(int testId, int questionId)
         {          
             connection = new SQLiteConnection("Data Source=Tests.sqlite;Version=3;");
@@ -828,8 +890,7 @@ namespace DataAccessObject
             */
             return test;
         }
-
-            
+                    
 
         public void AddTest(ITest test)
         {
@@ -862,5 +923,8 @@ namespace DataAccessObject
         }
 
         #endregion
+
+
+        
     }
 }

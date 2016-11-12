@@ -302,12 +302,7 @@ namespace UserInterface.ViewModel
             //Messenger.Default.Register<List<string>>(this, "question", s => QuestionString = s);
         }
 
-        private void DeleteQuestion()
-        {
-            SetMaxPoints(-_questions[_selectedIndex].Points);
-            _questionsIds.RemoveAt(_selectedIndex);
-            _questions.RemoveAt(_selectedIndex);
-        }
+        
 
         private void CreateAndSaveQuestion()
         {
@@ -330,6 +325,13 @@ namespace UserInterface.ViewModel
             else
                 ;
             //trzeba nadpisać istniejące pytanie -> info siedzi w questionstring, powinien sam sie odpakować            
+        }
+
+        private void DeleteQuestion()
+        {
+            SetMaxPoints(-_questions[_selectedIndex].Points);
+            _questionsIds.RemoveAt(_selectedIndex);
+            _questions.RemoveAt(_selectedIndex);
         }
 
         private void PrepareQuestionString()

@@ -41,5 +41,7 @@ namespace Interfaces
         void UpdateTest(int testId, List<string> TestData, List<int> NewTestQuestionsIds);
         void InitDAO();
 
+
+        void DeleteTest(int testId);
     }
 }

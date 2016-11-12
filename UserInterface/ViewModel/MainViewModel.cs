@@ -219,13 +219,14 @@ namespace UserInterface.ViewModel
             NewTestQuestionsIds = new List<int>();
             TestData = new List<string>();
 
-            CreateNewTestCommand =
-              new GalaSoft.MvvmLight.Command.RelayCommand(
+            CreateNewTestCommand = new GalaSoft.MvvmLight.Command.RelayCommand(
                 () => CreateAndSaveTest());
 
-            EditTestCommand =
-                new GalaSoft.MvvmLight.Command.RelayCommand(
+            EditTestCommand = new GalaSoft.MvvmLight.Command.RelayCommand(
                 () => EditTest(GetSelectedTestId()));
+
+            DeleteTestCommand = new GalaSoft.MvvmLight.Command.RelayCommand(
+                () => DeleteTest(GetSelectedTestId()));
 
             OpenModalDialog =
               new GalaSoft.MvvmLight.Command.RelayCommand(
@@ -246,6 +247,15 @@ namespace UserInterface.ViewModel
             _addTestCommand = new MyRelayCommand(param => this.AddTestToList());
             _saveNewTestCommand = new MyRelayCommand(param => this.SaveTest(),
                                                   param => this.CanSaveTest());
+        }
+
+        private void DeleteTest(int testId)
+        {
+            _dao.DeleteTest(testId);
+            _dao.InitDAO();
+            GetAllTests();
+            //tu mozna dodac jeszcze działania po zamknieciu okna dodawania testu
+
         }
 
         
@@ -353,6 +363,7 @@ namespace UserInterface.ViewModel
 
         public RelayCommand CreateNewTestCommand { get; private set; }
         public RelayCommand EditTestCommand { get; private set; }
+        public RelayCommand DeleteTestCommand { get; private set; }
         public RelayCommand OpenModalDialog { get; private set; }
         public RelayCommand OpenNonModalDialog { get; private set; }
 
@@ -383,6 +394,7 @@ namespace UserInterface.ViewModel
         #endregion
 
 
-        
+
+
     }
 }
