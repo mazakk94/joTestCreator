@@ -9,47 +9,35 @@
                               Source={StaticResource Locator}}"
         mc:Ignorable="d ignore"              
         Title="Overview" Height="480" Width="640">
-<!--
-
-        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-        xmlns:local="clr-namespace:UserInterface"  
-  <Window.DataContext>
-        <local:TestListViewModel/>
-    </Window.DataContext>
--->
-
-  
-
- <!--    
-    <local:QuestionListViewModel/>
-    <local:CarListViewModel/>
--->
         
-    <DockPanel> <!--LastChildFill=" True"-->
+    <DockPanel>
         <Grid DockPanel.Dock="Top">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0.5*" ></ColumnDefinition>
                 <ColumnDefinition ></ColumnDefinition>
-                <ColumnDefinition Width="1.5*" ></ColumnDefinition>                
+                <ColumnDefinition ></ColumnDefinition>
+                <ColumnDefinition Width="0.5*" ></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="0.5*"></RowDefinition>
                 <RowDefinition ></RowDefinition>
-                <RowDefinition ></RowDefinition>
-                <RowDefinition ></RowDefinition>
+                <RowDefinition Height="0.5*" ></RowDefinition>
+                <RowDefinition Height="0.15*"></RowDefinition>
             </Grid.RowDefinitions>
 
-            <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Grid.Row="0" Grid.Column="1" Margin="0 10">
-                <Button Command="{Binding CreateNewTestCommand}" Content="Create New Test" />
+            <Label VerticalAlignment="Center" Grid.ColumnSpan="2" HorizontalAlignment="Center" FontSize="30" Content="Test Editor" Grid.Column="1" Grid.Row="0" />
+            
+            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Grid.Row="2" Grid.Column="2" Margin="0 20">
+                <Button Width="100" FontSize="20" Command="{Binding CreateNewTestCommand}" Content="New" />
                 <!--Button Command="{Binding OpenModalDialog}"  Content="Open Modal Dialog" /-->              
             </StackPanel>
 
-            <TextBox Grid.Row="1" Grid.Column="2" Margin="10 30" 
+            <TextBox Visibility="Hidden" Grid.Row="1" Grid.Column="2" Margin="10 30" 
                      Text="{Binding SomeString}" TextAlignment="Center" />
-            <TextBlock Grid.Row="2" Grid.Column="2" HorizontalAlignment="Center"
+            <TextBlock Visibility="Hidden" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Center"
                VerticalAlignment="Center" FontSize="12" Text="{Binding Result}" />
 
-            <ListBox Name="lstBox" SelectedIndex="{Binding Index}" 
+            <ListBox Name="lstBox" Margin="0 0 10 0" SelectedIndex="{Binding Index}" 
                      ItemsSource="{Binding Tests}" Grid.Row="1" Grid.Column="1" >                
                 <ListBox.ItemTemplate>
                     <DataTemplate>
@@ -66,7 +54,7 @@
                 </ListBox.ContextMenu>
             </ListBox>            
             
-            <ListBox Name="lstBox2" ItemsSource="{Binding Questions}" Grid.Row="2" Grid.Column="1" >
+            <ListBox Name="lstBox2" ItemsSource="{Binding Questions}" Grid.Row="1" Grid.Column="2" >
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
@@ -77,7 +65,7 @@
                 
             </ListBox>
 
-            <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="2">
+            <StackPanel VerticalAlignment="Center" Orientation="Vertical" Grid.Row="2" Grid.Column="1">
                 <StackPanel Orientation="Horizontal">
                     <Label Content="MaxPoints"/>
                     <Label Content="{Binding MaxPoints}"/>
@@ -87,16 +75,6 @@
                     <Label Content="{Binding Length}"/>
                 </StackPanel>
             </StackPanel>
-
-            <!--ListBox Name="questionResult" ItemsSource="{Binding ResultQuestionList}" Grid.Row="3" Grid.Column="3" >
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding Content}" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </-->
 
         </Grid>
     </DockPanel>
