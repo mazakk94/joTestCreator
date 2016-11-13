@@ -47,6 +47,7 @@ namespace UserInterface
                           solveTestVM.Test.Id = Int32.Parse(message.Argument);                          
                           solveTestVM.RefreshDAO();
                           solveTestVM.LoadData();
+                          solveTestVM.FillWindow();
 
                           var result = solveTestWindow.ShowDialog();
                           

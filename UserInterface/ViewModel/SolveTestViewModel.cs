@@ -44,6 +44,20 @@ namespace UserInterface.ViewModel
             }
         }
 
+        private string _questionInfo;
+        public string QuestionInfo
+        {
+            get
+            {
+                return _questionInfo;
+            }
+            set
+            {
+                _questionInfo = value;
+                RaisePropertyChanged(() => QuestionInfo);
+            }
+        }
+
         private List<string> _answer;
         public List<string> Answer
         {
@@ -55,6 +69,20 @@ namespace UserInterface.ViewModel
             {
                 _answer = value;
                 RaisePropertyChanged(() => Answer);
+            }
+        }
+
+        public List<bool> _checkBox;
+        public List<bool> CheckBox
+        {
+            get
+            {
+                return _checkBox;
+            }
+            set
+            {
+                _checkBox = value;
+                RaisePropertyChanged(() => CheckBox);
             }
         }
 
@@ -108,8 +136,11 @@ namespace UserInterface.ViewModel
         {
             //TestName = "Test Name";
             Answer = new List<string>();
-            for(var i = 0; i < 5; i++) Answer.Add(i.ToString());
-            Content = "Question content?";
+            CheckBox = new List<bool>();
+            for (var i = 0; i < 5; i++) Answer.Add(i.ToString());
+            for (var i = 0; i < 5; i++) CheckBox.Add(false);
+            Content = "";
+            QuestionInfo = "";
                         
             Timer = new DispatcherTimer();
             Timer.Tick += DispatcherTimer_Tick;
@@ -117,7 +148,7 @@ namespace UserInterface.ViewModel
             Timer.Start();
             Timeleft = new TimeSpan(0, 0, 10);
             Test = _dao.CreateNewTest();
-            Test.Name = "Test Name";
+            Test.Name = "";
                      
 
         }
@@ -132,9 +163,23 @@ namespace UserInterface.ViewModel
         {
             this.Test = _dao.GetTest(Test.Id);
             this.Test.Question = _dao.GetQuestionsByIds(this.Test.QuestionsIds);
-        }
-        
-        #endregion
+        }     
 
+        internal void FillWindow()
+        {
+            Content = Test.Question[0].Content;
+            QuestionInfo = "1 of " + Test.Question.Count.ToString();
+            Timeleft = Test.Length;
+            Answer.Clear();
+            for(int i = 0; i < 5; i++)
+            {
+                if (Test.Question[0].Answer.Count > i)
+                    Answer.Add(Test.Question[0].Answer[i].Item1);
+                else
+                    Answer.Add("");
+            }
+        }
+
+        #endregion
     }
 }
