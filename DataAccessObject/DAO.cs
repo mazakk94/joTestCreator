@@ -904,10 +904,10 @@ namespace DataAccessObject
         {
             //TODO OR NOT
         }
-
+        
         ITest IDAO.CreateNewTest()
         {
-            throw new NotImplementedException();
+            return new DataObjects.Test();
         }
 
         void IDAO.AddTest(ITest test)

@@ -32,7 +32,8 @@ namespace Interfaces
         ITest CreateNewTest(List<string> TestData, List<int> NewTestQuestionsIds);
         List<int> SelectQuestionsIds(int testId);
         List<string> GetTestData(int testId);
-        ObservableCollection<IQuestion> GetQuestionsByIds(ObservableCollection<int> observableCollection);
+        ObservableCollection<IQuestion> GetQuestionsByIds(ObservableCollection<int> questionsIds);
+        List<IQuestion> GetQuestionsByIds(List<int> questionsIds);
         void DeleteQuestion(int id);
         void DeleteQuestionId(int id);
         void InsertQuestionId(int testId, int questionId);
@@ -43,5 +44,8 @@ namespace Interfaces
 
 
         void DeleteTest(int testId);
+
+        ITest GetTest(int p);
+
     }
 }

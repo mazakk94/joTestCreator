@@ -16,17 +16,17 @@ namespace UserInterface.ViewModel
         private readonly IDataService _dataService;
         private IDAO _dao = new DataAccessObject.DAO();
 
-        private string _testName;
-        public string TestName
+        private ITest _test;
+        public ITest Test
         {
             get
             {
-                return _testName;
+                return _test;
             }
             set
             {
-                _testName = value;
-                RaisePropertyChanged(() => TestName);
+                _test = value;
+                RaisePropertyChanged(() => Test);
             }
         }
 
@@ -106,7 +106,7 @@ namespace UserInterface.ViewModel
 
         public void ClearWindow()
         {
-            TestName = "Test Name";
+            //TestName = "Test Name";
             Answer = new List<string>();
             for(var i = 0; i < 5; i++) Answer.Add(i.ToString());
             Content = "Question content?";
@@ -116,6 +116,8 @@ namespace UserInterface.ViewModel
             Timer.Interval = new TimeSpan(0, 0, 1);
             Timer.Start();
             Timeleft = new TimeSpan(0, 0, 10);
+            Test = _dao.CreateNewTest();
+            Test.Name = "Test Name";
                      
 
         }
@@ -124,6 +126,12 @@ namespace UserInterface.ViewModel
         {
             //pobieram na nowo z bazy wszystkie testy, pytania i ids
             _dao.InitDAO();
+        }
+
+        internal void LoadData()
+        {
+            this.Test = _dao.GetTest(Test.Id);
+            this.Test.Question = _dao.GetQuestionsByIds(this.Test.QuestionsIds);
         }
         
         #endregion

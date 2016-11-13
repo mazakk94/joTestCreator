@@ -44,28 +44,33 @@ namespace UserInterface
                               DataContext = solveTestVM
                           };
                           solveTestVM.ClearWindow();
-                          //modalWindowVM.TestId = Int32.Parse(message.Argument);
-                          //modalWindowVM.RefreshDAO();
-                          //modalWindowVM.LoadData();
+                          solveTestVM.Test.Id = Int32.Parse(message.Argument);                          
+                          solveTestVM.RefreshDAO();
+                          solveTestVM.LoadData();
 
                           var result = solveTestWindow.ShowDialog();
-                          /*
+                          
                           if (result.HasValue && result.Value)
                           {
                               result = true;
-                              List<int> questionsIds = FillQuestionsIds(createEditTestWindow);
+                              /*List<int> questionsIds = FillQuestionsIds(createEditTestWindow);
                               List<string> resultList = GetTestDataFromDialog(createEditTestWindow);
 
                               Messenger.Default.Send(questionsIds, "questionsIds");
                               Messenger.Default.Send(resultList, "testData");
-                              modalWindowVM.UpdateQuestions(); //insert and delete from DB questions and Ids !
+                              modalWindowVM.UpdateQuestions();*/ 
+                              //insert and delete from DB questions and Ids !
+                          } 
+                          else 
+                          {
+                              solveTestVM.Timer.Stop();
                           }
 
-                          string resultString;
-                          if (result == true) resultString = "Accepted";
-                          else resultString = "Rejected";
-                          Messenger.Default.Send(resultString);
-                          */
+                          //string resultString;
+                          //if (result == true) resultString = "Accepted";
+                          //else resultString = "Rejected";
+                          //Messenger.Default.Send(resultString);
+                          
                           break;
 
                   }
