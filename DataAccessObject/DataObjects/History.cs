@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DataAccessObject.DataObjects
 {
-    class History : IHistory
+    class History : Test, IHistory
     {
         public int Score
         {

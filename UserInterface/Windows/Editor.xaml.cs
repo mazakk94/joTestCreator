@@ -23,9 +23,9 @@ using System.Collections.ObjectModel;
 
 namespace UserInterface
 {
-    public partial class Overview : Window
+    public partial class Editor : Window
     {
-        public Overview()
+        public Editor()
         {
             InitializeComponent();
             Closing += (s, e) => ViewModelLocator.Cleanup();

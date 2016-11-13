@@ -21,8 +21,7 @@ namespace DataAccessObject.DataObjects
             set;
         }
 
-
-        public bool Type
+        public bool Type //0 - user, 1 - editor
         {
             get;
             set;

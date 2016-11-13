@@ -200,6 +200,8 @@ namespace UserInterface.ViewModel
 
         public MainViewModel(IDataService dataService)
         {
+            #region variables initializations
+
             _dataService = dataService;
             _dataService.GetData((item, error) => { if (error != null) return; });
 
@@ -219,6 +221,10 @@ namespace UserInterface.ViewModel
             NewTestQuestionsIds = new List<int>();
             TestData = new List<string>();
 
+            #endregion 
+
+            #region commands initializations
+
             CreateNewTestCommand = new GalaSoft.MvvmLight.Command.RelayCommand(
                 () => CreateAndSaveTest());
 
@@ -227,6 +233,9 @@ namespace UserInterface.ViewModel
 
             DeleteTestCommand = new GalaSoft.MvvmLight.Command.RelayCommand(
                 () => DeleteTest(GetSelectedTestId()));
+
+            SolveTestCommand = new GalaSoft.MvvmLight.Command.RelayCommand(
+                () => SolveTest());
 
             OpenModalDialog =
               new GalaSoft.MvvmLight.Command.RelayCommand(
@@ -242,11 +251,19 @@ namespace UserInterface.ViewModel
             Messenger.Default.Register<string>(this, s => Result = s);
             Messenger.Default.Register<List<int>>(this, "questionsIds", s => NewTestQuestionsIds = s);
             Messenger.Default.Register<List<string>>(this, "testData", s => TestData = s);
-
-
+            
             _addTestCommand = new MyRelayCommand(param => this.AddTestToList());
             _saveNewTestCommand = new MyRelayCommand(param => this.SaveTest(),
                                                   param => this.CanSaveTest());
+            #endregion
+        }
+
+        #region methods        
+        
+        private void SolveTest()
+        {
+            Messenger.Default.Send<Helpers.OpenWindowMessage>(
+                   new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kSolveTest, Argument = _selectedIndex.ToString() });
         }
 
         private void DeleteTest(int testId)
@@ -257,11 +274,7 @@ namespace UserInterface.ViewModel
             //tu mozna dodac jeszcze działania po zamknieciu okna dodawania testu
 
         }
-
-        
-
-        #region methods
-
+               
         private int GetSelectedTestId()
         {
             return _selectedIndex;
@@ -361,6 +374,7 @@ namespace UserInterface.ViewModel
 
         #region commands
 
+        public RelayCommand SolveTestCommand { get; private set; }
         public RelayCommand CreateNewTestCommand { get; private set; }
         public RelayCommand EditTestCommand { get; private set; }
         public RelayCommand DeleteTestCommand { get; private set; }
@@ -392,6 +406,7 @@ namespace UserInterface.ViewModel
         }
 
         #endregion
+
 
 
 

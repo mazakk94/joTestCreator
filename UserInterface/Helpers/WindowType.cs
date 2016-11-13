@@ -7,6 +7,7 @@
         kNewTest,
         kEditTest,
         kNewQuestion,
-        kEditQuestion
+        kEditQuestion,
+        kSolveTest
     }
 }

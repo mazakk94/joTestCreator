@@ -8,6 +8,6 @@ namespace Interfaces
 {
     public interface IAnsweredQuestion : IQuestion
     {
-        Tuple<int> ChosenAnswers { get; set; } //id
+        List<int> ChosenAnswers { get; set; } //id
     }
 }

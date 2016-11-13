@@ -33,6 +33,8 @@ namespace DataAccessObject.DataObjects
             set;
         }
 
+        #region constructors
+
         public Question() { }
 
         public Question(List<string> questionString)
@@ -49,6 +51,10 @@ namespace DataAccessObject.DataObjects
             }
 
         }
+
+        #endregion
+
+        #region methods
 
         private Tuple<string, bool> ParseTuple(string answer)
         {
@@ -69,6 +75,8 @@ namespace DataAccessObject.DataObjects
             
             return tupleAnswer;
         }
-        
+
+        #endregion
+
     }
 }

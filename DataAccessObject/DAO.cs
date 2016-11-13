@@ -860,8 +860,6 @@ namespace DataAccessObject
 
 
             return -1;
-            
-
         }                
 
         public void AddCar(ICar car)

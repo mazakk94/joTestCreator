@@ -10,7 +10,7 @@ namespace DataAccessObject.DataObjects
     class AnsweredQuestion : IAnsweredQuestion
     {
 
-        public Tuple<int> ChosenAnswers
+        public List<int> ChosenAnswers
         {
             get;
             set;
@@ -34,17 +34,11 @@ namespace DataAccessObject.DataObjects
             set;
         }
 
-        public Tuple<string, bool> Answer
+        public List<Tuple<string, bool>> Answer
         {
             get;
             set;
         }
 
-
-        List<Tuple<string, bool>> IQuestion.Answer
-        {
-            get;
-            set;
-        }
     }
 }
