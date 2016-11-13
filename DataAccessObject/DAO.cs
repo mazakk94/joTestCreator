@@ -919,10 +919,18 @@ namespace DataAccessObject
         {
             throw new NotImplementedException();
         }
+        
+        public IHistory CreateNewHistory()
+        {
+            return new DataAccessObject.DataObjects.History();
+        }
+
+        public IHistory CreateNewHistory(int testId)
+        {
+            ITest test = GetTest(testId);
+            return new DataAccessObject.DataObjects.History(test);
+        }
 
         #endregion
-
-
-        
     }
 }

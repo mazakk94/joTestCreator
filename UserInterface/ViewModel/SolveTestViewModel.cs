@@ -16,6 +16,20 @@ namespace UserInterface.ViewModel
         private readonly IDataService _dataService;
         private IDAO _dao = new DataAccessObject.DAO();
 
+        private IHistory _beingSolved;
+        public IHistory BeingSolved
+        {
+            get
+            {
+                return _beingSolved;
+            }
+            set
+            {
+                _beingSolved = value;
+                RaisePropertyChanged(() => BeingSolved);
+            }
+        }
+
         private ITest _test;
         public ITest Test
         {
@@ -41,6 +55,20 @@ namespace UserInterface.ViewModel
             {
                 _content = value;
                 RaisePropertyChanged(() => Content);
+            }
+        }
+
+        private int _id;
+        public int Id
+        {
+            get
+            {
+                return _id;
+            }
+            set
+            {
+                _id = value;
+                RaisePropertyChanged(() => Id);
             }
         }
 
@@ -104,6 +132,13 @@ namespace UserInterface.ViewModel
 
         #endregion
 
+        #region commands definitions
+
+        public RelayCommand PreviousQuestionCommand { get; private set; }
+        public RelayCommand NextQuestionCommand { get; private set; }
+
+        #endregion
+
         public SolveTestViewModel(IDataService dataService)
         {
             #region variables initialization
@@ -113,15 +148,25 @@ namespace UserInterface.ViewModel
                        
             #endregion
 
-            
-            
+            #region methods initialization
+
+            PreviousQuestionCommand = new GalaSoft.MvvmLight.Command.RelayCommand(
+                () => UpdateWindow(-1));
+
+            NextQuestionCommand = new GalaSoft.MvvmLight.Command.RelayCommand(
+                () => UpdateWindow(1));            
+
+            #endregion
+
             //ClearWindow();
         }
+                       
+        #region methods
 
         private void DispatcherTimer_Tick(object sender, EventArgs e)
         {
             Timeleft = Timeleft - new TimeSpan(0, 0, 1);
-            if (Timeleft == new TimeSpan(0,0,0))
+            if (Timeleft == new TimeSpan(0, 0, 0))
             {
                 Timer.Stop();
                 Content = "TIME OVER";
@@ -129,28 +174,24 @@ namespace UserInterface.ViewModel
             }
         }
 
-        
-        #region methods
-
         public void ClearWindow()
         {
             //TestName = "Test Name";
+            Id = 0;            
+            Test = _dao.CreateNewTest();
+            Test.Name = "";
+            BeingSolved = _dao.CreateNewHistory();
             Answer = new List<string>();
-            CheckBox = new List<bool>();
-            for (var i = 0; i < 5; i++) Answer.Add(i.ToString());
-            for (var i = 0; i < 5; i++) CheckBox.Add(false);
+                for (var i = 0; i < 5; i++) Answer.Add(i.ToString());
+            CheckBox = new List<bool>();            
+                for (var i = 0; i < 5; i++) CheckBox.Add(false);
             Content = "";
-            QuestionInfo = "";
-                        
+            QuestionInfo = "";                        
             Timer = new DispatcherTimer();
             Timer.Tick += DispatcherTimer_Tick;
             Timer.Interval = new TimeSpan(0, 0, 1);
             Timer.Start();
-            Timeleft = new TimeSpan(0, 0, 10);
-            Test = _dao.CreateNewTest();
-            Test.Name = "";
-                     
-
+            Timeleft = new TimeSpan(0, 0, 10);            
         }
 
         internal void RefreshDAO()
@@ -163,23 +204,52 @@ namespace UserInterface.ViewModel
         {
             this.Test = _dao.GetTest(Test.Id);
             this.Test.Question = _dao.GetQuestionsByIds(this.Test.QuestionsIds);
+            this.BeingSolved = _dao.CreateNewHistory(Test.Id);
         }     
 
         internal void FillWindow()
         {
             Content = Test.Question[0].Content;
-            QuestionInfo = "1 of " + Test.Question.Count.ToString();
+            QuestionInfo = (Id+1).ToString() + " of " + Test.Question.Count.ToString();
             Timeleft = Test.Length;
             Answer.Clear();
             for(int i = 0; i < 5; i++)
             {
-                if (Test.Question[0].Answer.Count > i)
-                    Answer.Add(Test.Question[0].Answer[i].Item1);
+                if (Test.Question[Id].Answer.Count > i)
+                    Answer.Add(Test.Question[Id].Answer[i].Item1);
                 else
                     Answer.Add("");
             }
         }
 
+        private void UpdateWindow(int direction)
+        {
+
+            SaveCheckedAnswers(Id);
+
+            Id += direction;
+            Content = Test.Question[Id].Content;
+            QuestionInfo = (Id + 1).ToString() + " of " + Test.Question.Count.ToString();
+
+            Answer.Clear();
+            for (int i = 0; i < 5; i++)
+                 Answer.Add((Test.Question[Id].Answer.Count > i) ? Test.Question[Id].Answer[i].Item1 : "");
+
+            CheckBox.Clear();            
+            //for (int i = 0; i < 5; i++)
+             //   CheckBox.Add(BeingSolved.ChosenAnswers[Id].ChosenAnswers.Contains(i) ? true : false);
+            
+        }
+
+        private void SaveCheckedAnswers(int Id)
+        {
+            BeingSolved.ChosenAnswers[Id].ChosenAnswers.Clear();
+            for (int i = 0; i < 5; i++)
+                if (CheckBox[i] == true) 
+                    BeingSolved.ChosenAnswers[Id].ChosenAnswers.Add(i);
+        }
+
         #endregion
+
     }
 }

@@ -9,6 +9,10 @@ namespace DataAccessObject.DataObjects
 {
     class History : Test, IHistory
     {
+        #region variables
+
+        private int testId;        
+
         public int Score
         {
             get;
@@ -69,11 +73,33 @@ namespace DataAccessObject.DataObjects
             set;
         }
 
-
         public List<int> QuestionsIds
         {
             get;
             set;
+        }
+
+        #endregion
+
+        public History()
+        {
+
+        }
+
+        public History(ITest test)
+        {
+
+            // TODO: Complete member initialization
+            this.testId = test.Id;
+            this.Name = test.Name;
+            this.MaximumPoints = test.MaximumPoints;
+            this.Question = test.Question;
+            this.QuestionsIds = test.QuestionsIds;
+            this.ChosenAnswers = new List<IAnsweredQuestion>(this.Question.Count);
+            for(int i = 0; i < this.Question.Count; i++)
+            {
+                this.ChosenAnswers.Add(new AnsweredQuestion());
+            }
         }
     }
 }

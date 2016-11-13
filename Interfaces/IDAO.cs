@@ -46,6 +46,7 @@ namespace Interfaces
         void DeleteTest(int testId);
 
         ITest GetTest(int p);
-
+        IHistory CreateNewHistory();
+        IHistory CreateNewHistory(int testId);
     }
 }

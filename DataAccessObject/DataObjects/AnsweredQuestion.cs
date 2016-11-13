@@ -40,5 +40,11 @@ namespace DataAccessObject.DataObjects
             set;
         }
 
+        public AnsweredQuestion()
+        {
+            ChosenAnswers = new List<int>();
+        }
+
+
     }
 }

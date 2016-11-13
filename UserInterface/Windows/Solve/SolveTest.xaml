@@ -81,9 +81,12 @@
                 </StackPanel>
             </StackPanel>
             
-            <Button Grid.Row="4" Grid.Column="0" FontSize="14" Content="Previous" />
-            <Button Grid.Row="4" Grid.Column="2" FontSize="16" Content="Submit Test" />
-            <Button Grid.Row="4" Grid.Column="4" FontSize="14" Content="Next" />
+            <Button Grid.Row="4" Grid.Column="0" FontSize="14" 
+                    Content="Previous" Command="{Binding PreviousQuestionCommand}" />
+            <Button Grid.Row="4" Grid.Column="2" FontSize="16" 
+                    Content="Submit Test" />
+            <Button Grid.Row="4" Grid.Column="4" FontSize="14" 
+                    Content="Next" Command="{Binding NextQuestionCommand}" />
             
         </Grid>
     </DockPanel>    
