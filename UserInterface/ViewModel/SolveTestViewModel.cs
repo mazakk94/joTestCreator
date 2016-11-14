@@ -211,6 +211,7 @@ namespace UserInterface.ViewModel
 
         private void SubmitTest()
         {
+            SaveCheckedAnswers(Id);
             Timer.Stop();
             BeingSolved.Score = CalculateScore();
             ScoreInfo = BeingSolved.Score.ToString() + " / " + Test.MaximumPoints.ToString();
@@ -223,11 +224,23 @@ namespace UserInterface.ViewModel
         {
             int score = 0;
 
-            //for (int i = 0; i < Test.Question.Count; i++)
-            //{
-                //iterate after all 
+            for (int i = 0; i < Test.Question.Count; i++)
+            {
+                //iterate all 
                 //if checkbox is checked and test.question[i].answer
-           // }
+                bool correct = true;
+                for (int j = 0; j < Test.Question[i].Answer.Count; j++)
+                {
+                    if (Test.Question[i].Answer[j].Item2 && !BeingSolved.ChosenAnswers[i].ChosenAnswers.Contains(j)) //true
+                        correct = false;
+                    else if (!Test.Question[i].Answer[j].Item2 && BeingSolved.ChosenAnswers[i].ChosenAnswers.Contains(j)) //false
+                        correct = false;
+                }
+            
+                if (correct)
+                    score += Test.Question[i].Points;
+                
+            }
 
             return score;
         }
