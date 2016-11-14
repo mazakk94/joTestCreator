@@ -51,5 +51,9 @@ namespace Interfaces
         int GetNextHistoryId();
         void CreateNewHistory(IHistory BeingSolved);
         IUser GetCurrentUser();
+
+        IEnumerable<IUser> GetAllUsers();
+
+        void SetCurrentUser(string UserName);
     }
 }

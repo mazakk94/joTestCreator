@@ -1,6 +1,4 @@
-﻿using GalaSoft.MvvmLight.Ioc;
-using GalaSoft.MvvmLight.Messaging;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,16 +11,24 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Interfaces;
+
+
+using GalaSoft.MvvmLight.Ioc;
+using GalaSoft.MvvmLight.Messaging;
 using UserInterface.Helpers;
 using UserInterface.ViewModel;
+using UserInterface.Windows.Solve;
+using System.Collections.ObjectModel;
 
 namespace UserInterface
 {
-    public partial class Welcome : Window
+    public partial class Menu : Window
     {
-        public Welcome()
+        public Menu()
         {
             InitializeComponent();
+
             Closing += (s, e) => ViewModelLocator.Cleanup();
             Messenger.Default.Register<OpenWindowMessage>(
               this,
@@ -30,20 +36,24 @@ namespace UserInterface
               {
                   switch (message.Type)
                   {
-                      case WindowType.kMenu:
+                      case WindowType.kSolveTest:
 
-                          var menuVM = SimpleIoc.Default.GetInstance<MainViewModel>();
-                          var menuWindow = new Menu()
+                          var solveTestVM = SimpleIoc.Default.GetInstance<SolveTestViewModel>();
+                          var solveTestWindow = new SolveTest()
                           {
-                              DataContext = menuVM
+                              DataContext = solveTestVM
                           };
+                          solveTestVM.ClearWindow();
+                          solveTestVM.Test.Id = Int32.Parse(message.Argument);                          
+                          solveTestVM.RefreshDAO();
+                          solveTestVM.LoadData();
+                          solveTestVM.FillWindow();
 
-                          this.Close();
-                          var result = menuWindow.ShowDialog();
+                          var result = solveTestWindow.ShowDialog();
                           
-                          //if (result.HasValue && result.Value)
-                          //{
-                           //   result = true;
+                          if (result.HasValue && result.Value)
+                          {
+                              result = true;
                               /*List<int> questionsIds = FillQuestionsIds(createEditTestWindow);
                               List<string> resultList = GetTestDataFromDialog(createEditTestWindow);
 
@@ -51,11 +61,11 @@ namespace UserInterface
                               Messenger.Default.Send(resultList, "testData");
                               modalWindowVM.UpdateQuestions();*/ 
                               //insert and delete from DB questions and Ids !
-                       //   } 
-                       //   else 
-                      //    {
-                       //      solveTestVM.Timer.Stop();
-                        //  }
+                          } 
+                          else 
+                          {
+                              solveTestVM.Timer.Stop();
+                          }
 
                           //string resultString;
                           //if (result == true) resultString = "Accepted";
@@ -67,8 +77,12 @@ namespace UserInterface
                   }
 
               });
-        
         }
+
+        #region methods
+        
+        #endregion
+
 
     }
 }

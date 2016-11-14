@@ -362,7 +362,5 @@ namespace UserInterface.ViewModel
 
         #endregion
 
-
-        
     }
 }

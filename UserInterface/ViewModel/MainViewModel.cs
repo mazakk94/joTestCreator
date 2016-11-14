@@ -25,6 +25,28 @@ namespace UserInterface.ViewModel
 
         //  public event PropertyChangedEventHandler PropertyChanged;         ALE NAROBIŁ INBY
 
+        private string _userName;
+        public string UserName
+        {
+            get { return _userName; }
+            set
+            {
+                _userName = value;
+                RaisePropertyChanged("UserName");
+            }
+        }
+
+        private string _isEditorVisible;
+        public string IsEditorVisible
+        {
+            get { return _isEditorVisible; }
+            set
+            {
+                _isEditorVisible = value;
+                RaisePropertyChanged("IsEditorVisible");
+            }
+        }
+
         private ObservableCollection<TestViewModel> _tests;
         public ObservableCollection<TestViewModel> Tests
         {
@@ -217,6 +239,8 @@ namespace UserInterface.ViewModel
             _view = (ListCollectionView)CollectionViewSource.GetDefaultView(_tests);
             GetAllTests();
             GetAllQuestions();
+            //_userName = _dao.GetCurrentUser().Name;
+            //_isEditorVisible = _dao.GetCurrentUser().Type ? "Visible" : "Hidden";
 
             NewTestQuestionsIds = new List<int>();
             TestData = new List<string>();
@@ -224,6 +248,18 @@ namespace UserInterface.ViewModel
             #endregion 
 
             #region commands initializations
+
+            SignInRegisterCommand = new GalaSoft.MvvmLight.Command.RelayCommand(
+                () => SignInRegister());
+
+            OpenSolveCommand = new GalaSoft.MvvmLight.Command.RelayCommand(
+                () => OpenSolve());
+
+            OpenHistoryCommand = new GalaSoft.MvvmLight.Command.RelayCommand(
+                () => OpenHistory());
+
+            OpenEditorCommand = new GalaSoft.MvvmLight.Command.RelayCommand(
+                () => OpenEditor());
 
             CreateNewTestCommand = new GalaSoft.MvvmLight.Command.RelayCommand(
                 () => CreateAndSaveTest());
@@ -238,13 +274,11 @@ namespace UserInterface.ViewModel
                 () => SolveTest());
 
             OpenModalDialog =
-              new GalaSoft.MvvmLight.Command.RelayCommand(
-                () =>
+              new GalaSoft.MvvmLight.Command.RelayCommand(() =>
                 Messenger.Default.Send<Helpers.OpenWindowMessage>(
                   new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kModal, Argument = SomeString }));
             OpenNonModalDialog =
-              new GalaSoft.MvvmLight.Command.RelayCommand(
-                () =>
+              new GalaSoft.MvvmLight.Command.RelayCommand(() =>
                 Messenger.Default.Send<Helpers.OpenWindowMessage>(
                   new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kNonModal, Argument = SomeString }));
 
@@ -258,8 +292,48 @@ namespace UserInterface.ViewModel
             #endregion
         }
 
-        #region methods        
         
+
+        #region methods
+
+        private void OpenEditor()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void OpenHistory()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void OpenSolve()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void SignInRegister()
+        {
+            bool login = false;
+            foreach(var user in _dao.GetAllUsers())
+            {
+                if (UserName == user.Name)
+                {
+                    login = true;
+                    break;
+                }
+            }
+
+            if (login)
+                _dao.SetCurrentUser(UserName);
+            else
+            {
+                //REGISTER TODO
+            }
+
+            Messenger.Default.Send<Helpers.OpenWindowMessage>(
+                   new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kMenu, Argument = _selectedIndex.ToString() });
+        }
+
         private void SolveTest()
         {
             Messenger.Default.Send<Helpers.OpenWindowMessage>(
@@ -373,7 +447,11 @@ namespace UserInterface.ViewModel
         #endregion
 
         #region commands
-
+        
+        public RelayCommand SignInRegisterCommand { get; private set; }
+        public RelayCommand OpenSolveCommand { get; private set; }
+        public RelayCommand OpenHistoryCommand { get; private set; }
+        public RelayCommand OpenEditorCommand { get; private set; }
         public RelayCommand SolveTestCommand { get; private set; }
         public RelayCommand CreateNewTestCommand { get; private set; }
         public RelayCommand EditTestCommand { get; private set; }
@@ -406,6 +484,7 @@ namespace UserInterface.ViewModel
         }
 
         #endregion
+
 
 
 

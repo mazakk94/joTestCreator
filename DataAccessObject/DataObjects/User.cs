@@ -15,12 +15,6 @@ namespace DataAccessObject.DataObjects
             set;
         }
 
-        public string Password
-        {
-            get;
-            set;
-        }
-
         public bool Type //0 - user, 1 - editor
         {
             get;

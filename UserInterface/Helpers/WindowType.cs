@@ -9,6 +9,7 @@
         kNewQuestion,
         kEditQuestion,
         kSolveTest,
-        kSubmitTest
+        kSubmitTest,
+        kMenu
     }
 }

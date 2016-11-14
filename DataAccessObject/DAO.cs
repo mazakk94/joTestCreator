@@ -27,6 +27,7 @@ namespace DataAccessObject
         private List<IUser> _users;
         private List<int> _temporaryIds;
         SQLiteConnection connection;
+        private string _userName;
 
         #endregion
 
@@ -51,8 +52,9 @@ namespace DataAccessObject
                 
             };
             #endregion
-            _temporaryIds = new List<int>();
 
+            _temporaryIds = new List<int>();
+            _userName = "";
             _questions = new List<IQuestion>();
             _tests = new List<ITest>();
             _users = new List<IUser>();
@@ -345,7 +347,6 @@ namespace DataAccessObject
                     new DataObjects.User()
                     {
                         Name = reader["NAME"].ToString(),
-                        Password = reader["PASSWORD"].ToString(),
                         Type = Int32.Parse(reader["TYPE"].ToString()) == 1
                     });
                 }
@@ -974,7 +975,12 @@ namespace DataAccessObject
         
         public IUser GetCurrentUser()
         {
-            return _users[0];
+            return _users.Find(x => x.Name == _userName);
+        }
+
+        public void SetCurrentUser(string UserName)
+        {
+            _userName = UserName;
         }
     }
 }
