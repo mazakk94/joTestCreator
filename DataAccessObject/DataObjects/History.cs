@@ -51,7 +51,7 @@ namespace DataAccessObject.DataObjects
 
         #region test properties
 
-        private int TestId
+        public int TestId
         {
             get;
             set;

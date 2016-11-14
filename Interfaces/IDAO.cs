@@ -48,7 +48,8 @@ namespace Interfaces
         ITest GetTest(int p);
         IHistory CreateNewHistory();
         IHistory CreateNewHistory(int testId);
-
         int GetNextHistoryId();
+        void CreateNewHistory(IHistory BeingSolved);
+        IUser GetCurrentUser();
     }
 }

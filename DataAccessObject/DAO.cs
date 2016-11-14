@@ -52,65 +52,11 @@ namespace DataAccessObject
             };
             #endregion
             _temporaryIds = new List<int>();
+
             _questions = new List<IQuestion>();
-            #region comment
-            /*
-            {
-                new DataObjects.Question() 
-                { 
-                    Id = 0, Content = "Yellow electric mouse?", Points = 1, Answer = new List<Tuple<string,bool>>
-                    { 
-                        new Tuple<string, bool>("Electabuzz", false), 
-                        new Tuple<string, bool>("Zapdos", false), 
-                        new Tuple<string, bool>("Pikachu", true)
-                    }
-                },
-                
-                new DataObjects.Question() 
-                { 
-                    Id = 1, Content = "Name of main character?", Points = 1, Answer = new List<Tuple<string,bool>>
-                    { 
-                        new Tuple<string, bool>("Ash", true), 
-                        new Tuple<string, bool>("Brock", false),
-                        new Tuple<string, bool>("Giovanni", false), 
-                        new Tuple<string, bool>("Misty", false)
-                    }
-                },
-                
-                new DataObjects.Question() 
-                { 
-                    Id = 2, Content = "Is it possible to turn right on red?", Points = 1, Answer = new List<Tuple<string,bool>>
-                    { 
-                        new Tuple<string, bool>("Yes, always", false), 
-                        new Tuple<string, bool>("Never", false),
-                        new Tuple<string, bool>("Yes, but only if there's a green arrow", false)
-                    }
-                }
-
-            };*/
-            #endregion
-
             _tests = new List<ITest>();
-            #region comment
-            /*  {
-                new DataObjects.Test() { Id = 0, Name = "Pokemon Test", Length = new TimeSpan(1, 0, 0), MaximumPoints = 10, 
-                    QuestionsIds = new List<int>(){ 0 }, 
-                    Question = new List<IQuestion>()
-                    {
-                        _questions[0] //, _questions[1]
-                    }
-
-                }, 
-                new DataObjects.Test() { Id = 1, Name = "Driver's Test", Length = new TimeSpan(1, 15, 0), MaximumPoints = 18, 
-                    QuestionsIds = new List<int>(){ 1 }, 
-                    Question = new List<IQuestion>()
-                    {
-                        _questions[1]
-                    }
-
-                }
-            };*/
-            #endregion
+            _users = new List<IUser>();
+            _histories = new List<IHistory>();
 
             InitSQLite();
         }
@@ -120,8 +66,6 @@ namespace DataAccessObject
             InitDAO();
         }
         
-      //  private void InsertToDatabase(string tableName, )
-
         public void transaction(string cs)
         {
             using (SQLiteConnection con = new SQLiteConnection(cs))
@@ -285,16 +229,15 @@ namespace DataAccessObject
 
             if (connection.State == ConnectionState.Open)
             {
+                #region newDB
                 if (newDB)
                 {
-                    string createString = "CREATE TABLE QUESTIONS (" +
-                        "ID INT PRIMARY KEY, POINTS INT, CONTENT VARCHAR(100), " +
-                        "ANSWER1 VARCHAR(100), " +
-                        "ANSWER2 VARCHAR(100), " +
-                        "ANSWER3 VARCHAR(100), " +
-                        "ANSWER4 VARCHAR(100), " +
-                        "ANSWER5 VARCHAR(100))";
-                    SQLiteCommand createCommand = new SQLiteCommand(createString, connection);
+                    string createString;
+                    SQLiteCommand createCommand;
+
+                    createString = "CREATE TABLE QUESTIONS (ID INT PRIMARY KEY, POINTS INT, CONTENT VARCHAR(100), " +
+                     "ANSWER1 VARCHAR(100), ANSWER2 VARCHAR(100), ANSWER3 VARCHAR(100), ANSWER4 VARCHAR(100), ANSWER5 VARCHAR(100))";                    
+                    createCommand = new SQLiteCommand(createString, connection);
                     createCommand.ExecuteNonQuery();
 
                     createString = "CREATE TABLE TESTS (ID INT PRIMARY KEY, NAME VARCHAR(100), LENGTH INT, MAXPOINTS INT)";
@@ -305,57 +248,110 @@ namespace DataAccessObject
                     createCommand = new SQLiteCommand(createString, connection);
                     createCommand.ExecuteNonQuery();
 
-                    string insertString;
-                    SQLiteCommand insertCommand;
+                    createString = "CREATE TABLE USERS (NAME VARCHAR(20), PASSWORD VARCHAR(30), TYPE INT)";
+                    createCommand = new SQLiteCommand(createString, connection);
+                    createCommand.ExecuteNonQuery();
 
-                    insertString = "INSERT INTO QUESTIONS (ID, POINTS, CONTENT, ANSWER1, ANSWER2, ANSWER3, " +
-                        "ANSWER4, ANSWER5) VALUES (0, 10, 'What is the first question?', 'abc_1', 'def_0', '', '', '')";
-                    insertCommand = new SQLiteCommand(insertString, connection);
-                    insertCommand.ExecuteNonQuery();
-
-
-                    insertString = "INSERT INTO QUESTIONS (ID, POINTS, CONTENT, ANSWER1, ANSWER2, ANSWER3, " +
-                        "ANSWER4, ANSWER5) VALUES (1, 5, 'Yellow electric mouse?', 'Pika_0', 'Chu_1', 'Zapdos_0', '', '')";
-                    insertCommand = new SQLiteCommand(insertString, connection);
-                    insertCommand.ExecuteNonQuery();
-                    
-                    insertString = "INSERT INTO QUESTIONS (ID, POINTS, CONTENT, ANSWER1, ANSWER2, ANSWER3, " +
-                        "ANSWER4, ANSWER5) VALUES (2, 15, 'Name of main character?', 'Ash_1', 'Brock_0', 'Giovanni_0', 'Misty_0', '')";
-                    insertCommand = new SQLiteCommand(insertString, connection);
-                    insertCommand.ExecuteNonQuery();
-
-                    insertString = "INSERT INTO TESTS (ID, NAME, LENGTH, MAXPOINTS) VALUES (" +
-                        "0, 'Pokemon Test', 60, 10)";
-                    insertCommand = new SQLiteCommand(insertString, connection);
-                    insertCommand.ExecuteNonQuery();
-
-                    insertString = "INSERT INTO TESTS (ID, NAME, LENGTH, MAXPOINTS) VALUES (" +
-                        "1, 'Drivers test', 75, 18)";
-                    insertCommand = new SQLiteCommand(insertString, connection);
-                    insertCommand.ExecuteNonQuery();
-
-                    insertString = "INSERT INTO QUESTIONSIDS (TESTID, QUESTIONID) VALUES (1, 1)";
-                    insertCommand = new SQLiteCommand(insertString, connection);
-                    insertCommand.ExecuteNonQuery();
-
-                    insertString = "INSERT INTO QUESTIONSIDS (TESTID, QUESTIONID) VALUES (0, 0)";
-                    insertCommand = new SQLiteCommand(insertString, connection);
-                    insertCommand.ExecuteNonQuery();
-
-                    insertString = "INSERT INTO QUESTIONSIDS (TESTID, QUESTIONID) VALUES (1, 2)";
-                    insertCommand = new SQLiteCommand(insertString, connection);
-                    insertCommand.ExecuteNonQuery();
+                    createString = "CREATE TABLE HISTORY (ID INT, TESTID INT, USERNAME VARCHAR(20), TIME DATETIME, DURATION INT, SCORE INT)";
+                    createCommand = new SQLiteCommand(createString, connection);
+                    createCommand.ExecuteNonQuery();
                 }
+                #endregion
+
+                #region create table
+                /*
+                string createS = "CREATE TABLE HISTORY (ID INT, TESTID INT, USERNAME VARCHAR(20), TIME DATETIME, DURATION INT, SCORE INT)";
+                SQLiteCommand createC = new SQLiteCommand(createS, connection);
+                createC.ExecuteNonQuery();
+                 */
+                #endregion
 
                 connection.Close();
-
+                
                 List<IQuestion> questions = SelectAllQuestions();
-                _questions = questions;
-
                 List<ITest> tests = SelectAllTests();
-                _tests = tests;                                
+                List<IUser> users = SelectAllUsers();
+                List<IHistory> histories = SelectAllHistories(); //todo
 
-            }            
+                _questions = questions;
+                _tests = tests;
+                _users = users;
+                _histories = histories;
+
+            }
+        }
+
+        private List<IHistory> SelectAllHistories()
+        {
+            List<IHistory> histories = new List<IHistory>();
+
+            string selectString = "select * from HISTORY ORDER BY ID asc";
+
+            List<IUser> users = SelectAllUsers();
+            List<ITest> tests = SelectAllTests();     
+
+            connection.Open();
+            if (connection.State == ConnectionState.Open)
+            {
+                SQLiteCommand selectCommand = new SQLiteCommand(selectString, connection);
+                SQLiteDataReader reader = selectCommand.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    int durationSeconds = Int32.Parse(reader["DURATION"].ToString());
+                    string userName = reader["USERNAME"].ToString();
+                    int testId = Int32.Parse(reader["TESTID"].ToString());
+                                   
+                    IUser user = users.Find(x => x.Name == userName);
+                    ITest test = tests.Find(x => x.Id == testId);
+                    List<IQuestion> questions = GetQuestionsByIds(test.QuestionsIds);
+
+                    History history = new DataObjects.History();
+                    history.Name = test.Name;
+                    history.Duration = new TimeSpan(durationSeconds/3600, durationSeconds/60, durationSeconds%60);
+                    history.Id = Int32.Parse(reader["ID"].ToString());
+                    history.TestId = testId;
+                    history.Score = Int32.Parse(reader["SCORE"].ToString());
+                    history.When = DateTime.ParseExact(reader["TIME"].ToString(), "yyyy-MM-dd HH:mm:ss",
+                        System.Globalization.CultureInfo.InvariantCulture);
+                    history.User = user;
+                    history.Length = test.Length;
+                    history.MaximumPoints = test.MaximumPoints;
+                    history.QuestionsIds = test.QuestionsIds;
+                    history.Question = questions;
+
+                    histories.Add(history);                    
+                }
+                connection.Close();
+            }
+             
+            return histories;
+        }
+
+        private List<IUser> SelectAllUsers()
+        {
+            List<IUser> users = new List<IUser>();
+            string selectString = "select * from USERS";
+
+            connection.Open();
+            if (connection.State == ConnectionState.Open)
+            {
+                SQLiteCommand selectCommand = new SQLiteCommand(selectString, connection);
+                SQLiteDataReader reader = selectCommand.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    users.Add(
+                    new DataObjects.User()
+                    {
+                        Name = reader["NAME"].ToString(),
+                        Password = reader["PASSWORD"].ToString(),
+                        Type = Int32.Parse(reader["TYPE"].ToString()) == 1
+                    });
+                }
+                connection.Close();
+            }
+            return users;
         }
 
         private List<ITest> SelectAllTests()
@@ -423,11 +419,11 @@ namespace DataAccessObject
             List<IQuestion> questions = new List<IQuestion>();
             string selectString = "select * from QUESTIONS order by ID desc";
 
-            
-            connection.Open();
-            if (connection.State == ConnectionState.Open)
+            SQLiteConnection tmpconnection = new SQLiteConnection("Data Source=Tests.sqlite;Version=3;");
+            tmpconnection.Open();
+            if (tmpconnection.State == ConnectionState.Open)
             {
-                SQLiteCommand selectCommand = new SQLiteCommand(selectString, connection);
+                SQLiteCommand selectCommand = new SQLiteCommand(selectString, tmpconnection);
                 SQLiteDataReader reader = selectCommand.ExecuteReader();
 
                 while (reader.Read())
@@ -445,7 +441,7 @@ namespace DataAccessObject
                     });
 
                 }
-                connection.Close();
+                tmpconnection.Close();
             }
             
             return questions;
@@ -878,18 +874,10 @@ namespace DataAccessObject
             ITest test = new DataObjects.Test(TestData, GetQuestionsByIds(NewTestQuestionsIds), NewTestQuestionsIds, id);
             AddTest(test); //to tylko dodaje do DAO
             if (!InsertTest(test))
-            {
-                //raise error
-            }/*
-            else //insert successfull
-            {
-                InsertQuestionsIds(id, NewTestQuestionsIds);
-            }   
-            */
+                { /*raise error*/ }
             return test;
         }
                     
-
         public void AddTest(ITest test)
         {
             _tests.Add(test);
@@ -936,9 +924,57 @@ namespace DataAccessObject
 
         public int GetNextHistoryId()
         {
-            return 0;
-            //TODO
-            //select next free id from History table
+            int minId = 0;
+            foreach(var history in _histories)
+            {
+                if (history.Id == minId)
+                    minId++;                
+            }
+            return minId;
+        }
+
+        public void CreateNewHistory(IHistory history)
+        {
+            AddHistory(history);
+            if (!InsertHistory(history))
+            { /*raise error*/ }
+        }
+
+        private bool InsertHistory(IHistory history)
+        {
+            //"INSERT INTO HISTORY (ID, TESTID, USERNAME, TIME, DURATION, SCORE) VALUES (0, 0, 'MAZAK', '2016-11-13 10:00:00', 5, 2);"
+
+            connection = new SQLiteConnection("Data Source=Tests.sqlite;Version=3;");
+            connection.Open();
+
+            if (connection.State == ConnectionState.Open)
+            {
+                string insertString = "INSERT INTO HISTORY (ID, TESTID, USERNAME, TIME, DURATION, SCORE) " +
+                "VALUES (" + history.Id.ToString() + ", " + history.TestId.ToString() + ", '" + history.User.Name + 
+                "', '"+ history.When.ToString("yyyy-MM-dd HH:mm:ss") +"', "+ history.Duration.TotalSeconds.ToString() +
+                ", "+ history.Score.ToString() +");";
+                //'2016-11-13 10:00:00'
+                SQLiteCommand insertCommand = new SQLiteCommand(insertString, connection);
+                insertCommand.ExecuteNonQuery();
+                connection.Close();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+            
+            
+        }
+
+        private void AddHistory(IHistory history)
+        {
+            _histories.Add(history);
+        }
+        
+        public IUser GetCurrentUser()
+        {
+            return _users[0];
         }
     }
 }

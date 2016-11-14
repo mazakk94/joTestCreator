@@ -33,15 +33,16 @@ namespace UserInterface.Windows.Solve
                     case WindowType.kSubmitTest:
                         var submitTestWindowVM = SimpleIoc.Default.GetInstance<SolveTestViewModel>();
                         //submitTestWindowVM.MyText = message.Argument;
-                        var createNewTestWindow = new SubmitTest()
+                        var submitTestWindow = new SubmitTest()
                         {
                             DataContext = submitTestWindowVM
                             
                         };
                         //submitTestWindowVM.ClearWindow();
                         //submitTestWindowVM.TestId = Int32.Parse(message.Argument);
-                        
-                        bool? result = createNewTestWindow.ShowDialog();
+
+                        bool? result = submitTestWindow.ShowDialog();
+                        this.Close();
                         /*if (result.HasValue && result.Value)
                         {
                             result = true;

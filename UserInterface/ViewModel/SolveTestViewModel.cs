@@ -156,6 +156,20 @@ namespace UserInterface.ViewModel
             }
         }
 
+        private string _scoreinfo;
+        public string ScoreInfo
+        {
+            get
+            {
+                return _scoreinfo;
+            }
+            set
+            {
+                _scoreinfo = value;
+                RaisePropertyChanged(() => ScoreInfo);
+            }
+        }
+
         public DispatcherTimer Timer;
 
         #endregion
@@ -198,16 +212,39 @@ namespace UserInterface.ViewModel
         private void SubmitTest()
         {
             Timer.Stop();
-            TestDuration = DateTime.Now - TimeStarted;
+            BeingSolved.Score = CalculateScore();
+            ScoreInfo = BeingSolved.Score.ToString() + " / " + Test.MaximumPoints.ToString();
             CreateHistoryOfTest();
             Messenger.Default.Send<Helpers.OpenWindowMessage>(
                    new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kSubmitTest, Argument = TestDuration.ToString() });
         }
 
+        private int CalculateScore()
+        {
+            int score = 0;
+
+            //for (int i = 0; i < Test.Question.Count; i++)
+            //{
+                //iterate after all 
+                //if checkbox is checked and test.question[i].answer
+           // }
+
+            return score;
+        }
+
+        private TimeSpan RoundDuration(TimeSpan variable)
+        {
+            return new TimeSpan(variable.Hours, variable.Minutes, variable.Seconds);
+        }
+
         private void CreateHistoryOfTest()
         {
             BeingSolved.Id = _dao.GetNextHistoryId();
+            BeingSolved.When = DateTime.Now;
+            TestDuration = RoundDuration(DateTime.Now - TimeStarted); //nedded to be tested a little more
             BeingSolved.Duration = TestDuration;
+            BeingSolved.User = _dao.GetCurrentUser();
+            _dao.CreateNewHistory(BeingSolved);
         }                
 
         private void DispatcherTimer_Tick(object sender, EventArgs e)

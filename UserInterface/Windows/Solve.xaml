@@ -6,7 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         DataContext="{Binding Main, Source={StaticResource Locator}}"
         mc:Ignorable="d ignore"              
-        Title="Overview" Height="480" Width="540">
+        Title="Solve Tests Overview" Height="480" Width="540">
         
     <DockPanel>
         <Grid DockPanel.Dock="Top">

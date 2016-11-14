@@ -36,7 +36,7 @@
             <Label Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="2"  Content="Password" HorizontalAlignment="Center" VerticalAlignment="Bottom" />
             <TextBox Grid.Row="3" Grid.Column="3" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" Margin="5,0,0,0" />
 
-            <Button Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="4" Margin="0,10,0,10" >Sign In</Button>
+            <Button Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="4" Margin="0,10,0,10" >Sign In / Register</Button>
             <!--="{Binding AddCarCommand}" -->
         </Grid>
     </DockPanel>
