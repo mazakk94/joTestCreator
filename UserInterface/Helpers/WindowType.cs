@@ -8,6 +8,7 @@
         kEditTest,
         kNewQuestion,
         kEditQuestion,
-        kSolveTest
+        kSolveTest,
+        kSubmitTest
     }
 }

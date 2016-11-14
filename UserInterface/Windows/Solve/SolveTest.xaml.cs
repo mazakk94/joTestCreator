@@ -22,8 +22,48 @@ namespace UserInterface.Windows.Solve
     {
         public SolveTest()
         {
-            InitializeComponent();             
+            InitializeComponent();     
+            Closing += (s, e) => ViewModelLocator.Cleanup();
+            Messenger.Default.Register<OpenWindowMessage>(
+              this,
+              message =>
+              {
+                switch (message.Type)
+                {                
+                    case WindowType.kSubmitTest:
+                        var submitTestWindowVM = SimpleIoc.Default.GetInstance<SolveTestViewModel>();
+                        //submitTestWindowVM.MyText = message.Argument;
+                        var createNewTestWindow = new SubmitTest()
+                        {
+                            DataContext = submitTestWindowVM
+                            
+                        };
+                        //submitTestWindowVM.ClearWindow();
+                        //submitTestWindowVM.TestId = Int32.Parse(message.Argument);
+                        
+                        bool? result = createNewTestWindow.ShowDialog();
+                        /*if (result.HasValue && result.Value)
+                        {
+                            result = true;
+                            List<int> questionsIds = FillQuestionsIds(createNewTestWindow);      
+                            List<string> resultList = GetTestDataFromDialog(createNewTestWindow);
+
+                            Messenger.Default.Send(questionsIds, "questionsIds");
+                            Messenger.Default.Send(resultList, "testData");
+                            modalWindowVM.UpdateQuestions();
+                        }
+                        
+                        string resultString;
+                        if (result == true) resultString = "Accepted";
+                        else resultString = "Rejected";
+                        Messenger.Default.Send(resultString);
+                        */
+                        break;                        
+                }
+                 
+              });
         }
+        
 
         #region methods
 

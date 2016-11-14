@@ -932,5 +932,13 @@ namespace DataAccessObject
         }
 
         #endregion
+
+
+        public int GetNextHistoryId()
+        {
+            return 0;
+            //TODO
+            //select next free id from History table
+        }
     }
 }
