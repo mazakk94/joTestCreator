@@ -57,5 +57,8 @@ namespace Interfaces
         IUser CreateNewUser(string name, bool type);
 
         IUser InitUser(string name, bool type);
+
+
+        List<IHistory> GetAllHistories();
     }
 }

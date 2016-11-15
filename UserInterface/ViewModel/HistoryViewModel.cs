@@ -27,7 +27,27 @@ namespace UserInterface.ViewModel
             }
         }
 
+        private List<IHistory> _solvedTests;
+        public List<IHistory> SolvedTests
+        {
+            get { return _solvedTests; }
+            set
+            {
+                _solvedTests = value;
+                RaisePropertyChanged("SolvedTests");
+            }
+        }
 
+        private int _testIndex;
+        public int TestIndex
+        {
+            get { return _testIndex; }
+            set
+            {
+                _testIndex = value;
+                RaisePropertyChanged("TestIndex");
+            }
+        }
 
         #endregion
 
@@ -37,11 +57,35 @@ namespace UserInterface.ViewModel
 
             _dataService = dataService;
             _dataService.GetData((item, error) => { if (error != null) return; });
+            
 
             UserName = "";
+            SolvedTests = new List<IHistory>();
+            
+
             #endregion
 
         }
+
+        #region methods
+
+        public void RefreshDAO()
+        {
+            _dao.InitDAO();
+        }
+
+        public void FillSolvedTests()
+        {
+            SolvedTests.Clear();
+            foreach (var history in _dao.GetAllHistories())
+            {
+                if (history.User.Name == UserName)
+                    SolvedTests.Add(history);
+            }
+            //SolvedTests = _dao.GetAllHistories();
+        }
+
+        #endregion
     }
 }
 

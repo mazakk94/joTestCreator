@@ -57,8 +57,10 @@ namespace UserInterface
                           {
                               DataContext = historyVM
                           };
-
+                          historyVM.RefreshDAO();
                           historyVM.UserName = message.Argument;
+                          historyVM.FillSolvedTests();
+
                           result = historyWindow.ShowDialog();
 
                           if (result.HasValue && result.Value)

@@ -28,64 +28,6 @@ namespace UserInterface
         public History()
         {
             InitializeComponent();
-            /*
-            Closing += (s, e) => ViewModelLocator.Cleanup();
-            Messenger.Default.Register<OpenWindowMessage>(
-              this,
-              message =>
-              {
-                  switch (message.Type)
-                  {
-                      case WindowType.kSolveTest:
-
-                          var solveTestVM = SimpleIoc.Default.GetInstance<SolveTestViewModel>();
-                          var solveTestWindow = new SolveTest()
-                          {
-                              DataContext = solveTestVM
-                          };
-                          string[] parsedMessage = message.Argument.Split('+');
-                          solveTestVM.ClearWindow();
-                          solveTestVM.Test.Id = Int32.Parse(parsedMessage[0]);
-                          solveTestVM.UserName = parsedMessage[1];
-                          solveTestVM.RefreshDAO();
-                          solveTestVM.LoadData();
-                          solveTestVM.FillWindow();
-
-                          var result = solveTestWindow.ShowDialog();
-                          
-                          if (result.HasValue && result.Value)
-                          {
-                              result = true;
-                              /*List<int> questionsIds = FillQuestionsIds(createEditTestWindow);
-                              List<string> resultList = GetTestDataFromDialog(createEditTestWindow);
-
-                              Messenger.Default.Send(questionsIds, "questionsIds");
-                              Messenger.Default.Send(resultList, "testData");
-                              modalWindowVM.UpdateQuestions(); 
-                              //insert and delete from DB questions and Ids !
-                          } 
-                          else 
-                          {
-                              solveTestVM.Timer.Stop();
-                          }
-
-                          //string resultString;
-                          //if (result == true) resultString = "Accepted";
-                          //else resultString = "Rejected";
-                          //Messenger.Default.Send(resultString);
-                          
-                          break;
-
-                  }
-
-              });
-        }
-
-        #region methods
-        
-        #endregion*/
-
-
         }
     }
 }

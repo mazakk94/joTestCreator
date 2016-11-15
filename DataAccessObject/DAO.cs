@@ -1017,5 +1017,13 @@ namespace DataAccessObject
         {
             return new User(name, type);
         }
+
+
+
+
+        List<IHistory> IDAO.GetAllHistories()
+        {
+            return _histories;
+        }
     }
 }
