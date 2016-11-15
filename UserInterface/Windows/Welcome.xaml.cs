@@ -31,43 +31,35 @@ namespace UserInterface
                   switch (message.Type)
                   {
                       case WindowType.kMenu:
-
                           var menuVM = SimpleIoc.Default.GetInstance<MainViewModel>();
                           var menuWindow = new Menu()
                           {
                               DataContext = menuVM
                           };
 
+                          menuVM.LoginUser(this.userName.Text, UserOrEditor());
                           this.Close();
-                          var result = menuWindow.ShowDialog();
-                          
-                          //if (result.HasValue && result.Value)
-                          //{
-                           //   result = true;
-                              /*List<int> questionsIds = FillQuestionsIds(createEditTestWindow);
-                              List<string> resultList = GetTestDataFromDialog(createEditTestWindow);
-
-                              Messenger.Default.Send(questionsIds, "questionsIds");
-                              Messenger.Default.Send(resultList, "testData");
-                              modalWindowVM.UpdateQuestions();*/ 
-                              //insert and delete from DB questions and Ids !
-                       //   } 
-                       //   else 
-                      //    {
-                       //      solveTestVM.Timer.Stop();
-                        //  }
-
-                          //string resultString;
-                          //if (result == true) resultString = "Accepted";
-                          //else resultString = "Rejected";
-                          //Messenger.Default.Send(resultString);
+                          var result = menuWindow.ShowDialog();                         
                           
                           break;
-
                   }
 
               });
         
+        }
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var textBox = sender as TextBox;
+            this.Title = textBox.Text +
+            "[Length = " + textBox.Text.Length.ToString() + "]";
+        }
+
+
+
+        bool UserOrEditor()
+        {
+            return (this.RadioEditor.IsChecked ?? false) && (!this.RadioUser.IsChecked ?? false);
         }
 
     }

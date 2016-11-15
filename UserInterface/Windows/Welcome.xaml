@@ -25,17 +25,17 @@
             <Image Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="6" 
         		Stretch="None" Source="Resources/logo.jpg"  />
 
-            <RadioButton Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" 
+            <RadioButton Name="RadioEditor" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" 
                          Content="Editor" HorizontalAlignment="Center"  
                          VerticalAlignment="Center" GroupName="UserEditor" FontSize="16"/>
-            <RadioButton Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="2" 
+            <RadioButton Name="RadioUser" Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="2" 
                          Content="User" HorizontalAlignment="Center"  
                          VerticalAlignment="Center" GroupName="UserEditor" IsChecked="True" FontSize="16"/>
 
             <Label Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="2" Content="Username" 
                    HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
-            <TextBox Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="2" Text="{Binding UserName}"
-                     HorizontalAlignment="Stretch" Margin="0,0,5,0" />            
+            <TextBox Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="2" Text="{Binding User.Name}"        
+                     Name="userName" TextChanged="TextBox_TextChanged" HorizontalAlignment="Stretch" Margin="0,0,5,0" />            
             <Button Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="2" Margin="0,10,0,10" 
                     Content="Sign In / Register" Command="{Binding SignInRegisterCommand}" />
             <!--="{Binding AddCarCommand}" -->

@@ -127,3 +127,5 @@ C:\Users\Mazi\Documents\Visual Studio 2013\siszarpProjects\joTestCreator\MvvmLig
 C:\Users\Mazi\Documents\Visual Studio 2013\siszarpProjects\joTestCreator\MvvmLight5\bin\Debug\System.Data.SQLite.Linq.dll
 C:\Users\Mazi\Documents\Visual Studio 2013\siszarpProjects\joTestCreator\MvvmLight5\bin\Debug\EntityFramework.xml
 C:\Users\Mazi\Documents\Visual Studio 2013\siszarpProjects\joTestCreator\MvvmLight5\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\Mazi\Documents\Visual Studio 2013\siszarpProjects\joTestCreator\UserInterface\bin\Debug\UserInterface.exe
+C:\Users\Mazi\Documents\Visual Studio 2013\siszarpProjects\joTestCreator\UserInterface\bin\Debug\System.Data.SQLite.dll

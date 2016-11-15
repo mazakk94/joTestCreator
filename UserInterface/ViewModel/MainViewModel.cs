@@ -25,14 +25,14 @@ namespace UserInterface.ViewModel
 
         //  public event PropertyChangedEventHandler PropertyChanged;         ALE NAROBIŁ INBY
 
-        private string _userName;
-        public string UserName
+        private IUser _user;
+        public IUser User
         {
-            get { return _userName; }
+            get { return _user; }
             set
             {
-                _userName = value;
-                RaisePropertyChanged("UserName");
+                _user = value;
+                RaisePropertyChanged("User");
             }
         }
 
@@ -236,7 +236,7 @@ namespace UserInterface.ViewModel
             _newTestQuestionsIds = new List<int>();
             _testData = new List<string>();
             _dao = new DataAccessObject.DAO();
-            _view = (ListCollectionView)CollectionViewSource.GetDefaultView(_tests);
+            _view = (ListCollectionView)CollectionViewSource.GetDefaultView(_tests);            
             GetAllTests();
             GetAllQuestions();
             //_userName = _dao.GetCurrentUser().Name;
@@ -296,6 +296,22 @@ namespace UserInterface.ViewModel
 
         #region methods
 
+        public void LoginUser(string name, bool type)
+        {
+            bool login = false;
+            User = _dao.InitUser(name, type);
+
+            foreach (var user in _dao.GetAllUsers())
+                if (User.Name == user.Name)
+                    login = true;
+
+            if (login)
+                _dao.SetCurrentUser(User.Name);
+            else
+                User = _dao.CreateNewUser(name, type);
+            
+        }
+
         private void OpenEditor()
         {
             throw new NotImplementedException();
@@ -313,25 +329,13 @@ namespace UserInterface.ViewModel
 
         private void SignInRegister()
         {
-            bool login = false;
-            foreach(var user in _dao.GetAllUsers())
-            {
-                if (UserName == user.Name)
-                {
-                    login = true;
-                    break;
-                }
-            }
-
-            if (login)
-                _dao.SetCurrentUser(UserName);
-            else
-            {
-                //REGISTER TODO
-            }
-
             Messenger.Default.Send<Helpers.OpenWindowMessage>(
-                   new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kMenu, Argument = _selectedIndex.ToString() });
+                   new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kMenu, Argument = "" });
+
+            
+
+            
+            
         }
 
         private void SolveTest()

@@ -982,5 +982,40 @@ namespace DataAccessObject
         {
             _userName = UserName;
         }
+        
+
+        public IUser CreateNewUser(string username, bool type)
+        {
+            IUser user = InitUser(username, type);
+            AddUser(user);
+            InsertUser(user);
+            return user;
+        }
+
+        private void AddUser(IUser User)
+        {
+            _users.Add(User);
+        }
+
+        private void InsertUser(IUser User)
+        {
+            connection = new SQLiteConnection("Data Source=Tests.sqlite;Version=3;");
+            connection.Open();
+
+            if (connection.State == ConnectionState.Open)
+            {
+                string insertString = "INSERT INTO USERS (NAME, TYPE) VALUES ('" + User.Name.ToString() + 
+                    "', " + (User.Type == true ? "1" : "0") + ");";
+                SQLiteCommand insertCommand = new SQLiteCommand(insertString, connection);
+                insertCommand.ExecuteNonQuery();
+                connection.Close();
+            }
+        }
+
+
+        public IUser InitUser(string name, bool type)
+        {
+            return new User(name, type);
+        }
     }
 }

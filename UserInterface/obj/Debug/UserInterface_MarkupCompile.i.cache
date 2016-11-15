@@ -16,5 +16,5 @@ C:\Users\Mazi\Documents\Visual Studio 2013\siszarpProjects\joTestCreator\UserInt
 231133007432
 MainWindow.xaml;ModalWindow.xaml;NonModalWindow.xaml;Windows\Menu.xaml;Windows\Solve.xaml;Windows\Editor.xaml;Skins\MainSkin.xaml;Windows\Editor\CreateQuestion.xaml;Windows\Editor\CreateTest.xaml;Windows\Solve\SubmitTest.xaml;Windows\Solve\SolveTest.xaml;Windows\Welcome.xaml;
 
-True
+False
 

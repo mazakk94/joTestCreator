@@ -20,5 +20,14 @@ namespace DataAccessObject.DataObjects
             get;
             set;
         }
+
+        public User() { }
+
+        public User(string name, bool type)
+        {
+            Name = name;
+            Type = type;
+        }
+
     }
 }

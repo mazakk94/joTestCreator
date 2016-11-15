@@ -9,6 +9,6 @@ namespace Interfaces
     public interface IUser
     {
         string Name { get; set; }
-        bool Type { get; set; } //0 - user, 1 - editor
+        bool Type { get; set; } //0 - user, 1 - editor        
     }
 }

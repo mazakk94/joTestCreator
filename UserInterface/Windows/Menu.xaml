@@ -24,7 +24,7 @@
             <StackPanel Orientation="Horizontal" Grid.Row="0" 
                         HorizontalAlignment="Center" VerticalAlignment="Center">
                 <Label FontSize="30" Content="Hello," />
-                <Label FontSize="30" Content="{Binding UserName}" />                
+                <Label FontSize="30" Content="{Binding User.Name}" />                
             </StackPanel>
             
             
