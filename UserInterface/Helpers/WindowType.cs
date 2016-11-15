@@ -10,6 +10,9 @@
         kEditQuestion,
         kSolveTest,
         kSubmitTest,
-        kMenu
+        kMenu,
+        kEditor,
+        kSolve,
+        kHistory
     }
 }

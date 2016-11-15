@@ -16,6 +16,20 @@ namespace UserInterface.ViewModel
         private readonly IDataService _dataService;
         private IDAO _dao = new DataAccessObject.DAO();
 
+        private string _userName;
+        public string UserName
+        {
+            get
+            {
+                return _userName;
+            }
+            set
+            {
+                _userName = value;
+                RaisePropertyChanged(() => UserName);
+            }
+        }
+
         private IHistory _beingSolved;
         public IHistory BeingSolved
         {
@@ -256,6 +270,7 @@ namespace UserInterface.ViewModel
             BeingSolved.When = DateTime.Now;
             TestDuration = RoundDuration(DateTime.Now - TimeStarted); //nedded to be tested a little more
             BeingSolved.Duration = TestDuration;
+            _dao.SetCurrentUser(UserName);
             BeingSolved.User = _dao.GetCurrentUser();
             _dao.CreateNewHistory(BeingSolved);
         }                

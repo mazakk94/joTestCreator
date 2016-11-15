@@ -36,8 +36,7 @@ namespace UserInterface
                           {
                               DataContext = menuVM
                           };
-
-                          menuVM.LoginUser(this.userName.Text, UserOrEditor());
+                          menuVM.IsEditorVisible = menuVM.LoginUser(this.userName.Text, UserOrEditor()) ? "Visible" : "Hidden";                          
                           this.Close();
                           var result = menuWindow.ShowDialog();                         
                           

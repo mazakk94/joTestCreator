@@ -23,12 +23,12 @@ using System.Collections.ObjectModel;
 
 namespace UserInterface
 {
-    public partial class Solve : Window
+    public partial class History : Window
     {
-        public Solve()
+        public History()
         {
             InitializeComponent();
-
+            /*
             Closing += (s, e) => ViewModelLocator.Cleanup();
             Messenger.Default.Register<OpenWindowMessage>(
               this,
@@ -61,7 +61,7 @@ namespace UserInterface
 
                               Messenger.Default.Send(questionsIds, "questionsIds");
                               Messenger.Default.Send(resultList, "testData");
-                              modalWindowVM.UpdateQuestions();*/ 
+                              modalWindowVM.UpdateQuestions(); 
                               //insert and delete from DB questions and Ids !
                           } 
                           else 
@@ -83,8 +83,9 @@ namespace UserInterface
 
         #region methods
         
-        #endregion
+        #endregion*/
 
 
+        }
     }
 }

@@ -13,7 +13,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Interfaces;
 
-
 using GalaSoft.MvvmLight.Ioc;
 using GalaSoft.MvvmLight.Messaging;
 using UserInterface.Helpers;
@@ -36,44 +35,51 @@ namespace UserInterface
               {
                   switch (message.Type)
                   {
-                      case WindowType.kSolveTest:
+                      case WindowType.kSolve:
 
-                          var solveTestVM = SimpleIoc.Default.GetInstance<SolveTestViewModel>();
-                          var solveTestWindow = new SolveTest()
+                          var solveVM = SimpleIoc.Default.GetInstance<MainViewModel>();
+                          var solveWindow = new Solve()
                           {
-                              DataContext = solveTestVM
+                              DataContext = solveVM
                           };
-                          solveTestVM.ClearWindow();
-                          solveTestVM.Test.Id = Int32.Parse(message.Argument);                          
-                          solveTestVM.RefreshDAO();
-                          solveTestVM.LoadData();
-                          solveTestVM.FillWindow();
 
-                          var result = solveTestWindow.ShowDialog();
-                          
+                          var result = solveWindow.ShowDialog();
+
                           if (result.HasValue && result.Value)
-                          {
                               result = true;
-                              /*List<int> questionsIds = FillQuestionsIds(createEditTestWindow);
-                              List<string> resultList = GetTestDataFromDialog(createEditTestWindow);
 
-                              Messenger.Default.Send(questionsIds, "questionsIds");
-                              Messenger.Default.Send(resultList, "testData");
-                              modalWindowVM.UpdateQuestions();*/ 
-                              //insert and delete from DB questions and Ids !
-                          } 
-                          else 
-                          {
-                              solveTestVM.Timer.Stop();
-                          }
-
-                          //string resultString;
-                          //if (result == true) resultString = "Accepted";
-                          //else resultString = "Rejected";
-                          //Messenger.Default.Send(resultString);
-                          
                           break;
 
+                      case WindowType.kHistory:
+
+                          var historyVM = SimpleIoc.Default.GetInstance<HistoryViewModel>();
+                          var historyWindow = new History()
+                          {
+                              DataContext = historyVM
+                          };
+
+                          historyVM.UserName = message.Argument;
+                          result = historyWindow.ShowDialog();
+
+                          if (result.HasValue && result.Value)
+                              result = true;
+
+                          break;
+
+                      case WindowType.kEditor:
+
+                          var editorVM = SimpleIoc.Default.GetInstance<MainViewModel>();
+                          var editorWindow = new Editor()
+                          {
+                              DataContext = editorVM
+                          };
+
+                          result = editorWindow.ShowDialog();
+
+                          if (result.HasValue && result.Value)
+                              result = true;
+
+                          break;
                   }
 
               });

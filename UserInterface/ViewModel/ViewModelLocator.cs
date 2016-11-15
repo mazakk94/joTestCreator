@@ -35,7 +35,8 @@ namespace UserInterface.ViewModel
             SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<SolveTestViewModel>();
             SimpleIoc.Default.Register<CreateTestViewModel>();
-            SimpleIoc.Default.Register<CreateQuestionViewModel>();
+            SimpleIoc.Default.Register<CreateQuestionViewModel>(); 
+            SimpleIoc.Default.Register<HistoryViewModel>();
             SimpleIoc.Default.Register<NonModalWindowViewModel>();
         }
 

@@ -296,7 +296,7 @@ namespace UserInterface.ViewModel
 
         #region methods
 
-        public void LoginUser(string name, bool type)
+        public bool LoginUser(string name, bool type)
         {
             bool login = false;
             User = _dao.InitUser(name, type);
@@ -309,39 +309,39 @@ namespace UserInterface.ViewModel
                 _dao.SetCurrentUser(User.Name);
             else
                 User = _dao.CreateNewUser(name, type);
+            User = _dao.GetCurrentUser();
+            return User.Type;
             
         }
 
         private void OpenEditor()
         {
-            throw new NotImplementedException();
+            Messenger.Default.Send<Helpers.OpenWindowMessage>(
+                   new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kEditor, Argument = "" });
         }
 
         private void OpenHistory()
         {
-            throw new NotImplementedException();
+            Messenger.Default.Send<Helpers.OpenWindowMessage>(
+                  new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kHistory, Argument = User.Name });
         }
 
         private void OpenSolve()
         {
-            throw new NotImplementedException();
+            Messenger.Default.Send<Helpers.OpenWindowMessage>(
+                   new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kSolve, Argument = User.Name });
         }
 
         private void SignInRegister()
         {
             Messenger.Default.Send<Helpers.OpenWindowMessage>(
                    new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kMenu, Argument = "" });
-
-            
-
-            
-            
         }
 
         private void SolveTest()
         {
             Messenger.Default.Send<Helpers.OpenWindowMessage>(
-                   new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kSolveTest, Argument = _selectedIndex.ToString() });
+                   new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kSolveTest, Argument = _selectedIndex.ToString()+"+"+User.Name });
         }
 
         private void DeleteTest(int testId)
@@ -488,11 +488,6 @@ namespace UserInterface.ViewModel
         }
 
         #endregion
-
-
-
-
-
 
     }
 }
