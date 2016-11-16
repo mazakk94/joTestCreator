@@ -60,5 +60,9 @@ namespace Interfaces
 
 
         List<IHistory> GetAllHistories();
+
+        List<List<int>> SelectCheckedAnswers(int historyId);
+
+        IAnsweredQuestion CreateNewAnsweredQuestion();
     }
 }

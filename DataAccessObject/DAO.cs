@@ -257,6 +257,10 @@ namespace DataAccessObject
                     createString = "CREATE TABLE HISTORY (ID INT, TESTID INT, USERNAME VARCHAR(20), TIME DATETIME, DURATION INT, SCORE INT)";
                     createCommand = new SQLiteCommand(createString, connection);
                     createCommand.ExecuteNonQuery();
+
+                    createString = "CREATE TABLE CHECKEDANSWERS (HISTORYID INT, QUESTIONID INT, ANSWER INT)";
+                    createCommand = new SQLiteCommand(createString, connection);
+                    createCommand.ExecuteNonQuery();
                 }
                 #endregion
 
@@ -869,6 +873,11 @@ namespace DataAccessObject
             return new DataObjects.Test();
         }
 
+        public IAnsweredQuestion CreateNewAnsweredQuestion()
+        {
+            return new AnsweredQuestion();
+        }
+
         public ITest CreateNewTest(List<string> TestData, List<int> NewTestQuestionsIds)
         {
             int id = _tests.Count;
@@ -955,8 +964,25 @@ namespace DataAccessObject
                 "', '"+ history.When.ToString("yyyy-MM-dd HH:mm:ss") +"', "+ history.Duration.TotalSeconds.ToString() +
                 ", "+ history.Score.ToString() +");";
                 //'2016-11-13 10:00:00'
+
                 SQLiteCommand insertCommand = new SQLiteCommand(insertString, connection);
                 insertCommand.ExecuteNonQuery();
+
+                for (int i = 0; i < history.ChosenAnswers.Count; i++)
+                {
+                    for (int j = 0; j < history.ChosenAnswers[i].ChosenAnswers.Count; j++)
+                    {
+                        insertString =
+                        "INSERT INTO CHECKEDANSWERS (HISTORYID, QUESTIONID, ANSWER) VALUES (" + history.Id.ToString() + ", " +
+                        i.ToString() + ", " + history.ChosenAnswers[i].ChosenAnswers[j].ToString() + ");";
+
+                        insertCommand = new SQLiteCommand(insertString, connection);
+                        insertCommand.ExecuteNonQuery();
+
+                    }
+                }
+                    
+                
                 connection.Close();
                 return true;
             }
@@ -1024,6 +1050,39 @@ namespace DataAccessObject
         List<IHistory> IDAO.GetAllHistories()
         {
             return _histories;
+        }
+
+
+        public List<List<int>> SelectCheckedAnswers(int historyId)
+        {
+            List<List<int>> answersList = new List<List<int>>();
+            List<Tuple<int, int>> pairs = new List<Tuple<int, int>>();
+
+            string selectString = "select * from CHECKEDANSWERS WHERE HISTORYID = " 
+                + historyId.ToString() + " ORDER BY QUESTIONID ASC";
+
+            SQLiteConnection tmpconnection = new SQLiteConnection("Data Source=Tests.sqlite;Version=3;");
+            tmpconnection.Open();
+            if (tmpconnection.State == ConnectionState.Open)
+            {
+                SQLiteCommand selectCommand = new SQLiteCommand(selectString, tmpconnection);
+                SQLiteDataReader reader = selectCommand.ExecuteReader();
+
+                while (reader.Read())
+                {           
+                    int Id = Int32.Parse(reader["QUESTIONID"].ToString());
+                    int answer = Int32.Parse(reader["ANSWER"].ToString());
+                    pairs.Add(new Tuple<int, int>(Id, answer));
+
+                    if (Id > answersList.Count - 1)
+                        answersList.Add(new List<int>());
+                    answersList[Id].Add(answer);
+                }
+
+                tmpconnection.Close();
+            }
+
+            return answersList;
         }
     }
 }

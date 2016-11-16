@@ -48,7 +48,18 @@ namespace UserInterface.ViewModel
                 RaisePropertyChanged("Questions");
             }
         }
-        
+
+        private List<bool> _answers;
+        public List<bool> Answers
+        {
+            get { return _answers; }
+            set
+            {
+                _answers = value;
+                RaisePropertyChanged("Answers");
+            }
+        }
+
         private int _testIndex;
         public int TestIndex
         {
@@ -69,9 +80,10 @@ namespace UserInterface.ViewModel
             {
                 _questionsIndex = value;
                 RaisePropertyChanged("QuestionIndex");
+                UpdateAnswersList();
             }
         }
-
+           
         #endregion
 
         public HistoryViewModel(IDataService dataService)
@@ -104,9 +116,21 @@ namespace UserInterface.ViewModel
             foreach (var history in _dao.GetAllHistories())
             {
                 if (history.User.Name == UserName)
+                {
+                    //gonna do a function from that
+                    List<List<int>> checkedAnswers = _dao.SelectCheckedAnswers(history.Id);
+                    history.ChosenAnswers = new List<IAnsweredQuestion>();
+                    for(int i = 0; i < history.Question.Count; i++)
+                    {
+                        if (history.ChosenAnswers.Count <= i)
+                            history.ChosenAnswers.Add(_dao.CreateNewAnsweredQuestion());
+                        history.ChosenAnswers[i].ChosenAnswers = checkedAnswers[i];
+                            //adding list of integers (answer) from questionid = i
+                    }
                     SolvedTests.Add(history);
+                }
+                    
             }
-            //SolvedTests = _dao.GetAllHistories();
         }
 
         private void UpdateQuestionsList()
@@ -123,6 +147,19 @@ namespace UserInterface.ViewModel
                 }
                 if (changed)
                     Questions = new List<IQuestion>(questions);
+            }
+        }
+
+        private void UpdateAnswersList()
+        {
+            List<bool> answers = new List<bool>();
+            if (TestIndex > -1 && SolvedTests.Count > 0 && QuestionIndex > -1)
+            {
+                //for (int i = 0; i < SolvedTests[TestIndex].ChosenAnswers[QuestionIndex].ChosenAnswers.Count; i++)
+                for (int i = 0; i < SolvedTests[TestIndex].Question[QuestionIndex].Answer.Count; i++)
+                    answers.Add(SolvedTests[TestIndex].ChosenAnswers[QuestionIndex].ChosenAnswers.Contains(i));
+
+                Answers = new List<bool>(answers);
             }
         }
 

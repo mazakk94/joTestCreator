@@ -65,6 +65,17 @@
                 </ListBox.ItemTemplate>
             </ListBox>
 
+            <ListBox Grid.Row="1" Grid.Column="5"
+                     ItemsSource="{Binding Answers}"  >
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="{Binding}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
         </Grid>
     </DockPanel>
 </Window>
