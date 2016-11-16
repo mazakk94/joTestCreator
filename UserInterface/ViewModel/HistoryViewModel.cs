@@ -49,14 +49,14 @@ namespace UserInterface.ViewModel
             }
         }
 
-        private List<bool> _answers;
-        public List<bool> Answers
+        private List<bool> _checkBoxes;
+        public List<bool> CheckBoxes
         {
-            get { return _answers; }
+            get { return _checkBoxes; }
             set
             {
-                _answers = value;
-                RaisePropertyChanged("Answers");
+                _checkBoxes = value;
+                RaisePropertyChanged("CheckBoxes");
             }
         }
 
@@ -80,7 +80,7 @@ namespace UserInterface.ViewModel
             {
                 _questionsIndex = value;
                 RaisePropertyChanged("QuestionIndex");
-                UpdateAnswersList();
+                UpdateCheckBoxList();
             }
         }
            
@@ -150,16 +150,15 @@ namespace UserInterface.ViewModel
             }
         }
 
-        private void UpdateAnswersList()
+        private void UpdateCheckBoxList()
         {
-            List<bool> answers = new List<bool>();
+            List<bool> checkboxes = new List<bool>();
             if (TestIndex > -1 && SolvedTests.Count > 0 && QuestionIndex > -1)
             {
-                //for (int i = 0; i < SolvedTests[TestIndex].ChosenAnswers[QuestionIndex].ChosenAnswers.Count; i++)
                 for (int i = 0; i < SolvedTests[TestIndex].Question[QuestionIndex].Answer.Count; i++)
-                    answers.Add(SolvedTests[TestIndex].ChosenAnswers[QuestionIndex].ChosenAnswers.Contains(i));
+                    checkboxes.Add(SolvedTests[TestIndex].ChosenAnswers[QuestionIndex].ChosenAnswers.Contains(i));
 
-                Answers = new List<bool>(answers);
+                CheckBoxes = new List<bool>(checkboxes);
             }
         }
 

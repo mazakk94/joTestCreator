@@ -5,7 +5,7 @@
         xmlns:ignore="http://www.ignore.com"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         DataContext="{Binding Main, Source={StaticResource Locator}}"
-        mc:Ignorable="d ignore"              
+        mc:Ignorable="d ignore" 
         Title="Main Menu" Height="480" Width="400">
         
     <DockPanel>

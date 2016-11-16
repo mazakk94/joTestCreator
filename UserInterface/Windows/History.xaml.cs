@@ -29,5 +29,10 @@ namespace UserInterface
         {
             InitializeComponent();
         }
+
+        #region properties
+
+        #endregion
+
     }
 }
