@@ -66,6 +66,21 @@
                 </ListBox.ItemTemplate>
             </ListBox>
 
+
+            <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="5" >
+                <CheckBox Visibility="{Binding CheckBoxesVisibility[0]}" 
+                          VerticalAlignment="Center" IsChecked="{Binding CheckBoxes[0]}" />
+                <CheckBox Visibility="{Binding CheckBoxesVisibility[1]}" 
+                          VerticalAlignment="Center" IsChecked="{Binding CheckBoxes[1]}" />
+                <CheckBox Visibility="{Binding CheckBoxesVisibility[2]}" 
+                          VerticalAlignment="Center" IsChecked="{Binding CheckBoxes[2]}" />
+                <CheckBox Visibility="{Binding CheckBoxesVisibility[3]}" 
+                          VerticalAlignment="Center" IsChecked="{Binding CheckBoxes[3]}" />
+                <CheckBox Visibility="{Binding CheckBoxesVisibility[4]}" 
+                          VerticalAlignment="Center" IsChecked="{Binding CheckBoxes[4]}" />
+            </StackPanel>
+
+
 <!--
             <ListBox Grid.Row="1" Grid.Column="5"
                      ItemsSource="{Binding CheckBoxes}"  >
@@ -78,7 +93,7 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-            -->
+    -->        
             <ListBox Grid.Row="1" Grid.Column="6"
                      ItemsSource="{Binding CheckBoxes}"  >
                 <ListBox.ItemTemplate>

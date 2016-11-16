@@ -60,6 +60,17 @@ namespace UserInterface.ViewModel
             }
         }
 
+        private List<string> _checkBoxesVisibility;
+        public List<string> CheckBoxesVisibility
+        {
+            get { return _checkBoxesVisibility; }
+            set
+            {
+                _checkBoxesVisibility = value;
+                RaisePropertyChanged("CheckBoxesVisibility");
+            }
+        }
+
         private int _testIndex;
         public int TestIndex
         {
@@ -153,12 +164,22 @@ namespace UserInterface.ViewModel
         private void UpdateCheckBoxList()
         {
             List<bool> checkboxes = new List<bool>();
+            List<string> checkboxesVisibility = new List<string>();
             if (TestIndex > -1 && SolvedTests.Count > 0 && QuestionIndex > -1)
             {
                 for (int i = 0; i < SolvedTests[TestIndex].Question[QuestionIndex].Answer.Count; i++)
+                {
                     checkboxes.Add(SolvedTests[TestIndex].ChosenAnswers[QuestionIndex].ChosenAnswers.Contains(i));
+                    checkboxesVisibility.Add("Visible");
+                }
+                while (checkboxes.Count < 5)
+                {
+                    checkboxes.Add(false);
+                    checkboxesVisibility.Add("Hidden");
+                }
 
                 CheckBoxes = new List<bool>(checkboxes);
+                CheckBoxesVisibility = new List<string>(checkboxesVisibility);
             }
         }
 
