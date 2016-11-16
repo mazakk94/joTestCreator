@@ -68,15 +68,20 @@
 
 
             <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="5" >
-                <CheckBox Visibility="{Binding CheckBoxesVisibility[0]}" 
+                <CheckBox HorizontalAlignment="Right" Margin="9" 
+                          Visibility="{Binding CheckBoxesVisibility[0]}" 
                           VerticalAlignment="Center" IsChecked="{Binding CheckBoxes[0]}" />
-                <CheckBox Visibility="{Binding CheckBoxesVisibility[1]}" 
+                <CheckBox HorizontalAlignment="Right" Margin="9" 
+                          Visibility="{Binding CheckBoxesVisibility[1]}" 
                           VerticalAlignment="Center" IsChecked="{Binding CheckBoxes[1]}" />
-                <CheckBox Visibility="{Binding CheckBoxesVisibility[2]}" 
+                <CheckBox HorizontalAlignment="Right" Margin="9" 
+                          Visibility="{Binding CheckBoxesVisibility[2]}" 
                           VerticalAlignment="Center" IsChecked="{Binding CheckBoxes[2]}" />
-                <CheckBox Visibility="{Binding CheckBoxesVisibility[3]}" 
+                <CheckBox HorizontalAlignment="Right" Margin="9" 
+                          Visibility="{Binding CheckBoxesVisibility[3]}" 
                           VerticalAlignment="Center" IsChecked="{Binding CheckBoxes[3]}" />
-                <CheckBox Visibility="{Binding CheckBoxesVisibility[4]}" 
+                <CheckBox HorizontalAlignment="Right" Margin="9" 
+                          Visibility="{Binding CheckBoxesVisibility[4]}" 
                           VerticalAlignment="Center" IsChecked="{Binding CheckBoxes[4]}" />
             </StackPanel>
 
@@ -95,11 +100,11 @@
             </ListBox>
     -->        
             <ListBox Grid.Row="1" Grid.Column="6"
-                     ItemsSource="{Binding CheckBoxes}"  >
+                     ItemsSource="{Binding Answers}"  >
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <Label x:Name="label" Content="{Binding}" /> 
+                            <Label Content="{Binding}" /> 
                         </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>

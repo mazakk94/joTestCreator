@@ -49,6 +49,17 @@ namespace UserInterface.ViewModel
             }
         }
 
+        private List<string> _answers;
+        public List<string> Answers
+        {
+            get { return _answers; }
+            set
+            {
+                _answers = value;
+                RaisePropertyChanged("Answers");
+            }
+        }
+
         private List<bool> _checkBoxes;
         public List<bool> CheckBoxes
         {
@@ -92,6 +103,7 @@ namespace UserInterface.ViewModel
                 _questionsIndex = value;
                 RaisePropertyChanged("QuestionIndex");
                 UpdateCheckBoxList();
+                UpdateAnswersList();
             }
         }
            
@@ -131,12 +143,19 @@ namespace UserInterface.ViewModel
                     //gonna do a function from that
                     List<List<int>> checkedAnswers = _dao.SelectCheckedAnswers(history.Id);
                     history.ChosenAnswers = new List<IAnsweredQuestion>();
-                    for(int i = 0; i < history.Question.Count; i++)
+                    int count = history.Question.Count;
+                    for (int i = 0; i < count; i++)
                     {
-                        if (history.ChosenAnswers.Count <= i)
-                            history.ChosenAnswers.Add(_dao.CreateNewAnsweredQuestion());
-                        history.ChosenAnswers[i].ChosenAnswers = checkedAnswers[i];
+                        if (checkedAnswers.Count > i)
+                        {
+                            if (history.ChosenAnswers.Count <= i)
+                                history.ChosenAnswers.Add(_dao.CreateNewAnsweredQuestion());
+                            history.ChosenAnswers[i].ChosenAnswers = checkedAnswers[i];
                             //adding list of integers (answer) from questionid = i
+                        } else
+                        {
+                            history.Question.RemoveAt(history.Question.Count - 1);
+                        }
                     }
                     SolvedTests.Add(history);
                 }
@@ -182,6 +201,19 @@ namespace UserInterface.ViewModel
                 CheckBoxesVisibility = new List<string>(checkboxesVisibility);
             }
         }
+
+        private void UpdateAnswersList()
+        {
+            List<string> answers = new List<string>();
+            if (TestIndex > -1 && SolvedTests.Count > 0 && QuestionIndex > -1)
+            {
+                for (int i = 0; i < SolvedTests[TestIndex].Question[QuestionIndex].Answer.Count; i++)
+                    answers.Add(SolvedTests[TestIndex].Question[QuestionIndex].Answer[i].Item1);
+
+                Answers = new List<string>(answers);
+            }
+        }
+         
 
         #endregion
     }
