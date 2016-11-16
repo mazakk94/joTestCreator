@@ -38,6 +38,17 @@ namespace UserInterface.ViewModel
             }
         }
 
+        private List<IQuestion> _questions;
+        public List<IQuestion> Questions
+        {
+            get { return _questions; }
+            set
+            {
+                _questions = value;
+                RaisePropertyChanged("Questions");
+            }
+        }
+        
         private int _testIndex;
         public int TestIndex
         {
@@ -46,6 +57,18 @@ namespace UserInterface.ViewModel
             {
                 _testIndex = value;
                 RaisePropertyChanged("TestIndex");
+                UpdateQuestionsList();
+            }
+        }        
+
+        private int _questionsIndex;
+        public int QuestionIndex
+        {
+            get { return _questionsIndex; }
+            set
+            {
+                _questionsIndex = value;
+                RaisePropertyChanged("QuestionIndex");
             }
         }
 
@@ -56,12 +79,13 @@ namespace UserInterface.ViewModel
             #region variables initialization
 
             _dataService = dataService;
-            _dataService.GetData((item, error) => { if (error != null) return; });
-            
+            _dataService.GetData((item, error) => { if (error != null) return; });            
 
             UserName = "";
             SolvedTests = new List<IHistory>();
-            
+            Questions = new List<IQuestion>();            
+            QuestionIndex = -1;
+            TestIndex = -1;
 
             #endregion
 
@@ -83,6 +107,23 @@ namespace UserInterface.ViewModel
                     SolvedTests.Add(history);
             }
             //SolvedTests = _dao.GetAllHistories();
+        }
+
+        private void UpdateQuestionsList()
+        {
+            
+            List<IQuestion> questions = new List<IQuestion>();
+            if (TestIndex > -1 && SolvedTests.Count > 0)
+            {
+                bool changed = false;
+                foreach (var question in SolvedTests[TestIndex].Question)
+                {
+                    questions.Add(question);
+                    changed = true;
+                }
+                if (changed)
+                    Questions = new List<IQuestion>(questions);
+            }
         }
 
         #endregion
