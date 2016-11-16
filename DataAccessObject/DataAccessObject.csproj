@@ -58,12 +58,10 @@
   <ItemGroup>
     <Compile Include="DAO.cs" />
     <Compile Include="DataObjects\AnsweredQuestion.cs" />
-    <Compile Include="DataObjects\Car.cs" />
     <Compile Include="DataObjects\DataItem.cs" />
     <Compile Include="DataObjects\DataService.cs" />
     <Compile Include="DataObjects\DesignDataService.cs" />
     <Compile Include="DataObjects\History.cs" />
-    <Compile Include="DataObjects\Producer.cs" />
     <Compile Include="DataObjects\Question.cs" />
     <Compile Include="DataObjects\Test.cs" />
     <Compile Include="DataObjects\User.cs" />

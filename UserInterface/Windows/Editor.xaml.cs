@@ -34,20 +34,9 @@ namespace UserInterface
               message =>
               {
                 switch (message.Type)
-                {
-                    case WindowType.kModal:                          
-                        var modalWindowVM = SimpleIoc.Default.GetInstance<CreateTestViewModel>();
-                        modalWindowVM.MyText = message.Argument;
-                        var modalWindow = new ModalWindow()
-                        {
-                            DataContext = modalWindowVM
-                        };
-                        var modalResult = modalWindow.ShowDialog() ?? false;
-                        Messenger.Default.Send(modalResult ? "Accepted" : "Rejected");                           
-                        break;
-                
+                {                
                     case WindowType.kNewTest:
-                        modalWindowVM = SimpleIoc.Default.GetInstance<CreateTestViewModel>();
+                        var modalWindowVM = SimpleIoc.Default.GetInstance<CreateTestViewModel>();
                         modalWindowVM.MyText = message.Argument;
                         var createNewTestWindow = new CreateTest()
                         {

@@ -102,12 +102,6 @@
     </ApplicationDefinition>
     <Compile Include="Helpers\WindowType.cs" />
     <Compile Include="Helpers\OpenWindowMessage.cs" />
-    <Compile Include="ModalWindow.xaml.cs">
-      <DependentUpon>ModalWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="NonModalWindow.xaml.cs">
-      <DependentUpon>NonModalWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="ViewModel\CreateQuestionViewModel.cs" />
     <Compile Include="ViewModel\HistoryViewModel.cs" />
     <Compile Include="ViewModel\SolveTestViewModel.cs" />
@@ -123,7 +117,6 @@
     <Compile Include="Windows\Editor.xaml.cs">
       <DependentUpon>Editor.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModel\NonModalWindowViewModel.cs" />
     <Compile Include="ViewModel\CreateTestViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\MyRelayCommand.cs" />
@@ -144,26 +137,10 @@
     <Compile Include="Windows\Welcome.xaml.cs">
       <DependentUpon>Welcome.xaml</DependentUpon>
     </Compile>
-    <Page Include="MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Page Include="ModalWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="NonModalWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Windows\Menu.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

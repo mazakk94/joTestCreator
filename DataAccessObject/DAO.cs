@@ -15,11 +15,9 @@ namespace DataAccessObject
 {
     public class DAO : IDAO
     {
-        
+
         #region variable definitions
 
-        private List<IProducer> _producers;
-        private List<ICar> _cars;     
         private List<IAnsweredQuestion> _answeredQuestions;
         private List<IHistory> _histories;
         private List<IQuestion> _questions;
@@ -33,26 +31,6 @@ namespace DataAccessObject
 
         public void InitDAO()
         {
-            #region old
-            _producers = new List<IProducer>()
-            {
-                new DataObjects.Producer(){ ProducerID = 1, Name = "one"},
-                new DataObjects.Producer(){ ProducerID = 2, Name = "two"},
-                new DataObjects.Producer(){ ProducerID = 3, Name = "three"}
-            };
-
-            _cars = new List<ICar>()
-            {
-                new DataObjects.Car() { CarID = 6, Name = "Polo6", Producer = _producers[1], Price = 45, Color = "Red"},
-                new DataObjects.Car() { CarID = 1, Name = "Polo1", Producer = _producers[0], Price = 260, Color = "Black"},
-                new DataObjects.Car() { CarID = 2, Name = "Polo2", Producer = _producers[0], Price = 270, Color = "Red"},
-                new DataObjects.Car() { CarID = 3, Name = "Polo2", Producer = _producers[1], Price = 260, Color = "White"},
-                new DataObjects.Car() { CarID = 4, Name = "Polo4", Producer = _producers[1], Price = 45, Color = "Red"},
-                new DataObjects.Car() { CarID = 5, Name = "Polo5", Producer = _producers[1], Price = 45, Color = "Red"}
-                
-            };
-            #endregion
-
             _temporaryIds = new List<int>();
             _userName = "";
             _questions = new List<IQuestion>();
@@ -66,44 +44,6 @@ namespace DataAccessObject
         public DAO()
         {
             InitDAO();
-        }
-        
-        public void transaction(string cs)
-        {
-            using (SQLiteConnection con = new SQLiteConnection(cs))
-            {
-                con.Open();
-
-                using (SQLiteTransaction tr = con.BeginTransaction())
-                {
-                    using (SQLiteCommand cmd = con.CreateCommand())
-                    {
-
-                        cmd.Transaction = tr;
-                        cmd.CommandText = "DROP TABLE IF EXISTS Friends";
-                        cmd.ExecuteNonQuery();
-                        cmd.CommandText = @"CREATE TABLE Friends(Id INTEGER PRIMARY KEY, 
-                                        Name TEXT)";
-                        cmd.ExecuteNonQuery();
-                        cmd.CommandText = "INSERT INTO Friends(Name) VALUES ('Tom')";
-                        cmd.ExecuteNonQuery();
-                        cmd.CommandText = "INSERT INTO Friends(Name) VALUES ('Rebecca')";
-                        cmd.ExecuteNonQuery();
-                        cmd.CommandText = "INSERT INTO Friends(Name) VALUES ('Jim')";
-                        cmd.ExecuteNonQuery();
-                        cmd.CommandText = "INSERT INTO Friends(Name) VALUES ('Robert')";
-                        cmd.ExecuteNonQuery();
-                        cmd.CommandText = "INSERT INTO Friends(Name) VALUES ('Julian')";
-                        cmd.ExecuteNonQuery();
-                        cmd.CommandText = "INSERT INTO Friends(Name) VALUES ('Jane')";
-                        cmd.ExecuteNonQuery();
-                    }
-
-                    tr.Commit();
-                }
-
-                con.Close();
-            }
         }
 
         #region getters
@@ -119,36 +59,22 @@ namespace DataAccessObject
             return list;
         }
 
-        public IEnumerable<ICar> GettAllCars()
-        {
-            return _cars;
-        }
 
         public ObservableCollection<IQuestion> GetQuestionsByIds(ObservableCollection<int> questionsIds)
         {
-            // todo, check if it is working instead of list
             ObservableCollection<IQuestion> questions = new ObservableCollection<IQuestion>();
             foreach (var id in questionsIds)
-            {
                 questions.Add(GetQuestion(id));
-            }
+
             return questions;
         }
-        
+
         public List<IQuestion> GetQuestionsByIds(List<int> questionsIds)
         {
             List<IQuestion> questions = new List<IQuestion>();
             foreach (var id in questionsIds)
-            {
                 questions.Add(GetQuestion(id));
-            }
             return questions;
-        }
-
-
-        public IEnumerable<IProducer> GetAllProducers()
-        {
-            return _producers;
         }
 
 
@@ -190,16 +116,6 @@ namespace DataAccessObject
         }
 
 
-        IEnumerable<IProducer> IDAO.GetAllProducers()
-        {
-            throw new NotImplementedException();
-        }
-
-        IEnumerable<ICar> IDAO.GettAllCars()
-        {
-            throw new NotImplementedException();
-        }
-
         IEnumerable<ITest> IDAO.GetAllTests()
         {
             return GetAllTests();
@@ -213,11 +129,9 @@ namespace DataAccessObject
         #endregion
 
         #region sql methods
-        
+
         private void InitSQLite()
         {
-            //string path = System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-
             bool newDB = false;
             if (!File.Exists("Tests.sqlite"))
             {
@@ -238,7 +152,7 @@ namespace DataAccessObject
                     SQLiteCommand createCommand;
 
                     createString = "CREATE TABLE QUESTIONS (ID INT PRIMARY KEY, POINTS INT, CONTENT VARCHAR(100), " +
-                     "ANSWER1 VARCHAR(100), ANSWER2 VARCHAR(100), ANSWER3 VARCHAR(100), ANSWER4 VARCHAR(100), ANSWER5 VARCHAR(100))";                    
+                     "ANSWER1 VARCHAR(100), ANSWER2 VARCHAR(100), ANSWER3 VARCHAR(100), ANSWER4 VARCHAR(100), ANSWER5 VARCHAR(100))";
                     createCommand = new SQLiteCommand(createString, connection);
                     createCommand.ExecuteNonQuery();
 
@@ -273,11 +187,11 @@ namespace DataAccessObject
                 #endregion
 
                 connection.Close();
-                
+
                 List<IQuestion> questions = SelectAllQuestions();
                 List<ITest> tests = SelectAllTests();
                 List<IUser> users = SelectAllUsers();
-                List<IHistory> histories = SelectAllHistories(); //todo
+                List<IHistory> histories = SelectAllHistories();
 
                 _questions = questions;
                 _tests = tests;
@@ -294,7 +208,7 @@ namespace DataAccessObject
             string selectString = "select * from HISTORY ORDER BY ID asc";
 
             List<IUser> users = SelectAllUsers();
-            List<ITest> tests = SelectAllTests();     
+            List<ITest> tests = SelectAllTests();
 
             connection.Open();
             if (connection.State == ConnectionState.Open)
@@ -307,14 +221,14 @@ namespace DataAccessObject
                     int durationSeconds = Int32.Parse(reader["DURATION"].ToString());
                     string userName = reader["USERNAME"].ToString();
                     int testId = Int32.Parse(reader["TESTID"].ToString());
-                                   
+
                     IUser user = users.Find(x => x.Name == userName);
                     ITest test = tests.Find(x => x.Id == testId);
                     List<IQuestion> questions = GetQuestionsByIds(test.QuestionsIds);
 
                     History history = new DataObjects.History();
                     history.Name = test.Name;
-                    history.Duration = new TimeSpan(durationSeconds/3600, durationSeconds/60, durationSeconds%60);
+                    history.Duration = new TimeSpan(durationSeconds / 3600, durationSeconds / 60, durationSeconds % 60);
                     history.Id = Int32.Parse(reader["ID"].ToString());
                     history.TestId = testId;
                     history.Score = Int32.Parse(reader["SCORE"].ToString());
@@ -326,11 +240,11 @@ namespace DataAccessObject
                     history.QuestionsIds = test.QuestionsIds;
                     history.Question = questions;
 
-                    histories.Add(history);                    
+                    histories.Add(history);
                 }
                 connection.Close();
             }
-             
+
             return histories;
         }
 
@@ -372,8 +286,6 @@ namespace DataAccessObject
 
                 while (reader.Read())
                 {
-                    //przypisuje do zmiennych dane z bazy
-                    //Console.WriteLine("ID: " + reader["ID"] + "\tContent: " + reader["CONTENT"]);
                     int id = Int32.Parse(reader["ID"].ToString());
                     List<int> questionsIds = SelectQuestionsIds(id);
 
@@ -381,9 +293,9 @@ namespace DataAccessObject
                     new DataObjects.Test()
                     {
                         Id = id,
-                        Name = reader["NAME"].ToString(),                        
-                        Length = new TimeSpan(Int32.Parse(reader["LENGTH"].ToString())/60, Int32.Parse(reader["LENGTH"].ToString()) % 60, 0),
-                        MaximumPoints = Int32.Parse(reader["MAXPOINTS"].ToString()), 
+                        Name = reader["NAME"].ToString(),
+                        Length = new TimeSpan(Int32.Parse(reader["LENGTH"].ToString()) / 60, Int32.Parse(reader["LENGTH"].ToString()) % 60, 0),
+                        MaximumPoints = Int32.Parse(reader["MAXPOINTS"].ToString()),
                         QuestionsIds = questionsIds
                     });
                 }
@@ -403,15 +315,12 @@ namespace DataAccessObject
 
             if (tmpConnection.State == ConnectionState.Open)
             {
-
                 SQLiteCommand selectCommand = new SQLiteCommand(selectString, tmpConnection);
                 SQLiteDataReader reader = selectCommand.ExecuteReader();
 
                 while (reader.Read())
                 {
-                    //przypisuje do zmiennych dane z bazy
-                    //Console.WriteLine("ID: " + reader["ID"] + "\tContent: " + reader["CONTENT"]);
-                    int questionId = Int32.Parse(reader["QUESTIONID"].ToString());        
+                    int questionId = Int32.Parse(reader["QUESTIONID"].ToString());
                     ids.Add(questionId);
                 }
             }
@@ -433,9 +342,6 @@ namespace DataAccessObject
 
                 while (reader.Read())
                 {
-                    //przypisuje do zmiennych dane z bazy
-                    Console.WriteLine("ID: " + reader["ID"] + "\tContent: " + reader["CONTENT"]);
-
                     questions.Add(
                     new DataObjects.Question()
                     {
@@ -448,10 +354,10 @@ namespace DataAccessObject
                 }
                 tmpconnection.Close();
             }
-            
+
             return questions;
         }
-        
+
         private List<Tuple<string, bool>> ReadAnswers(SQLiteDataReader reader)
         {
             List<Tuple<string, bool>> Answers = new List<Tuple<string, bool>>();
@@ -498,10 +404,8 @@ namespace DataAccessObject
                 return true;
             }
             else
-            {
                 return false;
-            }
-            
+
         }
 
         public bool InsertQuestion(IQuestion question)
@@ -517,11 +421,9 @@ namespace DataAccessObject
 
                 connection.Close();
                 return true;
-            } 
-            else
-            {
-                return false;
             }
+            else
+                return false;
         }
 
         private bool InsertQuestionsIds(int id, List<int> NewTestQuestionsIds)
@@ -539,7 +441,7 @@ namespace DataAccessObject
                     {
                         for (int i = 0; i < insertStringList.Count; i++)
                         {
-                            command.CommandText = insertStringList[i];                                
+                            command.CommandText = insertStringList[i];
                             command.ExecuteNonQuery();
                         }
                         transaction.Commit();
@@ -550,14 +452,31 @@ namespace DataAccessObject
                 return true;
             }
             else
-            {
                 return false;
+        }
+
+        public void InsertQuestionId(int testId, int questionId)
+        {
+            connection = new SQLiteConnection("Data Source=Tests.sqlite;Version=3;");
+            connection.Open();
+
+            if (connection.State == ConnectionState.Open)
+            {
+                string result = "INSERT INTO QUESTIONSIDS (TESTID, QUESTIONID) VALUES (" +
+                    testId.ToString() + ", " + questionId.ToString() + ")";
+                SQLiteCommand insertCommand = new SQLiteCommand(result, connection);
+                insertCommand.ExecuteNonQuery();
+                connection.Close();
+                //return true;
+            }
+            else
+            {
+                //return false;
             }
         }
 
         public void DeleteQuestion(int questionId)
         {
-            //TODO - delete from database question selected by id
             connection = new SQLiteConnection("Data Source=Tests.sqlite;Version=3;");
             connection.Open();
 
@@ -567,21 +486,11 @@ namespace DataAccessObject
                 SQLiteCommand deleteCommand = new SQLiteCommand(result, connection);
                 deleteCommand.ExecuteNonQuery();
                 connection.Close();
-                //return true;
-            }
-            else
-            {
-                //return false;
             }
         }
 
-
         public void DeleteQuestionId(int questionId)
         {
-            /*
-             DELETE FROM table_name
-             WHERE [condition];
-            */
             connection = new SQLiteConnection("Data Source=Tests.sqlite;Version=3;");
             connection.Open();
 
@@ -591,13 +500,7 @@ namespace DataAccessObject
                 SQLiteCommand deleteCommand = new SQLiteCommand(result, connection);
                 deleteCommand.ExecuteNonQuery();
                 connection.Close();
-                //return true;
             }
-            else
-            {
-                //return false;
-            }
-            
         }
 
         public void DeleteTest(int testId)
@@ -618,14 +521,9 @@ namespace DataAccessObject
                 SQLiteCommand deleteCommand = new SQLiteCommand(result, connection);
                 deleteCommand.ExecuteNonQuery();
                 connection.Close();
-                //return true;
-            }
-            else
-            {
-                //return false;
             }
 
-            if (testId != _tests.Count-1)
+            if (testId != _tests.Count - 1)
                 FixTestsIds(testId);
 
             InitDAO();
@@ -662,27 +560,6 @@ namespace DataAccessObject
 
         }
 
-        public void InsertQuestionId(int testId, int questionId)
-        {          
-            connection = new SQLiteConnection("Data Source=Tests.sqlite;Version=3;");
-            connection.Open();
-
-            if (connection.State == ConnectionState.Open)
-            {
-                string result = "INSERT INTO QUESTIONSIDS (TESTID, QUESTIONID) VALUES (" +
-                    testId.ToString() + ", " + questionId.ToString() + ")";
-                SQLiteCommand insertCommand = new SQLiteCommand(result, connection);
-                insertCommand.ExecuteNonQuery();
-                connection.Close();
-                //return true;
-            }
-            else
-            {
-                //return false;
-            }
-        }
-
-
         public void UpdateTest(int testId, List<string> TestData, List<int> NewTestQuestionsIds)
         {
             //i have to update here test data and questionsids
@@ -701,50 +578,35 @@ namespace DataAccessObject
                 _tests[index].Name = TestData[2];
                 _tests[index].Length = new TimeSpan(Int32.Parse(TestData[1]) / 60, Int32.Parse(TestData[1]) % 60, 0);
                 _tests[index].MaximumPoints = Int32.Parse(TestData[0]);
-
-                //return true;
-            }
-            else
-            {
-                //return false;
             }
         }
 
         private string CreateUpdateTestString(int testId, List<string> TestData, List<int> NewTestQuestionsIds)
         {
-            /*
-            UPDATE table_name
-            SET column1 = value1, column2 = value2...., columnN = valueN
-            WHERE [condition];
-             // TestData - [0]maxpoints, [1]length, [2]name
-             */
-
             string result = "";
             for (var i = 0; i < TestData.Count; i++)
-            {
                 TestData[i] = TestData[i].Replace("\'", "");
-            }
-            
+
             result += "UPDATE TESTS SET NAME = '" + TestData[2] + "', LENGTH = " + Int32.Parse(TestData[1]) + ", " +
                 "MAXPOINTS = " + Int32.Parse(TestData[0]) + " WHERE ID = " + testId.ToString();
+
             return result;
         }
 
         private List<string> CreateQuestionsIdsString(int id, List<int> NewTestQuestionsIds)
         {
             List<string> result = new List<string>();
-            string init = "INSERT INTO QUESTIONSIDS (TESTID, QUESTIONID) VALUES (";  
+            string init = "INSERT INTO QUESTIONSIDS (TESTID, QUESTIONID) VALUES (";
             for (int i = 0; i < NewTestQuestionsIds.Count; i++)
-            {
-                result.Add(init+id.ToString()+", "+NewTestQuestionsIds[i]+")");
-            }
+                result.Add(init + id.ToString() + ", " + NewTestQuestionsIds[i] + ")");
+
             return result;
-        }    
+        }
 
         private string CreateQuestionString(IQuestion question)
         {
             string result = "";
-            string init = "INSERT INTO QUESTIONS (ID, POINTS, CONTENT, ANSWER1, ANSWER2, ANSWER3, ANSWER4, ANSWER5) VALUES (";            
+            string init = "INSERT INTO QUESTIONS (ID, POINTS, CONTENT, ANSWER1, ANSWER2, ANSWER3, ANSWER4, ANSWER5) VALUES (";
             result += init;
             result += question.Id.ToString() + ", ";
             result += question.Points.ToString() + ", ";
@@ -752,20 +614,20 @@ namespace DataAccessObject
             int count = question.Answer.Count;
             int item;
 
-            for (item = 0; item < count; item++) 
+            for (item = 0; item < count; item++)
             {
                 if (question.Answer[item].Item1.Length == 0)
                     result += (item == 4) ? "'')" : "'', ";
                 else
                 {
-                    result += "'" + question.Answer[item].Item1 + ((question.Answer[item].Item2 == true) ? "_1'" : "_0'");                    
+                    result += "'" + question.Answer[item].Item1 + ((question.Answer[item].Item2 == true) ? "_1'" : "_0'");
                     result += (item == 4) ? ")" : ", ";
                 }
             }
 
-            if (item < 4) 
-                for(int i = item; i < 5; i++)
-                    result += (i == 4) ? "'')" : "'', "; 
+            if (item < 4)
+                for (int i = item; i < 5; i++)
+                    result += (i == 4) ? "'')" : "'', ";
 
             return result;
         }
@@ -781,10 +643,103 @@ namespace DataAccessObject
 
             return result;
         }
+        
+        private bool InsertHistory(IHistory history)
+        {
+            connection = new SQLiteConnection("Data Source=Tests.sqlite;Version=3;");
+            connection.Open();
 
+            if (connection.State == ConnectionState.Open)
+            {
+                string insertString = "INSERT INTO HISTORY (ID, TESTID, USERNAME, TIME, DURATION, SCORE) " +
+                "VALUES (" + history.Id.ToString() + ", " + history.TestId.ToString() + ", '" + history.User.Name +
+                "', '" + history.When.ToString("yyyy-MM-dd HH:mm:ss") + "', " + history.Duration.TotalSeconds.ToString() +
+                ", " + history.Score.ToString() + ");";
+                //'2016-11-13 10:00:00'
+
+                SQLiteCommand insertCommand = new SQLiteCommand(insertString, connection);
+                insertCommand.ExecuteNonQuery();
+
+                for (int i = 0; i < history.ChosenAnswers.Count; i++)
+                {
+                    for (int j = 0; j < history.ChosenAnswers[i].ChosenAnswers.Count; j++)
+                    {
+                        insertString =
+                        "INSERT INTO CHECKEDANSWERS (HISTORYID, QUESTIONID, ANSWER) VALUES (" + history.Id.ToString() + ", " +
+                        i.ToString() + ", " + history.ChosenAnswers[i].ChosenAnswers[j].ToString() + ");";
+
+                        insertCommand = new SQLiteCommand(insertString, connection);
+                        insertCommand.ExecuteNonQuery();
+                    }
+                }
+
+                connection.Close();
+                return true;
+            }
+            else
+                return false;
+        }
+
+        private void InsertUser(IUser User)
+        {
+            connection = new SQLiteConnection("Data Source=Tests.sqlite;Version=3;");
+            connection.Open();
+
+            if (connection.State == ConnectionState.Open)
+            {
+                string insertString = "INSERT INTO USERS (NAME, TYPE) VALUES ('" + User.Name.ToString() +
+                    "', " + (User.Type == true ? "1" : "0") + ");";
+                SQLiteCommand insertCommand = new SQLiteCommand(insertString, connection);
+                insertCommand.ExecuteNonQuery();
+                connection.Close();
+            }
+        }
+
+        public List<List<int>> SelectCheckedAnswers(int historyId)
+        {
+            List<List<int>> answersList = new List<List<int>>();
+            List<Tuple<int, int>> pairs = new List<Tuple<int, int>>();
+
+            string selectString = "select * from CHECKEDANSWERS WHERE HISTORYID = "
+                + historyId.ToString() + " ORDER BY QUESTIONID ASC";
+
+            SQLiteConnection tmpconnection = new SQLiteConnection("Data Source=Tests.sqlite;Version=3;");
+            tmpconnection.Open();
+            if (tmpconnection.State == ConnectionState.Open)
+            {
+                SQLiteCommand selectCommand = new SQLiteCommand(selectString, tmpconnection);
+                SQLiteDataReader reader = selectCommand.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    int Id = Int32.Parse(reader["QUESTIONID"].ToString());
+                    int answer = Int32.Parse(reader["ANSWER"].ToString());
+                    pairs.Add(new Tuple<int, int>(Id, answer));
+
+                    if (Id > answersList.Count - 1)
+                        answersList.Add(new List<int>());
+                    answersList[Id].Add(answer);
+                }
+
+                tmpconnection.Close();
+            }
+
+            return answersList;
+        }
+        
         #endregion
-                       
+
         #region dao methods
+
+        public void AddTest(ITest test)
+        {
+            _tests.Add(test);
+        }
+
+        public void AddQuestion(IQuestion question)
+        {
+            _questions.Add(question);
+        }
 
         private Tuple<string, bool> ParseTuple(string answer)
         {
@@ -793,11 +748,6 @@ namespace DataAccessObject
             bool isTrue = (splitAnswer[1] == "1") ? true : false;
             Tuple<string, bool> tupleAnswer = new Tuple<string, bool>(splitAnswer[0], isTrue);
             return tupleAnswer;
-        }
-
-        public ICar CreateNewCar()
-        {
-            return new DataObjects.Car();
         }
 
         public IQuestion CreateNewQuestion()
@@ -815,17 +765,16 @@ namespace DataAccessObject
 
         public IQuestion CreateNewQuestion(List<string> questionString)
         {
-            //questionString.Add(GetAllQuestions().Count().ToString()); //add ID to question
             questionString.Add(GetNewQuestionId().ToString()); //add ID to question
             IQuestion question = new DataObjects.Question(questionString);
             AddQuestion(question);
-            //InsertQuestion(question);     //no insert until saving changes
+            //no insert until saving changes
             return question;
         }
 
         private int GetNewQuestionId()
         {
-            //szukam w bazie najniższy wolny id question który nie jest zajety
+            //looking for lowest free id question 
             string questionString = "SELECT ID FROM QUESTIONS ORDER BY ID";
             List<int> ids = new List<int>(_temporaryIds);
 
@@ -836,14 +785,9 @@ namespace DataAccessObject
                 SQLiteDataReader reader = selectCommand.ExecuteReader();
 
                 while (reader.Read())
-                {
-                    //przypisuje do zmiennych dane z bazy
-                    //Console.WriteLine("ID: " + reader["ID"] + "\tContent: " + reader["CONTENT"]);
-
                     ids.Add(Int32.Parse(reader["ID"].ToString()));
-
-                }
                 connection.Close();
+
 
                 int i = 0;
                 int nextId = 0;
@@ -861,12 +805,7 @@ namespace DataAccessObject
 
 
             return -1;
-        }                
-
-        public void AddCar(ICar car)
-        {
-            _cars.Add(car);
-        }              
+        }
 
         public ITest CreateNewTest()
         {
@@ -882,42 +821,12 @@ namespace DataAccessObject
         {
             int id = _tests.Count;
             ITest test = new DataObjects.Test(TestData, GetQuestionsByIds(NewTestQuestionsIds), NewTestQuestionsIds, id);
-            AddTest(test); //to tylko dodaje do DAO
+            AddTest(test); //only adds to DAO
             if (!InsertTest(test))
-                { /*raise error*/ }
+            { /*raise error*/ }
             return test;
         }
-                    
-        public void AddTest(ITest test)
-        {
-            _tests.Add(test);
-        }
 
-        public void AddQuestion(IQuestion question)
-        {
-            _questions.Add(question);
-        }
-
-        public void AddQuestionToTest(ITest test, IQuestion question)
-        {
-            //TODO OR NOT
-        }
-        
-        ITest IDAO.CreateNewTest()
-        {
-            return new DataObjects.Test();
-        }
-
-        void IDAO.AddTest(ITest test)
-        {
-            throw new NotImplementedException();
-        }        
-
-        void IDAO.AddCar(ICar car)
-        {
-            throw new NotImplementedException();
-        }
-        
         public IHistory CreateNewHistory()
         {
             return new DataAccessObject.DataObjects.History();
@@ -929,76 +838,27 @@ namespace DataAccessObject
             return new DataAccessObject.DataObjects.History(test);
         }
 
-        #endregion
-
-
         public int GetNextHistoryId()
         {
             int minId = 0;
-            foreach(var history in _histories)
-            {
+            foreach (var history in _histories)
                 if (history.Id == minId)
-                    minId++;                
-            }
+                    minId++;
+
             return minId;
         }
 
         public void CreateNewHistory(IHistory history)
         {
             AddHistory(history);
-            if (!InsertHistory(history))
-            { /*raise error*/ }
-        }
-
-        private bool InsertHistory(IHistory history)
-        {
-            //"INSERT INTO HISTORY (ID, TESTID, USERNAME, TIME, DURATION, SCORE) VALUES (0, 0, 'MAZAK', '2016-11-13 10:00:00', 5, 2);"
-
-            connection = new SQLiteConnection("Data Source=Tests.sqlite;Version=3;");
-            connection.Open();
-
-            if (connection.State == ConnectionState.Open)
-            {
-                string insertString = "INSERT INTO HISTORY (ID, TESTID, USERNAME, TIME, DURATION, SCORE) " +
-                "VALUES (" + history.Id.ToString() + ", " + history.TestId.ToString() + ", '" + history.User.Name + 
-                "', '"+ history.When.ToString("yyyy-MM-dd HH:mm:ss") +"', "+ history.Duration.TotalSeconds.ToString() +
-                ", "+ history.Score.ToString() +");";
-                //'2016-11-13 10:00:00'
-
-                SQLiteCommand insertCommand = new SQLiteCommand(insertString, connection);
-                insertCommand.ExecuteNonQuery();
-
-                for (int i = 0; i < history.ChosenAnswers.Count; i++)
-                {
-                    for (int j = 0; j < history.ChosenAnswers[i].ChosenAnswers.Count; j++)
-                    {
-                        insertString =
-                        "INSERT INTO CHECKEDANSWERS (HISTORYID, QUESTIONID, ANSWER) VALUES (" + history.Id.ToString() + ", " +
-                        i.ToString() + ", " + history.ChosenAnswers[i].ChosenAnswers[j].ToString() + ");";
-
-                        insertCommand = new SQLiteCommand(insertString, connection);
-                        insertCommand.ExecuteNonQuery();
-
-                    }
-                }
-                    
-                
-                connection.Close();
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-            
-            
+            InsertHistory(history);
         }
 
         private void AddHistory(IHistory history)
         {
             _histories.Add(history);
         }
-        
+
         public IUser GetCurrentUser()
         {
             return _users.Find(x => x.Name == _userName);
@@ -1009,7 +869,6 @@ namespace DataAccessObject
             _userName = UserName;
         }
         
-
         public IUser CreateNewUser(string username, bool type)
         {
             IUser user = InitUser(username, type);
@@ -1023,66 +882,17 @@ namespace DataAccessObject
             _users.Add(User);
         }
 
-        private void InsertUser(IUser User)
-        {
-            connection = new SQLiteConnection("Data Source=Tests.sqlite;Version=3;");
-            connection.Open();
-
-            if (connection.State == ConnectionState.Open)
-            {
-                string insertString = "INSERT INTO USERS (NAME, TYPE) VALUES ('" + User.Name.ToString() + 
-                    "', " + (User.Type == true ? "1" : "0") + ");";
-                SQLiteCommand insertCommand = new SQLiteCommand(insertString, connection);
-                insertCommand.ExecuteNonQuery();
-                connection.Close();
-            }
-        }
-
-
         public IUser InitUser(string name, bool type)
         {
             return new User(name, type);
         }
-
-
-
 
         List<IHistory> IDAO.GetAllHistories()
         {
             return _histories;
         }
 
-
-        public List<List<int>> SelectCheckedAnswers(int historyId)
-        {
-            List<List<int>> answersList = new List<List<int>>();
-            List<Tuple<int, int>> pairs = new List<Tuple<int, int>>();
-
-            string selectString = "select * from CHECKEDANSWERS WHERE HISTORYID = " 
-                + historyId.ToString() + " ORDER BY QUESTIONID ASC";
-
-            SQLiteConnection tmpconnection = new SQLiteConnection("Data Source=Tests.sqlite;Version=3;");
-            tmpconnection.Open();
-            if (tmpconnection.State == ConnectionState.Open)
-            {
-                SQLiteCommand selectCommand = new SQLiteCommand(selectString, tmpconnection);
-                SQLiteDataReader reader = selectCommand.ExecuteReader();
-
-                while (reader.Read())
-                {           
-                    int Id = Int32.Parse(reader["QUESTIONID"].ToString());
-                    int answer = Int32.Parse(reader["ANSWER"].ToString());
-                    pairs.Add(new Tuple<int, int>(Id, answer));
-
-                    if (Id > answersList.Count - 1)
-                        answersList.Add(new List<int>());
-                    answersList[Id].Add(answer);
-                }
-
-                tmpconnection.Close();
-            }
-
-            return answersList;
-        }
-    }
+        #endregion
+        
+    }        
 }

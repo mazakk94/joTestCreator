@@ -89,10 +89,7 @@ namespace DataAccessObject.DataObjects
               
         #endregion
 
-        public History()
-        {
-
-        }
+        public History() { }
 
         public History(ITest test)
         {

@@ -272,16 +272,7 @@ namespace UserInterface.ViewModel
 
             SolveTestCommand = new GalaSoft.MvvmLight.Command.RelayCommand(
                 () => SolveTest());
-
-            OpenModalDialog =
-              new GalaSoft.MvvmLight.Command.RelayCommand(() =>
-                Messenger.Default.Send<Helpers.OpenWindowMessage>(
-                  new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kModal, Argument = SomeString }));
-            OpenNonModalDialog =
-              new GalaSoft.MvvmLight.Command.RelayCommand(() =>
-                Messenger.Default.Send<Helpers.OpenWindowMessage>(
-                  new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kNonModal, Argument = SomeString }));
-
+            
             Messenger.Default.Register<string>(this, s => Result = s);
             Messenger.Default.Register<List<int>>(this, "questionsIds", s => NewTestQuestionsIds = s);
             Messenger.Default.Register<List<string>>(this, "testData", s => TestData = s);
