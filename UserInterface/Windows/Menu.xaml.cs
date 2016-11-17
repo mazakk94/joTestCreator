@@ -40,7 +40,7 @@ namespace UserInterface
                           {
                               DataContext = solveVM
                           };
-
+                          
                           var result = solveWindow.ShowDialog();
 
                           if (result.HasValue && result.Value)
@@ -74,6 +74,7 @@ namespace UserInterface
                               DataContext = editorVM
                           };
 
+                          editorVM.RefreshDAO();
                           result = editorWindow.ShowDialog();
 
                           if (result.HasValue && result.Value)

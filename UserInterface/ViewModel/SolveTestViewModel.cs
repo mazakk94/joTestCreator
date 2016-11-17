@@ -287,7 +287,29 @@ namespace Wojtasik.UserInterface.ViewModel
             BeingSolved.Duration = TestDuration;
             _dao.SetCurrentUser(UserName);
             BeingSolved.User = _dao.GetCurrentUser();
+            SetNewQuestionsIds();
             _dao.CreateNewHistory(BeingSolved);
+        }
+
+        private void SetNewQuestionsIds()
+        {
+            BeingSolved.QuestionsIds.Clear();
+            foreach(var question in BeingSolved.Question)
+            {
+                int newId = _dao.GetNewQuestionId();
+                question.Id = newId;
+                BeingSolved.QuestionsIds.Add(newId);
+                _dao.AddQuestion(question);
+                _dao.InsertQuestion(question);
+                _dao.InsertQuestionId(BeingSolved.Id, newId);                
+            }
+
+            //tworze nowe pytania w dao            
+            //robie insert nowych pytań
+            //robie insert nowych ID
+            //przypisuje w historii nowe id każdemu pytaniu
+            //zmieniam qIds w historii
+
         }                
 
         private void DispatcherTimer_Tick(object sender, EventArgs e)
@@ -336,26 +358,35 @@ namespace Wojtasik.UserInterface.ViewModel
             this.BeingSolved = _dao.CreateNewHistory(Test.Id);            
         }     
 
-        internal void FillWindow()
+        internal bool FillWindow()
         {
-            Content = Test.Question[0].Content;
-            QuestionInfo = (Id+1).ToString() + " of " + Test.Question.Count.ToString();
-            Timeleft = Test.Length;
-            Answer.Clear();
-            for(int i = 0; i < 5; i++)
+            if (Test.Question.Count == 0)
             {
-                if (Test.Question[Id].Answer.Count > i)
+                return false;
+            } 
+            else
+            {
+                Content = Test.Question[0].Content;
+                QuestionInfo = (Id + 1).ToString() + " of " + Test.Question.Count.ToString();
+                Timeleft = Test.Length;
+                Answer.Clear();
+                for (int i = 0; i < 5; i++)
                 {
-                    Answer.Add(Test.Question[Id].Answer[i].Item1);
-                    CheckBoxVisible[i] = "Visible";
+                    if (Test.Question[Id].Answer.Count > i)
+                    {
+                        Answer.Add(Test.Question[Id].Answer[i].Item1);
+                        CheckBoxVisible[i] = "Visible";
+                    }
+                    else
+                    {
+                        Answer.Add("");
+                        CheckBoxVisible[i] = "Hidden";
+                    }
                 }
-                else
-                {
-                    Answer.Add("");
-                    CheckBoxVisible[i] = "Hidden";
-                }
+                RaisePropertyChanged("CheckBoxVisible");
+                return true;
             }
-            RaisePropertyChanged("CheckBoxVisible");
+            
         }
 
         private void UpdateWindow(int direction)

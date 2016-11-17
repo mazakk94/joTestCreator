@@ -156,7 +156,7 @@ namespace Wojtasik.UserInterface.ViewModel
                 _questions.Clear();
                 //pobieram z testu liste numerów pytań i pobieram te pytania z DAO
                 //GetTestId(_selectedIndex);
-                List<int> questionsIds = GetQuestionsIds(_selectedIndex);
+                List<int> questionsIds = GetQuestionsIds(GetSelectedTestId());
                 _length = (Tests[_selectedIndex].Length.Hours*60 + Tests[_selectedIndex].Length.Minutes).ToString();
                 _maxPoints = Tests[_selectedIndex].MaximumPoints.ToString();
                 GetQuestions(questionsIds);
@@ -285,6 +285,11 @@ namespace Wojtasik.UserInterface.ViewModel
         }
                 
         #region methods
+        
+        public void RefreshDAO()
+        {
+            _dao.InitDAO();
+        }
 
         public bool LoginUser(string name, bool type)
         {
@@ -335,7 +340,7 @@ namespace Wojtasik.UserInterface.ViewModel
         {
             if (Index >= 0)
                 Messenger.Default.Send<Helpers.OpenWindowMessage>(
-                   new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kSolveTest, Argument = _selectedIndex.ToString()+"+"+User.Name });
+                   new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kSolveTest, Argument = GetSelectedTestId().ToString() + "+" + User.Name });
         }
 
         private void DeleteTest(int testId)
@@ -349,7 +354,14 @@ namespace Wojtasik.UserInterface.ViewModel
                
         private int GetSelectedTestId()
         {
-            return _selectedIndex;
+            int id = 0;
+            foreach(var test in Tests)
+            {
+                if (test.Id == Tests[_selectedIndex].Id)
+                    id = test.Id;
+            }
+            return id;
+            //tu musi być prawdziwy testId
         }
 
         private void GetAllTests()

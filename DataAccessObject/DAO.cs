@@ -148,7 +148,7 @@ namespace Wojtasik.DataAccessObject
                     createCommand = new SQLiteCommand(createString, connection);
                     createCommand.ExecuteNonQuery();
 
-                    createString = "CREATE TABLE HISTORY (ID INT, TESTID INT, USERNAME VARCHAR(20), TIME DATETIME, DURATION INT, SCORE INT)";
+                    createString = "CREATE TABLE HISTORY (ID INT, TESTNAME VARCHAR(20), USERNAME VARCHAR(20), TIME DATETIME, DURATION INT, SCORE INT)";
                     createCommand = new SQLiteCommand(createString, connection);
                     createCommand.ExecuteNonQuery();
 
@@ -188,7 +188,6 @@ namespace Wojtasik.DataAccessObject
             string selectString = "select * from HISTORY ORDER BY ID asc";
 
             List<IUser> users = SelectAllUsers().ToList();
-            List<ITest> tests = SelectAllTests().ToList();
 
             connection.Open();
             if (connection.State == ConnectionState.Open)
@@ -200,24 +199,24 @@ namespace Wojtasik.DataAccessObject
                 {
                     int durationSeconds = Int32.Parse(reader["DURATION"].ToString());
                     string userName = reader["USERNAME"].ToString();
-                    int testId = Int32.Parse(reader["TESTID"].ToString());
+                    string testName  = reader["TESTNAME"].ToString();
 
                     IUser user = users.Find(x => x.Name == userName);
-                    ITest test = tests.Find(x => x.Id == testId);
-                    List<IQuestion> questions = GetQuestionsByIds(test.QuestionsIds).ToList();
+                    //ITest test = tests.Find(x => x.Id == testId);
+                    
 
                     History history = new DataObjects.History();
-                    history.Name = test.Name;
+                    history.Name = testName;
                     history.Duration = new TimeSpan(durationSeconds / 3600, durationSeconds / 60, durationSeconds % 60);
                     history.Id = Int32.Parse(reader["ID"].ToString());
-                    history.TestId = testId;
+                    
                     history.Score = Int32.Parse(reader["SCORE"].ToString());
                     history.When = DateTime.ParseExact(reader["TIME"].ToString(), "yyyy-MM-dd HH:mm:ss",
                         System.Globalization.CultureInfo.InvariantCulture);
                     history.User = user;
-                    history.Length = test.Length;
-                    history.MaximumPoints = test.MaximumPoints;
-                    history.QuestionsIds = test.QuestionsIds;
+                    List<int> questionIds = SelectQuestionsIds(history.Id).ToList();
+                    List<IQuestion> questions = GetQuestionsByIds(questionIds).ToList();
+                    history.QuestionsIds = questionIds;
                     history.Question = questions;
 
                     histories.Add(history);
@@ -615,7 +614,7 @@ namespace Wojtasik.DataAccessObject
             return result;
         }
 
-        private string CreateQuestionString(IQuestion question)
+        public string CreateQuestionString(IQuestion question)
         {
             string result = "";
             string init = "INSERT INTO QUESTIONS (ID, POINTS, CONTENT, ANSWER1, ANSWER2, ANSWER3, ANSWER4, ANSWER5) VALUES (";
@@ -663,8 +662,8 @@ namespace Wojtasik.DataAccessObject
 
             if (connection.State == ConnectionState.Open)
             {
-                string insertString = "INSERT INTO HISTORY (ID, TESTID, USERNAME, TIME, DURATION, SCORE) " +
-                "VALUES (" + history.Id.ToString() + ", " + history.TestId.ToString() + ", '" + history.User.Name +
+                string insertString = "INSERT INTO HISTORY (ID, TESTNAME, USERNAME, TIME, DURATION, SCORE) " +
+                "VALUES (" + history.Id.ToString() + ", '" + history.Name.ToString() + "', '" + history.User.Name +
                 "', '" + history.When.ToString("yyyy-MM-dd HH:mm:ss") + "', " + history.Duration.TotalSeconds.ToString() +
                 ", " + history.Score.ToString() + ");";
                 //'2016-11-13 10:00:00'
@@ -684,7 +683,12 @@ namespace Wojtasik.DataAccessObject
                         insertCommand.ExecuteNonQuery();
                     }
                 }
+                /*
+                foreach (var question in history.Question)
+                    InsertQuestion(question);
 
+                InsertQuestionsIds(history.Id, history.QuestionsIds);
+                */
                 connection.Close();
                 return true;
             }
@@ -752,7 +756,7 @@ namespace Wojtasik.DataAccessObject
             return question;
         }
 
-        private int GetNewQuestionId()
+        public int GetNewQuestionId()
         {
             //looking for lowest free id question 
             string questionString = "SELECT ID FROM QUESTIONS ORDER BY ID";
@@ -799,7 +803,7 @@ namespace Wojtasik.DataAccessObject
 
         public ITest CreateNewTest(List<string> TestData, List<int> NewTestQuestionsIds)
         {
-            int id = _tests.Count;
+            int id = GetNextHistoryId();
             ITest test = new DataObjects.Test(TestData, GetQuestionsByIds(NewTestQuestionsIds), NewTestQuestionsIds, id);
             AddTest(test); //only adds to DAO
             if (!InsertTest(test))
@@ -816,22 +820,30 @@ namespace Wojtasik.DataAccessObject
         {
             ITest test = GetTest(testId);
             return new DataAccessObject.DataObjects.History(test);
-        }
-
-        public int GetNextHistoryId()
-        {
-            int minId = 0;
-            foreach (var history in _histories)
-                if (history.Id == minId)
-                    minId++;
-
-            return minId;
-        }
+        }        
 
         public void CreateNewHistory(IHistory history)
         {
             AddHistory(history);
             InsertHistory(history);
+        }
+
+        public int GetNextHistoryId()
+        {
+            int minId = 0;
+            List<int> Ids = new List<int>();
+            
+            foreach (var test in _tests)
+                Ids.Add(test.Id);
+
+            foreach (var history in _histories)
+                Ids.Add(history.Id);
+
+            Ids.Sort();
+            minId = Ids.Max() + 1;
+
+
+            return minId;
         }
 
         private void AddHistory(IHistory history)
@@ -867,6 +879,8 @@ namespace Wojtasik.DataAccessObject
             return new User(name, type);
         }
         
-        #endregion                
+        #endregion             
+    
+
     }        
 }

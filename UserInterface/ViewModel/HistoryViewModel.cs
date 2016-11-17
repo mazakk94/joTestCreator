@@ -167,17 +167,25 @@ namespace Wojtasik.UserInterface.ViewModel
         {
             
             List<IQuestion> questions = new List<IQuestion>();
-            if (TestIndex > -1 && SolvedTests.Count > 0)
-            {
-                bool changed = false;
-                foreach (var question in SolvedTests[TestIndex].Question)
+            Questions = new List<IQuestion>();
+            Answers = new List<string>();
+            CheckBoxes = new List<bool>();
+            for (int i = 0; i < 5; i++) CheckBoxes.Add(false);
+            CheckBoxesVisibility = new List<string>();
+            for (int i = 0; i < 5; i++) CheckBoxesVisibility.Add("Hidden");
+            RaisePropertyChanged(() => CheckBoxesVisibility);
+
+                if (TestIndex > -1 && SolvedTests.Count > 0)
                 {
-                    questions.Add(question);
-                    changed = true;
+                    bool changed = false;
+                    foreach (var question in SolvedTests[TestIndex].Question)
+                    {
+                        questions.Add(question);
+                        changed = true;
+                    }
+                    if (changed)
+                        Questions = new List<IQuestion>(questions);
                 }
-                if (changed)
-                    Questions = new List<IQuestion>(questions);
-            }
         }
 
         private void UpdateCheckBoxList()

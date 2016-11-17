@@ -29,17 +29,24 @@ namespace Wojtasik.Interfaces
         IUser InitUser(string name, bool type);
         IAnsweredQuestion CreateNewAnsweredQuestion();
         List<List<int>> SelectCheckedAnswers(int historyId);
+        string CreateQuestionString(IQuestion question);
         void DeleteQuestion(int id);
         void DeleteQuestionId(int id);
         void InsertQuestionId(int testId, int questionId);        
         void UpdateTest(int testId, List<string> TestData, List<int> NewTestQuestionsIds);
         void InitDAO();
+        void AddQuestion(IQuestion question);
         void AddTest(ITest test);
         void DeleteTest(int testId);                
         void CreateNewHistory(IHistory BeingSolved);        
         void SetCurrentUser(string UserName);
         int GetNextHistoryId();
+        int GetNewQuestionId();
         bool InsertQuestion(IQuestion question);
+
+
+
+
         
     }
 }

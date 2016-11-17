@@ -46,25 +46,35 @@ namespace UserInterface
                           solveTestVM.UserName = parsedMessage[1];
                           solveTestVM.RefreshDAO();
                           solveTestVM.LoadData();
-                          solveTestVM.FillWindow();
 
-                          var result = solveTestWindow.ShowDialog();
-                          
-                          if (result.HasValue && result.Value)
+                          if(solveTestVM.FillWindow())
                           {
-                              result = true;
-                              /*List<int> questionsIds = FillQuestionsIds(createEditTestWindow);
-                              List<string> resultList = GetTestDataFromDialog(createEditTestWindow);
+                              var result = solveTestWindow.ShowDialog();
 
-                              Messenger.Default.Send(questionsIds, "questionsIds");
-                              Messenger.Default.Send(resultList, "testData");
-                              modalWindowVM.UpdateQuestions();*/ 
-                              //insert and delete from DB questions and Ids !
-                          } 
-                          else 
+                              if (result.HasValue && result.Value)
+                              {
+                                  result = true;
+                                  /*List<int> questionsIds = FillQuestionsIds(createEditTestWindow);
+                                  List<string> resultList = GetTestDataFromDialog(createEditTestWindow);
+
+                                  Messenger.Default.Send(questionsIds, "questionsIds");
+                                  Messenger.Default.Send(resultList, "testData");
+                                  modalWindowVM.UpdateQuestions();*/
+                                  //insert and delete from DB questions and Ids !
+                              }
+                              else
+                              {
+                                  solveTestVM.Timer.Stop();
+                              }
+                          }
+                          else
                           {
                               solveTestVM.Timer.Stop();
+                              MessageBox.Show("This test does not have any question!");
                           }
+                              
+
+                          
 
                           //string resultString;
                           //if (result == true) resultString = "Accepted";
