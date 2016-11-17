@@ -214,7 +214,6 @@ namespace UserInterface.ViewModel
             }
         }
          
-
         #endregion
     }
 }

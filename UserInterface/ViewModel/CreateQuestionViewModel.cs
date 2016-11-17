@@ -10,8 +10,6 @@ namespace UserInterface.ViewModel
 {
     class CreateQuestionViewModel : ViewModelBase
     {
-
-
         #region variables definitions
 
         private readonly IDataService _dataService;
@@ -76,28 +74,7 @@ namespace UserInterface.ViewModel
                 RaisePropertyChanged(() => Name);
             }
         }
-
-
-        private string _myText;
-        public string MyText
-        {
-            get
-            {
-                return _myText;
-            }
-
-            set
-            {
-                if (_myText == value)
-                {
-                    return;
-                }
-
-                _myText = value;
-                RaisePropertyChanged(() => MyText);
-            }
-        }
-
+        
         private List<string> _questionString;  //contains question content, points, answers to unpack
         public List<string> QuestionString
         {
@@ -137,10 +114,6 @@ namespace UserInterface.ViewModel
             ClearWindow();
 
             #endregion
-
-            //Messenger.Default.Register<List<string>>(this, "question",
-              //  s => { QuestionString.Clear(); foreach (var item in s) QuestionString.Add(item); });
-            //Messenger.Default.Register<List<string>>(this, "question", s => QuestionString = s);
         }
 
         #region methods

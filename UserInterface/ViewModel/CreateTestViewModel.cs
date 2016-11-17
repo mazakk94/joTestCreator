@@ -2,6 +2,7 @@
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using Interfaces;
+using System.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,30 +16,6 @@ namespace UserInterface.ViewModel
         private readonly IDataService _dataService;
         private IDAO _dao = new DataAccessObject.DAO();
 
-        /*
-        private List<string> _answers;
-        public List<string> Answers
-        {
-            get { return _answers; }
-            set
-            {
-                _answers = value;
-                RaisePropertyChanged("Answers");
-            }
-        }
-
-        private List<bool> _correctAnswer;
-        public List<bool> CorrectAnswer
-        {
-            get { return _correctAnswer; }
-            set
-            {
-                _correctAnswer = value;
-                RaisePropertyChanged("CorrectAnswer");
-            }
-        }
-        */
-        
         private int _testId;
         public int TestId
         {
@@ -120,8 +97,8 @@ namespace UserInterface.ViewModel
             }
         }
 
-        private ObservableCollection<IQuestion> _questions;
-        public ObservableCollection<IQuestion> Questions
+        private List<IQuestion> _questions;
+        public List<IQuestion> Questions
         {
             get { return _questions; }
             set
@@ -132,8 +109,8 @@ namespace UserInterface.ViewModel
         }
 
 
-        private ObservableCollection<int> _questionsIds;
-        public ObservableCollection<int> QuestionsIds
+        private List<int> _questionsIds;
+        public List<int> QuestionsIds
         {
             get
             {
@@ -190,9 +167,9 @@ namespace UserInterface.ViewModel
                 RaisePropertyChanged(() => Index);
             }
         }
-        
-        private ObservableCollection<string> _answerList;
-        public ObservableCollection<string> AnswerList
+
+        private List<string> _answerList;
+        public List<string> AnswerList
         {
             get { return _answerList; }
             set
@@ -221,8 +198,7 @@ namespace UserInterface.ViewModel
                 RaisePropertyChanged(() => MaxPoints);
             }
         }
-
-        
+                
         private string _myText;
         public string MyText
         {
@@ -301,9 +277,105 @@ namespace UserInterface.ViewModel
                 s => { QuestionString.Clear(); foreach (var item in s) QuestionString.Add(item); });
             //Messenger.Default.Register<List<string>>(this, "question", s => QuestionString = s);
         }
+              
+        #region methods
 
-        
+        public void ClearWindow()
+        {
+            _maxPoints = 0;
+            MaxPoints = 0;
+            _length = 1;
+            Length = 1;
+            _name = "";
+            Name = "";
+            _questionsIds = new List<int>();
+            QuestionsIds = new List<int>();
+            _answerList = new List<string>();
+            AnswerList = new List<string>();
+            _questions = new List<IQuestion>();
+            Questions = new List<IQuestion>();
+            _questionString = new List<string>();
+            QuestionString = new List<string>();
+        }        
 
+        private void SetMaxPoints(int points)
+        {
+            MaxPoints += points;
+        }
+
+        private void UnpackQuestionString(bool isEdit)
+        {
+            if (isEdit == false)
+            {
+                IQuestion question = _dao.CreateNewQuestion(_questionString);
+                _questions.Add(question);
+                _questionsIds.Add(question.Id);
+                SetMaxPoints(question.Points);
+            }
+            else // question Edit           
+            {   //  no new question in dao, no new id, replacement of question.points 
+                int selectedIndex = _selectedIndex;
+                _questionString.Add(_questionsIds[selectedIndex].ToString());
+                SetMaxPoints(-_questions[selectedIndex].Points);
+                IQuestion question = _dao.CreateTempQuestion(_questionString);
+                _questions[selectedIndex] = question;
+                SetMaxPoints(_questions[selectedIndex].Points);
+            }
+        }
+
+        internal void RefreshDAO()
+        {
+            //pobieram na nowo z bazy wszystkie testy, pytania i ids
+            _dao.InitDAO();
+        }
+
+        internal void LoadData()
+        {            
+            List<string> testData = _dao.GetTestData(this.TestId).ToList();
+            this.Name = testData[0];
+            this.Length = ParseTimeSpan(testData[1]);
+            this.QuestionsIds = new List<int>(_dao.SelectQuestionsIds(this.TestId));
+            this.Questions = _dao.GetQuestionsByIds(this.QuestionsIds).ToList();
+            this.MaxPoints = CalculateMaxPoints(Questions);
+        }
+
+        private int CalculateMaxPoints(List<IQuestion> Questions)
+        {
+            int maxpoints = 0;
+            foreach(var question in Questions)
+            {
+                maxpoints += question.Points;
+            }
+            return maxpoints;
+        }
+
+        private int ParseTimeSpan(string timeSpan)
+        {
+            int minutes = 0;
+            string[] splitted = timeSpan.Split(':');
+            minutes += splitted[0] == "01" ? 60 : 0;
+            minutes += Int32.Parse(splitted[1]);
+            return minutes;
+        }
+
+        public void UpdateQuestions()
+        {
+            //here i'm deleting old questions and putting new ones in DataBase !
+            //pobieram z bazy questionsids i usuwam stare pytania oraz te questionsids
+            List<int> questionsIds = this._dao.SelectQuestionsIds(TestId).ToList();
+            foreach (var id in questionsIds)
+            {
+                this._dao.DeleteQuestion(id);
+                this._dao.DeleteQuestionId(id);
+            }
+            foreach (var question in Questions)
+            {
+                this._dao.InsertQuestion(question);
+                this._dao.InsertQuestionId(TestId, question.Id);
+            }
+
+        }              
+           
         private void CreateAndSaveQuestion()
         {
             Messenger.Default.Send<Helpers.OpenWindowMessage>(
@@ -348,146 +420,26 @@ namespace UserInterface.ViewModel
                 else
                     QuestionString.Add("");
             }
-            
+
             QuestionString.Add(_questions[_selectedIndex].Points.ToString());
             QuestionString.Add("");
         }
 
         private string UnParseAnswer(Tuple<string, bool> answer)
         {
-            return answer.Item1 + ((answer.Item2 == true) ? "_1" : "_0");              
+            return answer.Item1 + ((answer.Item2 == true) ? "_1" : "_0");
         }
-     
+
         private string ParseQuestionString(List<string> questionString)
         {
             string parsed = "";
-            for (int i = 0; i < questionString.Count-1; i++)
+            for (int i = 0; i < questionString.Count - 1; i++)
             {
                 parsed += (i == questionString.Count - 2) ? questionString[i] : (questionString[i] + ";");
             }
             return parsed;
         }
         
-        #region methods
-
-        public void ClearWindow()
-        {
-            _maxPoints = 0;
-            MaxPoints = 0;
-            _length = 1;
-            Length = 1;
-            _name = "";
-            Name = "";
-            _questionsIds = new ObservableCollection<int>();
-            QuestionsIds = new ObservableCollection<int>();
-            _answerList = new ObservableCollection<string>();
-            AnswerList = new ObservableCollection<string>();
-            _questions = new ObservableCollection<IQuestion>();
-            Questions = new ObservableCollection<IQuestion>();
-            _questionString = new List<string>();
-            QuestionString = new List<string>();
-        }        
-
-        private void SetMaxPoints(int points)
-        {
-            MaxPoints += points;
-        }
-
-        private void UnpackQuestionString(bool isEdit)
-        {
-            if (isEdit == false)
-            {
-                IQuestion question = _dao.CreateNewQuestion(_questionString);
-                _questions.Add(question);
-                _questionsIds.Add(question.Id);
-                SetMaxPoints(question.Points);
-            }
-            else // question Edit           
-            {   //  no new question in dao, no new id, replacement of question.points 
-                int selectedIndex = _selectedIndex;
-                _questionString.Add(_questionsIds[selectedIndex].ToString());
-                SetMaxPoints(-_questions[selectedIndex].Points);
-                IQuestion question = _dao.CreateTempQuestion(_questionString);
-                _questions[selectedIndex] = question;
-                SetMaxPoints(_questions[selectedIndex].Points);
-            }
-        }
-
-        internal void RefreshDAO()
-        {
-            //pobieram na nowo z bazy wszystkie testy, pytania i ids
-            _dao.InitDAO();
-        }
-
-        internal void LoadData()
-        {            
-            List<string> testData = _dao.GetTestData(this.TestId);
-            this.Name = testData[0];
-            this.Length = ParseTimeSpan(testData[1]);            
-            this.QuestionsIds = new ObservableCollection<int>(_dao.SelectQuestionsIds(this.TestId));
-            this.Questions = _dao.GetQuestionsByIds(this.QuestionsIds);
-            this.MaxPoints = CalculateMaxPoints(Questions);
-        }
-
-        private int CalculateMaxPoints(ObservableCollection<IQuestion> Questions)
-        {
-            int maxpoints = 0;
-            foreach(var question in Questions)
-            {
-                maxpoints += question.Points;
-            }
-            return maxpoints;
-        }
-
-        private int ParseTimeSpan(string timeSpan)
-        {
-            int minutes = 0;
-            string[] splitted = timeSpan.Split(':');
-            minutes += splitted[0] == "01" ? 60 : 0;
-            minutes += Int32.Parse(splitted[1]);
-            return minutes;
-        }
-
-        public void UpdateQuestions()
-        {
-            //here i'm deleting old questions and putting new ones in DataBase !
-            //pobieram z bazy questionsids i usuwam stare pytania oraz te questionsids
-            List<int> questionsIds = this._dao.SelectQuestionsIds(TestId);
-            foreach (var id in questionsIds)
-            {
-                this._dao.DeleteQuestion(id);
-                this._dao.DeleteQuestionId(id);
-            }
-            foreach (var question in Questions)
-            {
-                this._dao.InsertQuestion(question);
-                this._dao.InsertQuestionId(TestId, question.Id);
-            }
-
-        }              
-            /*
-        internal void FillDialog()
-        {
-            /* * 0 - content, 1 .. 5 - answer, 6 - points, 7 - id
-            Name = QuestionString[0];
-            for (int i = 0; i < 5; i++)
-            {
-                string [] splitted = QuestionString[i + 1].Split('_');
-                if (splitted.Length == 2)
-                {
-                    Answers.Add(splitted[0]);
-                    CorrectAnswer.Add(splitted[1] == "1" ? true : false);
-                }
-                else
-                {
-                    Answers.Add("");
-                    CorrectAnswer.Add(false);
-                }                
-            }
-            
-            Length = Int32.Parse(QuestionString[6].Replace("-", ""));            
-        }*/
-
         #endregion
 
     }

@@ -2,6 +2,7 @@
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using Interfaces;
+using System.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -315,7 +316,7 @@ namespace UserInterface.ViewModel
         internal void LoadData()
         {
             this.Test = _dao.GetTest(Test.Id);
-            this.Test.Question = _dao.GetQuestionsByIds(this.Test.QuestionsIds);
+            this.Test.Question = _dao.GetQuestionsByIds(this.Test.QuestionsIds).ToList();
             this.BeingSolved = _dao.CreateNewHistory(Test.Id);            
         }     
 

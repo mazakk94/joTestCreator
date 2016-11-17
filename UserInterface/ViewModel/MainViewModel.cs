@@ -282,9 +282,7 @@ namespace UserInterface.ViewModel
                                                   param => this.CanSaveTest());
             #endregion
         }
-
-        
-
+                
         #region methods
 
         public bool LoginUser(string name, bool type)
@@ -299,7 +297,10 @@ namespace UserInterface.ViewModel
             if (login)
                 _dao.SetCurrentUser(User.Name);
             else
+            {
                 User = _dao.CreateNewUser(name, type);
+                _dao.SetCurrentUser(User.Name);
+            }
             User = _dao.GetCurrentUser();
             return User.Type;
             
@@ -331,7 +332,8 @@ namespace UserInterface.ViewModel
 
         private void SolveTest()
         {
-            Messenger.Default.Send<Helpers.OpenWindowMessage>(
+            if (Index > 0)
+                Messenger.Default.Send<Helpers.OpenWindowMessage>(
                    new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kSolveTest, Argument = _selectedIndex.ToString()+"+"+User.Name });
         }
 

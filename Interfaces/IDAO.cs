@@ -11,44 +11,35 @@ namespace Interfaces
     {
         IEnumerable<ITest> GetAllTests();
         IEnumerable<IQuestion> GetAllQuestions();
-        ITest CreateNewTest();
-        IQuestion GetQuestion(int questionId);
-        void AddTest(ITest test);
+        IEnumerable<IUser> GetAllUsers();
+        IEnumerable<IHistory> GetAllHistories();        
+        IEnumerable<int> SelectQuestionsIds(int testId);
+        IEnumerable<string> GetTestData(int testId);
+        IEnumerable<IQuestion> GetQuestionsByIds(List<int> questionsIds);        
+        IQuestion GetQuestion(int questionId);        
         IQuestion CreateNewQuestion(List<string> questionString);
         IQuestion CreateTempQuestion(List<string> _questionString);        
         ITest CreateNewTest(List<string> TestData, List<int> NewTestQuestionsIds);
-        List<int> SelectQuestionsIds(int testId);
-        List<string> GetTestData(int testId);
-        ObservableCollection<IQuestion> GetQuestionsByIds(ObservableCollection<int> questionsIds);
-        List<IQuestion> GetQuestionsByIds(List<int> questionsIds);
-        void DeleteQuestion(int id);
-        void DeleteQuestionId(int id);
-        void InsertQuestionId(int testId, int questionId);
-        bool InsertQuestion(IQuestion question);
-        void UpdateTest(int testId, List<string> TestData, List<int> NewTestQuestionsIds);
-        void InitDAO();
-
-
-        void DeleteTest(int testId);
-
         ITest GetTest(int p);
+        ITest CreateNewTest();
         IHistory CreateNewHistory();
         IHistory CreateNewHistory(int testId);
-        int GetNextHistoryId();
-        void CreateNewHistory(IHistory BeingSolved);
-        IUser GetCurrentUser();
-        IEnumerable<IUser> GetAllUsers();
-        void SetCurrentUser(string UserName);
-
+        IUser GetCurrentUser();        
         IUser CreateNewUser(string name, bool type);
-
         IUser InitUser(string name, bool type);
-
-
-        List<IHistory> GetAllHistories();
-
-        List<List<int>> SelectCheckedAnswers(int historyId);
-
         IAnsweredQuestion CreateNewAnsweredQuestion();
+        List<List<int>> SelectCheckedAnswers(int historyId);
+        void DeleteQuestion(int id);
+        void DeleteQuestionId(int id);
+        void InsertQuestionId(int testId, int questionId);        
+        void UpdateTest(int testId, List<string> TestData, List<int> NewTestQuestionsIds);
+        void InitDAO();
+        void AddTest(ITest test);
+        void DeleteTest(int testId);                
+        void CreateNewHistory(IHistory BeingSolved);        
+        void SetCurrentUser(string UserName);
+        int GetNextHistoryId();
+        bool InsertQuestion(IQuestion question);
+        
     }
 }

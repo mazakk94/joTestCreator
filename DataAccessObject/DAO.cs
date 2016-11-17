@@ -48,7 +48,7 @@ namespace DataAccessObject
 
         #region getters
 
-        public List<string> GetTestData(int testId)
+        public IEnumerable<string> GetTestData(int testId)
         {
             List<string> list = new List<string>();
             ITest test = GetTest(testId);
@@ -58,26 +58,15 @@ namespace DataAccessObject
 
             return list;
         }
-
-
-        public ObservableCollection<IQuestion> GetQuestionsByIds(ObservableCollection<int> questionsIds)
-        {
-            ObservableCollection<IQuestion> questions = new ObservableCollection<IQuestion>();
-            foreach (var id in questionsIds)
-                questions.Add(GetQuestion(id));
-
-            return questions;
-        }
-
-        public List<IQuestion> GetQuestionsByIds(List<int> questionsIds)
+        
+        public IEnumerable<IQuestion> GetQuestionsByIds(List<int> questionsIds)
         {
             List<IQuestion> questions = new List<IQuestion>();
             foreach (var id in questionsIds)
                 questions.Add(GetQuestion(id));
             return questions;
         }
-
-
+        
         public IEnumerable<IAnsweredQuestion> GetAllAnsweredQuestions()
         {
             return _answeredQuestions;
@@ -101,7 +90,7 @@ namespace DataAccessObject
         public IQuestion GetQuestion(int questionId)
         {
             _questions.Clear();
-            _questions = SelectAllQuestions();
+            _questions = SelectAllQuestions().ToList();
             return _questions.Find(x => x.Id == questionId);
         }
 
@@ -113,17 +102,6 @@ namespace DataAccessObject
         public IEnumerable<IUser> GetAllUsers()
         {
             return _users;
-        }
-
-
-        IEnumerable<ITest> IDAO.GetAllTests()
-        {
-            return GetAllTests();
-        }
-
-        IEnumerable<IQuestion> IDAO.GetAllQuestions()
-        {
-            return GetAllQuestions();
         }
 
         #endregion
@@ -164,7 +142,7 @@ namespace DataAccessObject
                     createCommand = new SQLiteCommand(createString, connection);
                     createCommand.ExecuteNonQuery();
 
-                    createString = "CREATE TABLE USERS (NAME VARCHAR(20), PASSWORD VARCHAR(30), TYPE INT)";
+                    createString = "CREATE TABLE USERS (NAME VARCHAR(20), TYPE INT)";
                     createCommand = new SQLiteCommand(createString, connection);
                     createCommand.ExecuteNonQuery();
 
@@ -188,10 +166,10 @@ namespace DataAccessObject
 
                 connection.Close();
 
-                List<IQuestion> questions = SelectAllQuestions();
-                List<ITest> tests = SelectAllTests();
-                List<IUser> users = SelectAllUsers();
-                List<IHistory> histories = SelectAllHistories();
+                List<IQuestion> questions = SelectAllQuestions().ToList();
+                List<ITest> tests = SelectAllTests().ToList();
+                List<IUser> users = SelectAllUsers().ToList();
+                List<IHistory> histories = SelectAllHistories().ToList();
 
                 _questions = questions;
                 _tests = tests;
@@ -201,14 +179,14 @@ namespace DataAccessObject
             }
         }
 
-        private List<IHistory> SelectAllHistories()
+        private IEnumerable<IHistory> SelectAllHistories()
         {
             List<IHistory> histories = new List<IHistory>();
 
             string selectString = "select * from HISTORY ORDER BY ID asc";
 
-            List<IUser> users = SelectAllUsers();
-            List<ITest> tests = SelectAllTests();
+            List<IUser> users = SelectAllUsers().ToList();
+            List<ITest> tests = SelectAllTests().ToList();
 
             connection.Open();
             if (connection.State == ConnectionState.Open)
@@ -224,7 +202,7 @@ namespace DataAccessObject
 
                     IUser user = users.Find(x => x.Name == userName);
                     ITest test = tests.Find(x => x.Id == testId);
-                    List<IQuestion> questions = GetQuestionsByIds(test.QuestionsIds);
+                    List<IQuestion> questions = GetQuestionsByIds(test.QuestionsIds).ToList();
 
                     History history = new DataObjects.History();
                     history.Name = test.Name;
@@ -248,7 +226,7 @@ namespace DataAccessObject
             return histories;
         }
 
-        private List<IUser> SelectAllUsers()
+        private IEnumerable<IUser> SelectAllUsers()
         {
             List<IUser> users = new List<IUser>();
             string selectString = "select * from USERS";
@@ -273,7 +251,7 @@ namespace DataAccessObject
             return users;
         }
 
-        private List<ITest> SelectAllTests()
+        private IEnumerable<ITest> SelectAllTests()
         {
             List<ITest> tests = new List<ITest>();
             string selectString = "select * from TESTS order by id";
@@ -287,7 +265,7 @@ namespace DataAccessObject
                 while (reader.Read())
                 {
                     int id = Int32.Parse(reader["ID"].ToString());
-                    List<int> questionsIds = SelectQuestionsIds(id);
+                    List<int> questionsIds = SelectQuestionsIds(id).ToList();
 
                     tests.Add(
                     new DataObjects.Test()
@@ -305,7 +283,7 @@ namespace DataAccessObject
             return tests;
         }
 
-        public List<int> SelectQuestionsIds(int testId)
+        public IEnumerable<int> SelectQuestionsIds(int testId)
         {
             List<int> ids = new List<int>();
             string selectString = "select * from QUESTIONSIDS where TESTID = " + testId.ToString();
@@ -328,7 +306,7 @@ namespace DataAccessObject
             return ids;
         }
 
-        private List<IQuestion> SelectAllQuestions()
+        private IEnumerable<IQuestion> SelectAllQuestions()
         {
             List<IQuestion> questions = new List<IQuestion>();
             string selectString = "select * from QUESTIONS order by ID desc";
@@ -358,6 +336,38 @@ namespace DataAccessObject
             return questions;
         }
 
+        public List<List<int>> SelectCheckedAnswers(int historyId)
+        {
+            List<List<int>> answersList = new List<List<int>>();
+            List<Tuple<int, int>> pairs = new List<Tuple<int, int>>();
+
+            string selectString = "select * from CHECKEDANSWERS WHERE HISTORYID = "
+                + historyId.ToString() + " ORDER BY QUESTIONID ASC";
+
+            SQLiteConnection tmpconnection = new SQLiteConnection("Data Source=Tests.sqlite;Version=3;");
+            tmpconnection.Open();
+            if (tmpconnection.State == ConnectionState.Open)
+            {
+                SQLiteCommand selectCommand = new SQLiteCommand(selectString, tmpconnection);
+                SQLiteDataReader reader = selectCommand.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    int Id = Int32.Parse(reader["QUESTIONID"].ToString());
+                    int answer = Int32.Parse(reader["ANSWER"].ToString());
+                    pairs.Add(new Tuple<int, int>(Id, answer));
+
+                    if (Id > answersList.Count - 1)
+                        answersList.Add(new List<int>());
+                    answersList[Id].Add(answer);
+                }
+
+                tmpconnection.Close();
+            }
+
+            return answersList;
+        }
+        
         private List<Tuple<string, bool>> ReadAnswers(SQLiteDataReader reader)
         {
             List<Tuple<string, bool>> Answers = new List<Tuple<string, bool>>();
@@ -505,7 +515,7 @@ namespace DataAccessObject
 
         public void DeleteTest(int testId)
         {
-            List<int> ids = SelectQuestionsIds(testId);
+            List<int> ids = SelectQuestionsIds(testId).ToList();
             foreach (var id in ids)
             {
                 DeleteQuestion(id);
@@ -544,7 +554,7 @@ namespace DataAccessObject
 
             //pobieram QIds te, które mają oldId w testId i zamieniam ich testId z oldId na testId
 
-            List<int> questionsIds = SelectQuestionsIds(oldId);
+            List<int> questionsIds = SelectQuestionsIds(oldId).ToList();
             foreach (var id in questionsIds)
             {
                 connection = new SQLiteConnection("Data Source=Tests.sqlite;Version=3;");
@@ -695,38 +705,6 @@ namespace DataAccessObject
             }
         }
 
-        public List<List<int>> SelectCheckedAnswers(int historyId)
-        {
-            List<List<int>> answersList = new List<List<int>>();
-            List<Tuple<int, int>> pairs = new List<Tuple<int, int>>();
-
-            string selectString = "select * from CHECKEDANSWERS WHERE HISTORYID = "
-                + historyId.ToString() + " ORDER BY QUESTIONID ASC";
-
-            SQLiteConnection tmpconnection = new SQLiteConnection("Data Source=Tests.sqlite;Version=3;");
-            tmpconnection.Open();
-            if (tmpconnection.State == ConnectionState.Open)
-            {
-                SQLiteCommand selectCommand = new SQLiteCommand(selectString, tmpconnection);
-                SQLiteDataReader reader = selectCommand.ExecuteReader();
-
-                while (reader.Read())
-                {
-                    int Id = Int32.Parse(reader["QUESTIONID"].ToString());
-                    int answer = Int32.Parse(reader["ANSWER"].ToString());
-                    pairs.Add(new Tuple<int, int>(Id, answer));
-
-                    if (Id > answersList.Count - 1)
-                        answersList.Add(new List<int>());
-                    answersList[Id].Add(answer);
-                }
-
-                tmpconnection.Close();
-            }
-
-            return answersList;
-        }
-        
         #endregion
 
         #region dao methods
@@ -886,13 +864,9 @@ namespace DataAccessObject
         {
             return new User(name, type);
         }
-
-        List<IHistory> IDAO.GetAllHistories()
-        {
-            return _histories;
-        }
-
+        
         #endregion
+
         
     }        
 }

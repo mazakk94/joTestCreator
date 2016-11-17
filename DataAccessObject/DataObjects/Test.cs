@@ -50,13 +50,13 @@ namespace DataAccessObject.DataObjects
         public Test() { }
 
 
-        public Test(List<string> TestData, List<IQuestion> list, List<int> NewTestQuestionsIds, int id)
+        public Test(List<string> TestData, IEnumerable<IQuestion> list, List<int> NewTestQuestionsIds, int id)
         {
             this.Name = TestData[2];            
             this.Length = new TimeSpan(Int32.Parse(TestData[1])/60, Int32.Parse(TestData[1]) % 60, 0);
             this.MaximumPoints = Int32.Parse(TestData[0]);
             this.QuestionsIds = NewTestQuestionsIds; 
-            this.Question = list;            
+            this.Question = list.ToList();            
             this.Id = id;
         }
 

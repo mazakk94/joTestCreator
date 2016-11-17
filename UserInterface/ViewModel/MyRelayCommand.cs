@@ -33,6 +33,8 @@ namespace UserInterface.ViewModel
 
         #endregion
 
+        #region methods
+
         public bool CanExecute(object parameter)
         {
             return _canExecute == null ? true : _canExecute(parameter);
@@ -48,5 +50,7 @@ namespace UserInterface.ViewModel
         {
             _execute(parameter);
         }
+        
+        #endregion
     }
 }
