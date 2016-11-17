@@ -1,19 +1,19 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
-using Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Wojtasik.Interfaces;
 
-namespace UserInterface.ViewModel
+namespace Wojtasik.UserInterface.ViewModel
 {
     class CreateQuestionViewModel : ViewModelBase
     {
         #region variables definitions
 
         private readonly IDataService _dataService;
-        private IDAO _dao = new DataAccessObject.DAO();
+        private IDAO _dao = new Wojtasik.DataAccessObject.DAO();
 
         private List<string> _answers;
         public List<string> Answers

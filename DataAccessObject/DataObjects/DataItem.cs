@@ -1,10 +1,10 @@
-﻿using Interfaces;
+﻿using Wojtasik.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace DataAccessObject.DataObjects
+namespace Wojtasik.DataAccessObject.DataObjects
 {
     public class DataItem : IDataItem
     {

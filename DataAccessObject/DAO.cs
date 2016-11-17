@@ -1,5 +1,5 @@
-﻿using DataAccessObject.DataObjects;
-using Interfaces;
+﻿using Wojtasik.DataAccessObject.DataObjects;
+using Wojtasik.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,8 +10,9 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Wojtasik.Interfaces;
 
-namespace DataAccessObject
+namespace Wojtasik.DataAccessObject
 {
     public class DAO : IDAO
     {
@@ -45,6 +46,7 @@ namespace DataAccessObject
         {
             InitDAO();
         }
+
 
         #region getters
 
@@ -865,8 +867,6 @@ namespace DataAccessObject
             return new User(name, type);
         }
         
-        #endregion
-
-        
+        #endregion                
     }        
 }

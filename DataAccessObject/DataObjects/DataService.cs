@@ -1,7 +1,7 @@
 ﻿using System;
-using Interfaces;
+using Wojtasik.Interfaces;
 
-namespace DataAccessObject.DataObjects
+namespace Wojtasik.DataAccessObject.DataObjects
 {
     public class DataService : IDataService
     {

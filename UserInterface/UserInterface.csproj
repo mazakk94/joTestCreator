@@ -119,7 +119,7 @@
     </Compile>
     <Compile Include="ViewModel\CreateTestViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
-    <Compile Include="ViewModel\MyRelayCommand.cs" />
+    <Compile Include="Helpers\MyRelayCommand.cs" />
     <Compile Include="ViewModel\TestViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="Windows\Editor\CreateQuestion.xaml.cs">

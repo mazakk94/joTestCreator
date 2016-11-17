@@ -1,21 +1,10 @@
-﻿/*
-  In App.xaml:
-  <Application.Resources>
-      <vm:ViewModelLocatorTemplate xmlns:vm="clr-namespace:UserInterface.ViewModel"
-                                   x:Key="Locator" />
-  </Application.Resources>
-  
-  In the View:
-  DataContext="{Binding Source={StaticResource Locator}, Path=ViewModelName}"
-*/
-
-using Interfaces;
+﻿using Wojtasik.Interfaces;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Practices.ServiceLocation;
-using DataAccessObject.DataObjects;
+using Wojtasik.DataAccessObject.DataObjects;
 
-namespace UserInterface.ViewModel
+namespace Wojtasik.UserInterface.ViewModel
 {
     public class ViewModelLocator
     {
@@ -24,13 +13,9 @@ namespace UserInterface.ViewModel
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
 
             if (ViewModelBase.IsInDesignModeStatic)
-            {
                 SimpleIoc.Default.Register<IDataService, DesignDataService>();
-            }
             else
-            {
                 SimpleIoc.Default.Register<IDataService, DataService>();
-            }
 
             SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<SolveTestViewModel>();
@@ -39,25 +24,14 @@ namespace UserInterface.ViewModel
             SimpleIoc.Default.Register<HistoryViewModel>();
         }
 
-        /// <summary>
-        /// Gets the Main property.
-        /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance",
             "CA1822:MarkMembersAsStatic",
             Justification = "This non-static member is needed for data binding purposes.")]
         public MainViewModel Main
         {
-            get
-            {
-                return ServiceLocator.Current.GetInstance<MainViewModel>();
-            }
+            get { return ServiceLocator.Current.GetInstance<MainViewModel>(); }
         }
-
-        /// <summary>
-        /// Cleans up all the resources.
-        /// </summary>
-        public static void Cleanup()
-        {
-        }
+        
+        public static void Cleanup() { }
     }
 }

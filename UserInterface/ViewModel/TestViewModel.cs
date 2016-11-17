@@ -1,4 +1,4 @@
-﻿using Interfaces;
+﻿using Wojtasik.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace UserInterface.ViewModel
+namespace Wojtasik.UserInterface.ViewModel
 {
     public class TestViewModel
     {

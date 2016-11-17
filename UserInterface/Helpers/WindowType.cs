@@ -1,4 +1,4 @@
-﻿namespace UserInterface.Helpers
+﻿namespace Wojtasik.UserInterface.Helpers
 {
     public enum WindowType
     {

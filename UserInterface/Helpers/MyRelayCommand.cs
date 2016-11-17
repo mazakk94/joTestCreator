@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace UserInterface.ViewModel
+namespace Wojtasik.UserInterface.Helpers
 {
 
     public class MyRelayCommand: ICommand

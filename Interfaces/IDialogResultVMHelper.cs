@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace Interfaces
+namespace Wojtasik.Interfaces
 {
     public interface IDialogResultVMHelper
     {

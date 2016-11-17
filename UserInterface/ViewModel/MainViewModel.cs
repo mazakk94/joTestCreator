@@ -2,16 +2,17 @@
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Ioc;
 using GalaSoft.MvvmLight.Messaging;
-using Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Data;
 using System.Windows.Input;
+using Wojtasik.UserInterface.Helpers;
+using Wojtasik.Interfaces;
 
 
-namespace UserInterface.ViewModel
+namespace Wojtasik.UserInterface.ViewModel
 {
 
     public class MainViewModel : ViewModelBase, INotifyPropertyChanged
@@ -235,7 +236,7 @@ namespace UserInterface.ViewModel
             _resultQuestionList = new ObservableCollection<IQuestion>();
             _newTestQuestionsIds = new List<int>();
             _testData = new List<string>();
-            _dao = new DataAccessObject.DAO();
+            _dao = new Wojtasik.DataAccessObject.DAO();
             _view = (ListCollectionView)CollectionViewSource.GetDefaultView(_tests);            
             GetAllTests();
             GetAllQuestions();
