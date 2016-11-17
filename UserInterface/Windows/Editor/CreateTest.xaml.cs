@@ -43,7 +43,7 @@ namespace UserInterface.Windows.Editor
                         };
                         modalWindowVM.ClearWindow();
                         bool? result = modalWindow.ShowDialog();// ?? false;
-
+                        
                         if (result.HasValue && result.Value)
                         {
                             List<string> resultList = GetQuestionDataFromDialog(modalWindow);

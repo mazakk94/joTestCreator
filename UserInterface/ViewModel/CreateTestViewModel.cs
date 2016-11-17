@@ -136,7 +136,6 @@ namespace Wojtasik.UserInterface.ViewModel
             {                    
                 return _selectedIndex;
             }
-
             set
             {
                 if (_selectedIndex == value)
@@ -146,18 +145,19 @@ namespace Wojtasik.UserInterface.ViewModel
                 }
 
                 _selectedIndex = value;
-                _answerList.Clear();
+                AnswerList.Clear();
                 //pobieram id pytania po indeksie
                 //pobieram z listy pytań listę odpowiedzi szukając po id 
+                List<string> list = new List<string>();
                 if (_questions.Count > 0)
                 {
                     int id = _questionsIds[_selectedIndex];
                     foreach (var answer in _questions[_selectedIndex].Answer)
                     {
-                        _answerList.Add(answer.Item1);
+                        list.Add(answer.Item1);
                     }
                 }
-                
+                AnswerList = new List<String>(list);
 
                 //GetQuestions(_selectedIndex);
                 //GetAllQuestions();
@@ -165,6 +165,7 @@ namespace Wojtasik.UserInterface.ViewModel
 
                 //Items[_selectedIndex] = (Convert.ToInt32(Items[_selectedIndex]) + 1).ToString();
                 RaisePropertyChanged(() => Index);
+                RaisePropertyChanged("AnswerList");
             }
         }
 
