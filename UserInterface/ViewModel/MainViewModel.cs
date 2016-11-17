@@ -333,7 +333,7 @@ namespace Wojtasik.UserInterface.ViewModel
 
         private void SolveTest()
         {
-            if (Index > 0)
+            if (Index >= 0)
                 Messenger.Default.Send<Helpers.OpenWindowMessage>(
                    new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kSolveTest, Argument = _selectedIndex.ToString()+"+"+User.Name });
         }

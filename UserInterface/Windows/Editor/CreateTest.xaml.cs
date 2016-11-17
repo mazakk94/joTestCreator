@@ -47,7 +47,7 @@ namespace UserInterface.Windows.Editor
                         if (result.HasValue && result.Value)
                         {
                             List<string> resultList = GetQuestionDataFromDialog(modalWindow);
-                            Messenger.Default.Send(resultList, "question");
+                            Messenger.Default.Send(resultList, "question");                            
                         }
 
                         string resultString;
