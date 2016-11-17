@@ -143,6 +143,20 @@ namespace Wojtasik.UserInterface.ViewModel
             }
         }
 
+        public List<string> _checkBoxVisible;
+        public List<string> CheckBoxVisible
+        {
+            get
+            {
+                return _checkBoxVisible;
+            }
+            set
+            {
+                _checkBoxVisible = value;
+                RaisePropertyChanged(() => CheckBoxVisible);
+            }
+        }
+
         private TimeSpan _timeleft;
         public TimeSpan Timeleft
         {
@@ -297,6 +311,8 @@ namespace Wojtasik.UserInterface.ViewModel
                 for (var i = 0; i < 5; i++) Answer.Add(i.ToString());
             CheckBox = new List<bool>();            
                 for (var i = 0; i < 5; i++) CheckBox.Add(false);
+            CheckBoxVisible = new List<string>();
+                for (var i = 0; i < 5; i++) CheckBoxVisible.Add("Hidden");
             Content = "";
             QuestionInfo = "";                        
             Timer = new DispatcherTimer();
@@ -329,10 +345,17 @@ namespace Wojtasik.UserInterface.ViewModel
             for(int i = 0; i < 5; i++)
             {
                 if (Test.Question[Id].Answer.Count > i)
+                {
                     Answer.Add(Test.Question[Id].Answer[i].Item1);
+                    CheckBoxVisible[i] = "Visible";
+                }
                 else
+                {
                     Answer.Add("");
+                    CheckBoxVisible[i] = "Hidden";
+                }
             }
+            RaisePropertyChanged("CheckBoxVisible");
         }
 
         private void UpdateWindow(int direction)
@@ -348,7 +371,20 @@ namespace Wojtasik.UserInterface.ViewModel
                 Answer.Clear();
                 Answer = new List<string>();
                 for (int i = 0; i < 5; i++)
-                    Answer.Add((Test.Question[Id].Answer.Count > i) ? Test.Question[Id].Answer[i].Item1 : "");
+                {
+                    if (Test.Question[Id].Answer.Count > i)
+                    {
+                        Answer.Add(Test.Question[Id].Answer[i].Item1);
+                        CheckBoxVisible[i] = "Visible";
+                    }
+                    else
+                    {
+                        Answer.Add("");
+                        CheckBoxVisible[i] = "Hidden";
+                    }
+                }
+
+                RaisePropertyChanged(() => CheckBoxVisible);
                 RaisePropertyChanged(() => Answer);
 
 
