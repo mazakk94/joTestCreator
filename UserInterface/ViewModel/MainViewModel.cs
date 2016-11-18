@@ -239,7 +239,7 @@ namespace Wojtasik.UserInterface.ViewModel
             _dao = new Wojtasik.DataAccessObject.DAO();
             _view = (ListCollectionView)CollectionViewSource.GetDefaultView(_tests);            
             GetAllTests();
-            GetAllQuestions();
+            //GetAllQuestions();
             //_userName = _dao.GetCurrentUser().Name;
             //_isEditorVisible = _dao.GetCurrentUser().Type ? "Visible" : "Hidden";
 

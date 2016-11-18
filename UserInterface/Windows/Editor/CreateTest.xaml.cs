@@ -86,7 +86,7 @@ namespace UserInterface.Windows.Editor
                         if (result == true) resultString = "Accepted";
                         else resultString = "Rejected";
 
-                        Messenger.Default.Send(resultString);
+                        Messenger.Default.Send(resultString, "result");
                         
                         break;                   
                 }             

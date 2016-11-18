@@ -10,7 +10,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using Wojtasik.Interfaces;
 
 namespace Wojtasik.DataAccessObject
 {
@@ -136,7 +135,7 @@ namespace Wojtasik.DataAccessObject
                     createCommand = new SQLiteCommand(createString, connection);
                     createCommand.ExecuteNonQuery();
 
-                    createString = "CREATE TABLE TESTS (ID INT PRIMARY KEY, NAME VARCHAR(100), LENGTH INT, MAXPOINTS INT)";
+                    createString = "CREATE TABLE TESTS (ID INT PRIMARY KEY, NAME VARCHAR(100), LENGTH INT, MAXPOINTS INT, MULTICHECK BOOLEAN)";
                     createCommand = new SQLiteCommand(createString, connection);
                     createCommand.ExecuteNonQuery();
 
@@ -646,11 +645,12 @@ namespace Wojtasik.DataAccessObject
         private string CreateTestString(ITest test)
         {
             string result = "";
-            result += "INSERT INTO TESTS (ID, NAME, LENGTH, MAXPOINTS) VALUES (";
+            result += "INSERT INTO TESTS (ID, NAME, LENGTH, MAXPOINTS, MULTICHECK) VALUES (";
             result += test.Id.ToString() + ", ";
             result += "'" + test.Name.ToString() + "', ";
             result += (test.Length.Minutes + test.Length.Hours * 60).ToString() + ", ";
-            result += test.MaximumPoints.ToString() + ")";
+            result += test.MaximumPoints.ToString() + ", ";
+            result += test.MultiCheck.ToString() + ")";
 
             return result;
         }

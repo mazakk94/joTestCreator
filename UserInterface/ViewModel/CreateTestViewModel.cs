@@ -16,6 +16,22 @@ namespace Wojtasik.UserInterface.ViewModel
         private readonly IDataService _dataService;
         private IDAO _dao = new Wojtasik.DataAccessObject.DAO();
 
+        private string _result;
+        public string Result
+        {
+            get
+            {
+                return _result;
+            }
+            set
+            {
+                if (_result == value)
+                    return;
+                _result = value;
+                RaisePropertyChanged(() => Result);
+            }
+        }
+
         private int _testId;
         public int TestId
         {
@@ -97,8 +113,8 @@ namespace Wojtasik.UserInterface.ViewModel
             }
         }
 
-        private List<IQuestion> _questions;
-        public List<IQuestion> Questions
+        private ObservableCollection<IQuestion> _questions;
+        public ObservableCollection<IQuestion> Questions
         {
             get { return _questions; }
             set
@@ -276,7 +292,8 @@ namespace Wojtasik.UserInterface.ViewModel
 
             Messenger.Default.Register<List<string>>(this, "question", 
                 s => { QuestionString.Clear(); foreach (var item in s) QuestionString.Add(item); });
-            //Messenger.Default.Register<List<string>>(this, "question", s => QuestionString = s);
+            
+            Messenger.Default.Register<string>(this, "result", s => Result = s);
         }
               
         #region methods
@@ -293,10 +310,12 @@ namespace Wojtasik.UserInterface.ViewModel
             QuestionsIds = new List<int>();
             _answerList = new List<string>();
             AnswerList = new List<string>();
-            _questions = new List<IQuestion>();
-            Questions = new List<IQuestion>();
+            _questions = new ObservableCollection<IQuestion>();
+            Questions = new ObservableCollection<IQuestion>();
             _questionString = new List<string>();
             QuestionString = new List<string>();
+            _result = "";
+            Result = "";
         }        
 
         private void SetMaxPoints(int points)
@@ -336,11 +355,34 @@ namespace Wojtasik.UserInterface.ViewModel
             this.Name = testData[0];
             this.Length = ParseTimeSpan(testData[1]);
             this.QuestionsIds = new List<int>(_dao.SelectQuestionsIds(this.TestId));
-            this.Questions = _dao.GetQuestionsByIds(this.QuestionsIds).ToList();
+            List<IQuestion> tmpQuestions = _dao.GetQuestionsByIds(this.QuestionsIds).ToList();
+            foreach (var question in tmpQuestions) Questions.Add(question);
             this.MaxPoints = CalculateMaxPoints(Questions);
         }
 
-        private int CalculateMaxPoints(List<IQuestion> Questions)
+        internal void SetAnswers(bool notDeleted)
+        {
+            if (Questions.Count > 0)
+            {
+                int index = 0;
+                if (_selectedIndex >= 0 && notDeleted)
+                    index = _selectedIndex;
+
+                List<string> answers = new List<string>();
+
+                foreach (var answer in Questions[index].Answer)
+                    if (answer.Item1 != null)
+                        answers.Add(answer.Item1);
+                    
+
+                AnswerList = new List<string>(answers);
+                RaisePropertyChanged(() => AnswerList);
+                
+            }
+                
+        }
+
+        private int CalculateMaxPoints(ObservableCollection<IQuestion> Questions)
         {
             int maxpoints = 0;
             foreach(var question in Questions)
@@ -375,8 +417,8 @@ namespace Wojtasik.UserInterface.ViewModel
                 this._dao.InsertQuestionId(TestId, question.Id);
             }
 
-        }              
-           
+        }    
+        
         private void CreateAndSaveQuestion()
         {
             Messenger.Default.Send<Helpers.OpenWindowMessage>(
@@ -385,26 +427,41 @@ namespace Wojtasik.UserInterface.ViewModel
                 UnpackQuestionString(false);
             else
                 ;
+
+            SetAnswers(false);
         }
 
         private void EditAndSaveQuestion()
         {
-            PrepareQuestionString();
-            string arg = ParseQuestionString(QuestionString);
-            Messenger.Default.Send<Helpers.OpenWindowMessage>(
-                  new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kEditQuestion, Argument = arg });
-            if (QuestionString.Count > 6)
-                UnpackQuestionString(true);
-            else
-                ;
+            if (_selectedIndex >= 0)
+            {
+                PrepareQuestionString();
+                string arg = ParseQuestionString(QuestionString);
+                Messenger.Default.Send<Helpers.OpenWindowMessage>(
+                      new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kEditQuestion, Argument = arg });
+                if (QuestionString.Count > 6 && Result == "Accepted")
+                    UnpackQuestionString(true);
+                else
+                    ;
+            }
+            SetAnswers(true);
             //trzeba nadpisać istniejące pytanie -> info siedzi w questionstring, powinien sam sie odpakować            
         }
 
         private void DeleteQuestion()
         {
-            SetMaxPoints(-_questions[_selectedIndex].Points);
-            _questionsIds.RemoveAt(_selectedIndex);
-            _questions.RemoveAt(_selectedIndex);
+            if(_selectedIndex >= 0)
+            {
+                SetMaxPoints(-_questions[_selectedIndex].Points);
+                QuestionsIds.RemoveAt(_selectedIndex);
+                Questions.RemoveAt(_selectedIndex);
+                ObservableCollection<IQuestion> questions = new ObservableCollection<IQuestion>();
+                foreach (var question in Questions) questions.Add(question); ;
+                Questions.Clear();
+                Questions = new ObservableCollection<IQuestion>(questions);
+                RaisePropertyChanged(() => Questions);
+            }
+            SetAnswers(false);
         }
 
         private void PrepareQuestionString()
@@ -441,7 +498,8 @@ namespace Wojtasik.UserInterface.ViewModel
             return parsed;
         }
         
-        #endregion
-
+        #endregion        
+    
+        
     }
 }

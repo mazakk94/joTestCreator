@@ -45,10 +45,13 @@ namespace Wojtasik.DataAccessObject.DataObjects
             set;
         }
 
-        
+        public bool MultiCheck
+        {
+            get;
+            set;
+        }
 
         public Test() { }
-
 
         public Test(List<string> TestData, IEnumerable<IQuestion> list, List<int> NewTestQuestionsIds, int id)
         {
@@ -58,9 +61,8 @@ namespace Wojtasik.DataAccessObject.DataObjects
             this.QuestionsIds = NewTestQuestionsIds; 
             this.Question = list.ToList();            
             this.Id = id;
+            this.MultiCheck = TestData[3] == "1";
         }
-
-
     }
 }
 

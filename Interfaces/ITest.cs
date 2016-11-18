@@ -14,5 +14,6 @@ namespace Wojtasik.Interfaces
         int MaximumPoints { get; set; }
         List<IQuestion> Question { get; set; }
         List<int> QuestionsIds { get; set; }
+        bool MultiCheck { get; set; }
     }
 }

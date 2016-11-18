@@ -75,6 +75,7 @@ namespace UserInterface
                         modalWindowVM.TestId = Int32.Parse(message.Argument);
                         modalWindowVM.RefreshDAO();
                         modalWindowVM.LoadData();
+                        modalWindowVM.SetAnswers(false);
 
                         result = createEditTestWindow.ShowDialog();
                         if (result.HasValue && result.Value)
