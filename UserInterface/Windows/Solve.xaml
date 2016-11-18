@@ -54,19 +54,30 @@
             
 
             <StackPanel Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center"
-                        Orientation="Vertical" Grid.Row="2" Grid.Column="1">
-                <StackPanel Orientation="Horizontal">
-                    <Label Content="MaxPoints"/>
-                    <Label Content="{Binding MaxPoints}"/>
+                        Orientation="Horizontal" Grid.Row="2" Grid.Column="1">
+                <StackPanel Orientation="Vertical">
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="MaxPoints"/>
+                        <Label Content="{Binding MaxPoints}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Length"/>
+                        <Label Content="{Binding Length}"/>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel Orientation="Vertical">
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="No. of Questions"/>
+                        <Label Content="{Binding Questions.Count}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="More than one answer correct: "/>
+                        <Label Content="{Binding IsMultiCheck}" />
+                    </StackPanel>   
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <Label Content="Length"/>
-                    <Label Content="{Binding Length}"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Label Content="No. of Questions"/>
-                    <!--TODO CHECK IF BINDED CORRECTLY-->
-                    <Label Content="{Binding Questions.Count}"/>
+                    
+                    
                 </StackPanel>
             </StackPanel>
 
