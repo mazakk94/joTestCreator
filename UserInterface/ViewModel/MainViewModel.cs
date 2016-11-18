@@ -96,7 +96,7 @@ namespace Wojtasik.UserInterface.ViewModel
         }
 
         private List<string> _testData;
-        public List<string> TestData //contains data about test - [0]maxpoints, [1]length, [2]name
+        public List<string> TestData //contains data about test - [0]maxpoints, [1]length, [2]name, [3]multiCheck
         {
             get
             {

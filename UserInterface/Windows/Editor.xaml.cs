@@ -39,13 +39,15 @@ namespace UserInterface
                         modalWindowVM.MyText = message.Argument;
                         var createNewTestWindow = new CreateTest()
                         {
-                            DataContext = modalWindowVM
-                            
+                            DataContext = modalWindowVM                            
                         };
+                        
                         modalWindowVM.ClearWindow();
                         modalWindowVM.TestId = Int32.Parse(message.Argument);
+                        modalWindowVM.ShowMultiCheck();
                         
                         bool? result = createNewTestWindow.ShowDialog();
+                        modalWindowVM.HideMultiCheck();
                         if (result.HasValue && result.Value)
                         {
                             result = true;
@@ -119,6 +121,7 @@ namespace UserInterface
             list.Add(window.maxPoints.Content.ToString());
             list.Add(window.Length.Content.ToString());
             list.Add(window.Name.Text.ToString());
+            list.Add(window.RadioMulti.IsChecked ?? false ? "1" : "0");
             
             return list;
         }

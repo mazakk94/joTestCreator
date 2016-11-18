@@ -16,7 +16,7 @@
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="0.5*" ></RowDefinition>
-                <RowDefinition ></RowDefinition>
+                <RowDefinition Height="1.25*"></RowDefinition>
                 <RowDefinition Height="3.5*"></RowDefinition>
                 <RowDefinition ></RowDefinition>
                 <RowDefinition ></RowDefinition>
@@ -88,10 +88,14 @@
                 Content="Check this to return true as result when closing this window" />
             </StackPanel>
 
-            <StackPanel Visibility="Hidden" Orientation="Vertical" Grid.Row="3" Grid.Column="2">
-                <TextBox  Margin="10 10" Text="{Binding SomeString}" TextAlignment="Center" />
-                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
-                    FontSize="12" Text="{Binding Result}" />
+                        
+            <StackPanel Name="Stack" Visibility="{Binding MultiCheckVisible}" Orientation="Vertical" 
+                         Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center">
+                <Label FontSize="16" Content="Test Type" />
+                <RadioButton x:Name="RadioSingle" IsChecked="True" Content="Single"  
+                          GroupName="MultiCheck" FontSize="16"/>
+                <RadioButton x:Name="RadioMulti"  Content="Multi" 
+                          GroupName="MultiCheck" IsChecked="False" FontSize="16"/>
             </StackPanel>
 
             <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="2">

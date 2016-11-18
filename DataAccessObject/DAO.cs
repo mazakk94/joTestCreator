@@ -650,7 +650,7 @@ namespace Wojtasik.DataAccessObject
             result += "'" + test.Name.ToString() + "', ";
             result += (test.Length.Minutes + test.Length.Hours * 60).ToString() + ", ";
             result += test.MaximumPoints.ToString() + ", ";
-            result += test.MultiCheck.ToString() + ")";
+            result += (test.MultiCheck == true ? "1" : "0").ToString() + ")";
 
             return result;
         }

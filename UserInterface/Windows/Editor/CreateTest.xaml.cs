@@ -122,6 +122,12 @@ namespace UserInterface.Windows.Editor
         {
             this.DialogResult = true;
         }
+        
+        bool IsMultiCheck()
+        {//true == single  
+            return (!this.RadioSingle.IsChecked ?? false) && (this.RadioMulti.IsChecked ?? false);
+        }
+
 
 
     }

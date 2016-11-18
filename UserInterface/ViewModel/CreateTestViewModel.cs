@@ -32,6 +32,24 @@ namespace Wojtasik.UserInterface.ViewModel
             }
         }
 
+        private string _multiCheckVisible;
+        public string MultiCheckVisible
+        {
+            get
+            {
+                return _multiCheckVisible;
+            }
+
+            set
+            {
+                if (_multiCheckVisible == value)
+                    return;
+
+                _multiCheckVisible = value;
+                RaisePropertyChanged(() => MultiCheckVisible);
+            }
+        }
+
         private int _testId;
         public int TestId
         {
@@ -316,6 +334,7 @@ namespace Wojtasik.UserInterface.ViewModel
             QuestionString = new List<string>();
             _result = "";
             Result = "";
+            MultiCheckVisible = "Hidden";
         }        
 
         private void SetMaxPoints(int points)
@@ -497,8 +516,21 @@ namespace Wojtasik.UserInterface.ViewModel
             }
             return parsed;
         }
-        
+
+        internal void ShowMultiCheck()
+        {
+            MultiCheckVisible = "Visible";
+        }
+
+        internal void HideMultiCheck()
+        {
+            MultiCheckVisible = "Hidden";
+        }
+
         #endregion        
+    
+        
+    
     
         
     }
