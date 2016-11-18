@@ -11,6 +11,9 @@
         kMenu,
         kEditor,
         kSolve,
-        kHistory
+        kHistory,
+        kNewSingleTest,
+        kNewSingleQuestion,
+        kEditSingleQuestion
     }
 }

@@ -56,6 +56,16 @@ namespace Wojtasik.UserInterface.ViewModel
             }
         }
 
+        public bool MultiCheck
+        {
+            get { return _test.MultiCheck; }
+            set
+            {
+                _test.MultiCheck = value;
+                //RaisePropertyChanged("testId");
+            }
+        }
+
         public List<IQuestion> Question
         {
             get { return _test.Question; }

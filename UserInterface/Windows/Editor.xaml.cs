@@ -33,7 +33,9 @@ namespace UserInterface
               message =>
               {
                 switch (message.Type)
-                {                
+                {
+
+                    #region new test
                     case WindowType.kNewTest:
                         var modalWindowVM = SimpleIoc.Default.GetInstance<CreateTestViewModel>();
                         modalWindowVM.MyText = message.Argument;
@@ -44,10 +46,10 @@ namespace UserInterface
                         
                         modalWindowVM.ClearWindow();
                         modalWindowVM.TestId = Int32.Parse(message.Argument);
-                        modalWindowVM.ShowMultiCheck();
-                        
+                        modalWindowVM.IsMultiCheck = "true";
+
                         bool? result = createNewTestWindow.ShowDialog();
-                        modalWindowVM.HideMultiCheck();
+
                         if (result.HasValue && result.Value)
                         {
                             result = true;
@@ -65,7 +67,43 @@ namespace UserInterface
                         Messenger.Default.Send(resultString);
                         
                         break;
+                    #endregion
 
+                    #region new single test
+                    case WindowType.kNewSingleTest:
+                        var createNewSingleTestVM = SimpleIoc.Default.GetInstance<CreateTestViewModel>();
+                        createNewSingleTestVM.MyText = message.Argument;
+                        var createNewSingleTestWindow = new CreateTest()
+                        {
+                            DataContext = createNewSingleTestVM
+                        };
+
+                        createNewSingleTestVM.ClearWindow();
+                        createNewSingleTestVM.TestId = Int32.Parse(message.Argument);
+                        createNewSingleTestVM.IsMultiCheck = "false";
+
+                        result = createNewSingleTestWindow.ShowDialog();
+
+                        if (result.HasValue && result.Value)
+                        {
+                            result = true;
+                            List<int> questionsIds = FillQuestionsIds(createNewSingleTestWindow);
+                            List<string> resultList = GetTestDataFromDialog(createNewSingleTestWindow);
+
+                            Messenger.Default.Send(questionsIds, "questionsIds");
+                            Messenger.Default.Send(resultList, "testData");
+                            createNewSingleTestVM.UpdateQuestions();
+                        }
+
+                        //string resultString;
+                        if (result == true) resultString = "Accepted";
+                        else resultString = "Rejected";
+                        Messenger.Default.Send(resultString);
+
+                        break;
+                    #endregion
+
+                    #region edit test
                     case WindowType.kEditTest:
                         
                         modalWindowVM = SimpleIoc.Default.GetInstance<CreateTestViewModel>();                        
@@ -78,6 +116,7 @@ namespace UserInterface
                         modalWindowVM.RefreshDAO();
                         modalWindowVM.LoadData();
                         modalWindowVM.SetAnswers(false);
+                        modalWindowVM.SetMultiCheck(modalWindowVM.TestId);
 
                         result = createEditTestWindow.ShowDialog();
                         if (result.HasValue && result.Value)
@@ -96,8 +135,8 @@ namespace UserInterface
                         else resultString = "Rejected";
                         Messenger.Default.Send(resultString);
                         
-                        break;      
-
+                        break;
+                    #endregion
                 }
                  
               });
@@ -121,7 +160,7 @@ namespace UserInterface
             list.Add(window.maxPoints.Content.ToString());
             list.Add(window.Length.Content.ToString());
             list.Add(window.Name.Text.ToString());
-            list.Add(window.RadioMulti.IsChecked ?? false ? "1" : "0");
+            list.Add(window.Multi.IsChecked ?? false ? "1" : "0");
             
             return list;
         }

@@ -33,6 +33,7 @@ namespace UserInterface.Windows.Editor
               {
                 switch (message.Type)
                 {
+                    #region new question
                     case WindowType.kNewQuestion:
                         //var modalWindowVM = SimpleIoc.Default.GetInstance<CreateTestViewModel>();
                         var modalWindowVM = SimpleIoc.Default.GetInstance<CreateQuestionViewModel>();
@@ -56,7 +57,35 @@ namespace UserInterface.Windows.Editor
 
                         Messenger.Default.Send(resultString);                        
                         break;
+                    #endregion
 
+                    #region new single question
+                    case WindowType.kNewSingleQuestion:
+                        //var modalWindowVM = SimpleIoc.Default.GetInstance<CreateTestViewModel>();
+                        var createSingleQuestionWindowVM = SimpleIoc.Default.GetInstance<CreateQuestionViewModel>();
+                        //modalWindowVM.MyText = message.Argument;
+                        var createSingleQuestionlWindow = new CreateSingleQuestion()
+                        {
+                            DataContext = createSingleQuestionWindowVM
+                        };
+                        createSingleQuestionWindowVM.ClearWindow();
+                         result = createSingleQuestionlWindow.ShowDialog();// ?? false;
+
+                        if (result.HasValue && result.Value)
+                        {
+                            List<string> resultList = GetQuestionDataFromDialog(createSingleQuestionlWindow);
+                            Messenger.Default.Send(resultList, "question");
+                        }
+
+                        //string resultString;
+                        if (result == true) resultString = "Accepted";
+                        else resultString = "Rejected";
+
+                        Messenger.Default.Send(resultString);
+                        break;
+                    #endregion
+
+                    #region edit question
                     case WindowType.kEditQuestion:
                         
                         var EditQuestionWindowVM = SimpleIoc.Default.GetInstance<CreateQuestionViewModel>();
@@ -88,7 +117,43 @@ namespace UserInterface.Windows.Editor
 
                         Messenger.Default.Send(resultString, "result");
                         
-                        break;                   
+                        break;
+                    #endregion
+
+                    #region edit single question
+                    case WindowType.kEditSingleQuestion:
+
+                        var EditSingleQuestionWindowVM = SimpleIoc.Default.GetInstance<CreateQuestionViewModel>();
+                        unparsed = UnParseQuestionString(message.Argument);
+
+                        EditSingleQuestionWindowVM.QuestionString = new List<string>();
+                        foreach (var item in unparsed)
+                        {
+                            EditSingleQuestionWindowVM.QuestionString.Add(item);
+                        }
+                        //EditSingleQuestionWindowVM.QuestionString = unparsed; //questionString
+
+                        var EditSingleQuestionWindow = new CreateSingleQuestion()
+                        {
+                            DataContext = EditSingleQuestionWindowVM
+                        };
+
+                        EditSingleQuestionWindowVM.FillDialog(); //fill dialog with questionString
+                        result = EditSingleQuestionWindow.ShowDialog();
+
+                        if (result.HasValue && result.Value)
+                        {
+                            List<string> resultList = GetQuestionDataFromDialog(EditSingleQuestionWindow);
+                            Messenger.Default.Send(resultList, "question");
+                        }
+
+                        if (result == true) resultString = "Accepted";
+                        else resultString = "Rejected";
+
+                        Messenger.Default.Send(resultString, "result");
+
+                        break;
+                    #endregion
                 }             
               });
              
@@ -100,6 +165,22 @@ namespace UserInterface.Windows.Editor
             List<string> list = new List<string>(unParsed);
             list[list.Count-1] += "-";
             return list;
+        }
+
+        private List<string> GetQuestionDataFromDialog(CreateSingleQuestion window)
+        {
+            List<string> result = new List<string>();
+            // 0 - content, 1 - answer1, 2 - answer2 .. 5 - answer5, 6 - points, 7 - id
+            //string correct;            
+            result.Add(window.content.Text);
+            result.Add(window.answer1.Text + ((bool)(window.answer1.Text.Length > 0) ? ((bool)window.correct1.IsChecked ? "_1" : "_0") : ""));
+            result.Add(window.answer2.Text + ((bool)(window.answer2.Text.Length > 0) ? ((bool)window.correct2.IsChecked ? "_1" : "_0") : ""));
+            result.Add(window.answer3.Text + ((bool)(window.answer3.Text.Length > 0) ? ((bool)window.correct3.IsChecked ? "_1" : "_0") : ""));
+            result.Add(window.answer4.Text + ((bool)(window.answer4.Text.Length > 0) ? ((bool)window.correct4.IsChecked ? "_1" : "_0") : ""));
+            result.Add(window.answer5.Text + ((bool)(window.answer5.Text.Length > 0) ? ((bool)window.correct5.IsChecked ? "_1" : "_0") : ""));
+            result.Add(window.points.Content.ToString());
+
+            return result;
         }
 
         private List<string> GetQuestionDataFromDialog(CreateQuestion window)
@@ -117,15 +198,15 @@ namespace UserInterface.Windows.Editor
 
             return result;
         }
-
+        
         void acceptButton_Click(object sender, RoutedEventArgs e)
-        {
+        {            
             this.DialogResult = true;
         }
         
         bool IsMultiCheck()
         {//true == single  
-            return (!this.RadioSingle.IsChecked ?? false) && (this.RadioMulti.IsChecked ?? false);
+            return this.Multi.IsChecked ?? false;
         }
 
 

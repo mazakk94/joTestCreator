@@ -1,4 +1,4 @@
-﻿<Window x:Class="UserInterface.Windows.Editor.CreateQuestion"
+﻿<Window x:Class="UserInterface.Windows.Editor.CreateSingleQuestion"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="CreateQuestion" Height="420" Width="300"
@@ -18,31 +18,31 @@
             
             <StackPanel Orientation="Horizontal">
                 <Label Content="Answer 1"  Margin="0 0 175 0"/>                
-                <CheckBox IsChecked="{Binding CorrectAnswer[0]}" VerticalAlignment="Center" x:Name="correct1" />
+                <RadioButton GroupName="group" IsChecked="{Binding CorrectAnswer[0]}" VerticalAlignment="Center" x:Name="correct1" />
             </StackPanel>
             <TextBox Text="{Binding Answers[0]}" x:Name="answer1" MinWidth="150" />
 
             <StackPanel Orientation="Horizontal">
                 <Label Content="Answer 2"  Margin="0 0 175 0"/>
-                <CheckBox IsChecked="{Binding CorrectAnswer[1]}" VerticalAlignment="Center" x:Name="correct2" />
+                <RadioButton GroupName="group"  IsChecked="{Binding CorrectAnswer[1]}" VerticalAlignment="Center" x:Name="correct2" />
             </StackPanel>
             <TextBox Text="{Binding Answers[1]}" x:Name="answer2" MinWidth="150" />
             
             <StackPanel Orientation="Horizontal">
                 <Label Content="Answer 3"  Margin="0 0 175 0"/>
-                <CheckBox IsChecked="{Binding CorrectAnswer[2]}" VerticalAlignment="Center" x:Name="correct3" />
+                <RadioButton GroupName="group"  IsChecked="{Binding CorrectAnswer[2]}" VerticalAlignment="Center" x:Name="correct3" />
             </StackPanel>
             <TextBox Text="{Binding Answers[2]}" x:Name="answer3" MinWidth="150" />
             
             <StackPanel Orientation="Horizontal">
                 <Label Content="Answer 4"  Margin="0 0 175 0"/>
-                <CheckBox IsChecked="{Binding CorrectAnswer[3]}" VerticalAlignment="Center" x:Name="correct4" />
+                <RadioButton GroupName="group"  IsChecked="{Binding CorrectAnswer[3]}" VerticalAlignment="Center" x:Name="correct4" />
             </StackPanel>
             <TextBox Text="{Binding Answers[3]}" x:Name="answer4" MinWidth="150" />
             
             <StackPanel Orientation="Horizontal">
                 <Label Content="Answer 5"  Margin="0 0 175 0"/>
-                <CheckBox IsChecked="{Binding CorrectAnswer[4]}" VerticalAlignment="Center" x:Name="correct5" />
+                <RadioButton GroupName="group"  IsChecked="{Binding CorrectAnswer[4]}" VerticalAlignment="Center" x:Name="correct5" />
             </StackPanel>
             <TextBox Text="{Binding Answers[4]}" x:Name="answer5" MinWidth="150" />
             

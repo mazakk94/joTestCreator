@@ -14,16 +14,15 @@ using System.Windows.Shapes;
 
 namespace UserInterface.Windows.Editor
 {
-    public partial class CreateQuestion : Window
+    public partial class CreateSingleQuestion : Window
     {
-        public CreateQuestion()
+        public CreateSingleQuestion()
         {
             InitializeComponent();
         }
 
         void acceptButton_Click(object sender, RoutedEventArgs e)
         {
-
             bool closeWindow = true;
             if ((this.correct1.IsChecked == true && this.answer1.Text.Length > 0)
                 || (this.correct2.IsChecked == true && this.answer2.Text.Length > 0)
@@ -44,10 +43,10 @@ namespace UserInterface.Windows.Editor
                 closeWindow = false;
                 MessageBox.Show("Set content of question!");
             }
-
-
-            if (closeWindow)
-                this.DialogResult = true;
+                
+            
+            if(closeWindow)
+            this.DialogResult = true;
             
         }
     }

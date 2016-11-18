@@ -32,21 +32,23 @@ namespace Wojtasik.UserInterface.ViewModel
             }
         }
 
-        private string _multiCheckVisible;
-        public string MultiCheckVisible
+        private string _isMultiCheck;
+        public string IsMultiCheck
         {
             get
             {
-                return _multiCheckVisible;
+                return _isMultiCheck;
             }
 
             set
             {
-                if (_multiCheckVisible == value)
+                if (_isMultiCheck == value)
+                {
                     return;
+                }
 
-                _multiCheckVisible = value;
-                RaisePropertyChanged(() => MultiCheckVisible);
+                _isMultiCheck = value;
+                RaisePropertyChanged(() => IsMultiCheck);
             }
         }
 
@@ -334,7 +336,7 @@ namespace Wojtasik.UserInterface.ViewModel
             QuestionString = new List<string>();
             _result = "";
             Result = "";
-            MultiCheckVisible = "Hidden";
+            IsMultiCheck = "true";
         }        
 
         private void SetMaxPoints(int points)
@@ -369,14 +371,22 @@ namespace Wojtasik.UserInterface.ViewModel
         }
 
         internal void LoadData()
-        {            
+        {      
+            
             List<string> testData = _dao.GetTestData(this.TestId).ToList();
-            this.Name = testData[0];
-            this.Length = ParseTimeSpan(testData[1]);
-            this.QuestionsIds = new List<int>(_dao.SelectQuestionsIds(this.TestId));
-            List<IQuestion> tmpQuestions = _dao.GetQuestionsByIds(this.QuestionsIds).ToList();
-            foreach (var question in tmpQuestions) Questions.Add(question);
-            this.MaxPoints = CalculateMaxPoints(Questions);
+            if (testData.Count == 4)
+            {
+                this.Name = testData[0];
+                this.Length = ParseTimeSpan(testData[1]);
+                this.QuestionsIds = new List<int>(_dao.SelectQuestionsIds(this.TestId));
+                List<IQuestion> tmpQuestions = _dao.GetQuestionsByIds(this.QuestionsIds).ToList();
+                foreach (var question in tmpQuestions) Questions.Add(question);
+                this.MaxPoints = CalculateMaxPoints(Questions);
+                this.IsMultiCheck = testData[3];
+            }
+            else
+                this.MaxPoints = 99999999;
+               
         }
 
         internal void SetAnswers(bool notDeleted)
@@ -440,8 +450,16 @@ namespace Wojtasik.UserInterface.ViewModel
         
         private void CreateAndSaveQuestion()
         {
-            Messenger.Default.Send<Helpers.OpenWindowMessage>(
-                new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kNewQuestion, Argument = QuestionsCount.ToString() });
+            if (IsMultiCheck == "True")
+            {
+                Messenger.Default.Send<Helpers.OpenWindowMessage>(
+                    new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kNewQuestion, Argument = QuestionsCount.ToString() });
+            } else
+            {
+                Messenger.Default.Send<Helpers.OpenWindowMessage>(
+                    new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kNewSingleQuestion, Argument = QuestionsCount.ToString() });
+            }
+            
             if (QuestionString.Count > 6)
                 UnpackQuestionString(false);
             else
@@ -456,8 +474,12 @@ namespace Wojtasik.UserInterface.ViewModel
             {
                 PrepareQuestionString();
                 string arg = ParseQuestionString(QuestionString);
-                Messenger.Default.Send<Helpers.OpenWindowMessage>(
-                      new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kEditQuestion, Argument = arg });
+                if (IsMultiCheck == "true")
+                    Messenger.Default.Send<Helpers.OpenWindowMessage>(
+                        new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kEditQuestion, Argument = arg });
+                else
+                    Messenger.Default.Send<Helpers.OpenWindowMessage>(
+                        new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kEditSingleQuestion, Argument = arg });
                 if (QuestionString.Count > 6 && Result == "Accepted")
                     UnpackQuestionString(true);
                 else
@@ -517,20 +539,21 @@ namespace Wojtasik.UserInterface.ViewModel
             return parsed;
         }
 
-        internal void ShowMultiCheck()
+        internal void SetMultiCheck(int testId)
         {
-            MultiCheckVisible = "Visible";
-        }
-
-        internal void HideMultiCheck()
-        {
-            MultiCheckVisible = "Hidden";
+            List<string> testData = _dao.GetTestData(testId).ToList();
+            if (testData.Count == 4)
+            {
+                IsMultiCheck = testData[3];
+            } else
+            {
+                SetMaxPoints(99999999);
+            }
         }
 
         #endregion        
     
         
-    
     
         
     }

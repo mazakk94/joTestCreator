@@ -15,6 +15,24 @@ namespace Wojtasik.UserInterface.ViewModel
         private readonly IDataService _dataService;
         private IDAO _dao = new Wojtasik.DataAccessObject.DAO();
 
+        private bool _isMultiCheck;
+        public bool IsMultiCheck
+        {
+            get
+            {
+                return _isMultiCheck;
+            }
+            set
+            {
+                if (_isMultiCheck == value)
+                {
+                    return;
+                }
+                _isMultiCheck = value;
+                RaisePropertyChanged(() => IsMultiCheck);
+            }
+        }
+
         private List<string> _answers;
         public List<string> Answers
         {
@@ -130,6 +148,8 @@ namespace Wojtasik.UserInterface.ViewModel
             Answers = new List<string>();
             _correctAnswer = new List<bool>();
             CorrectAnswer = new List<bool>();
+            _isMultiCheck = false;
+            IsMultiCheck = false;
         }
 
         internal void RefreshDAO()
@@ -167,6 +187,7 @@ namespace Wojtasik.UserInterface.ViewModel
             }
 
             Length = Int32.Parse(QuestionString[6].Replace("-", ""));
+
         }
 
         #endregion

@@ -88,15 +88,11 @@
                 Content="Check this to return true as result when closing this window" />
             </StackPanel>
 
-                        
-            <StackPanel Name="Stack" Visibility="{Binding MultiCheckVisible}" Orientation="Vertical" 
-                         Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center">
-                <Label FontSize="16" Content="Test Type" />
-                <RadioButton x:Name="RadioSingle" IsChecked="True" Content="Single"  
-                          GroupName="MultiCheck" FontSize="16"/>
-                <RadioButton x:Name="RadioMulti"  Content="Multi" 
-                          GroupName="MultiCheck" IsChecked="False" FontSize="16"/>
+            <StackPanel VerticalAlignment="Center" Grid.Row="1" Grid.Column="2" Orientation="Horizontal">
+                <CheckBox Name="Multi" VerticalAlignment="Center" IsEnabled="False" IsChecked="{Binding IsMultiCheck}" />
+                <Label Content="More than one correct answer allowed" />
             </StackPanel>
+            
 
             <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="2">
                 <StackPanel Height="40" Orientation="Horizontal" HorizontalAlignment="Center">

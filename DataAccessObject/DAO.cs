@@ -56,6 +56,7 @@ namespace Wojtasik.DataAccessObject
             list.Add(test.Name);
             list.Add(test.Length.ToString());
             list.Add(test.MaximumPoints.ToString());
+            list.Add(test.MultiCheck.ToString());
 
             return list;
         }
@@ -274,7 +275,8 @@ namespace Wojtasik.DataAccessObject
                         Name = reader["NAME"].ToString(),
                         Length = new TimeSpan(Int32.Parse(reader["LENGTH"].ToString()) / 60, Int32.Parse(reader["LENGTH"].ToString()) % 60, 0),
                         MaximumPoints = Int32.Parse(reader["MAXPOINTS"].ToString()),
-                        QuestionsIds = questionsIds
+                        QuestionsIds = questionsIds,
+                        MultiCheck = reader["MULTICHECK"].ToString() == "1" ? true : false
                     });
                 }
                 connection.Close();

@@ -48,6 +48,7 @@ namespace Wojtasik.UserInterface.ViewModel
             }
         }
 
+
         private ObservableCollection<TestViewModel> _tests;
         public ObservableCollection<TestViewModel> Tests
         {
@@ -109,6 +110,21 @@ namespace Wojtasik.UserInterface.ViewModel
             }
         }
 
+        
+        private string _isMultiCheck;
+        public string IsMultiCheck
+        {
+            get
+            {
+                return _isMultiCheck;
+            }
+            set
+            {
+                _isMultiCheck = value;
+                RaisePropertyChanged("IsMultiCheck");
+            }
+        }
+
         private string _maxPoints;
         public string MaxPoints 
         {
@@ -159,12 +175,14 @@ namespace Wojtasik.UserInterface.ViewModel
                 List<int> questionsIds = GetQuestionsIds(GetSelectedTestId());
                 _length = (Tests[_selectedIndex].Length.Hours*60 + Tests[_selectedIndex].Length.Minutes).ToString();
                 _maxPoints = Tests[_selectedIndex].MaximumPoints.ToString();
+                _isMultiCheck = Tests[_selectedIndex].MultiCheck == true ? "true" : "false";
                 GetQuestions(questionsIds);
 
                 RaisePropertyChanged(() => Index);
                 RaisePropertyChanged(() => Questions);
                 RaisePropertyChanged(() => MaxPoints);
                 RaisePropertyChanged(() => Length);
+                RaisePropertyChanged(() => IsMultiCheck);
             }
         }        
 
@@ -237,8 +255,10 @@ namespace Wojtasik.UserInterface.ViewModel
             _newTestQuestionsIds = new List<int>();
             _testData = new List<string>();
             _dao = new Wojtasik.DataAccessObject.DAO();
-            _view = (ListCollectionView)CollectionViewSource.GetDefaultView(_tests);            
+            _view = (ListCollectionView)CollectionViewSource.GetDefaultView(_tests);
+            _isMultiCheck = "";
             GetAllTests();
+
             //GetAllQuestions();
             //_userName = _dao.GetCurrentUser().Name;
             //_isEditorVisible = _dao.GetCurrentUser().Type ? "Visible" : "Hidden";
@@ -264,6 +284,9 @@ namespace Wojtasik.UserInterface.ViewModel
 
             CreateNewTestCommand = new GalaSoft.MvvmLight.Command.RelayCommand(
                 () => CreateAndSaveTest());
+
+            CreateNewSingleTestCommand = new GalaSoft.MvvmLight.Command.RelayCommand(
+                () => CreateAndSaveSingleTest());
 
             EditTestCommand = new GalaSoft.MvvmLight.Command.RelayCommand(
                 () => EditTest(GetSelectedTestId()));
@@ -446,9 +469,21 @@ namespace Wojtasik.UserInterface.ViewModel
         private void CreateAndSaveTest()
         {
             Messenger.Default.Send<Helpers.OpenWindowMessage>(
-                   new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kNewTest, Argument = _tests.Count.ToString() });
+                   new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kNewTest, Argument = _tests.Count.ToString() }); //CHECK IF IT DOES'NT MAKE PROBLEMS
 
-            if(Result == "Accepted")
+            if (Result == "Accepted")
+                _dao.CreateNewTest(TestData, NewTestQuestionsIds);
+            GetAllTests();
+            //tu mozna dodac jeszcze działania po zamknieciu okna dodawania testu
+
+        }
+
+        private void CreateAndSaveSingleTest()
+        {
+            Messenger.Default.Send<Helpers.OpenWindowMessage>(
+                   new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kNewSingleTest, Argument = _tests.Count.ToString() });
+
+            if (Result == "Accepted")
                 _dao.CreateNewTest(TestData, NewTestQuestionsIds);
             GetAllTests();
             //tu mozna dodac jeszcze działania po zamknieciu okna dodawania testu
@@ -468,6 +503,7 @@ namespace Wojtasik.UserInterface.ViewModel
         public RelayCommand DeleteTestCommand { get; private set; }
         public RelayCommand OpenModalDialog { get; private set; }
         public RelayCommand OpenNonModalDialog { get; private set; }
+        public RelayCommand CreateNewSingleTestCommand { get; private set; }
 
         private MyRelayCommand _addTestCommand;
         public ICommand AddTestCommand
@@ -494,6 +530,7 @@ namespace Wojtasik.UserInterface.ViewModel
         }
 
         #endregion
+
 
     }
 }
