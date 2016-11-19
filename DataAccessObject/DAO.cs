@@ -276,7 +276,7 @@ namespace Wojtasik.DataAccessObject
                         Length = new TimeSpan(Int32.Parse(reader["LENGTH"].ToString()) / 60, Int32.Parse(reader["LENGTH"].ToString()) % 60, 0),
                         MaximumPoints = Int32.Parse(reader["MAXPOINTS"].ToString()),
                         QuestionsIds = questionsIds,
-                        MultiCheck = reader["MULTICHECK"].ToString() == "True" ? true : false
+                        MultiCheck = (reader["MULTICHECK"].ToString() == "True" || reader["MULTICHECK"].ToString() == "1" ) ? true : false
                     });
                 }
                 connection.Close();

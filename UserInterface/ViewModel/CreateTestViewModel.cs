@@ -474,7 +474,7 @@ namespace Wojtasik.UserInterface.ViewModel
             {
                 PrepareQuestionString();
                 string arg = ParseQuestionString(QuestionString);
-                if (IsMultiCheck == "true")
+                if (IsMultiCheck == "true" || IsMultiCheck == "True")
                     Messenger.Default.Send<Helpers.OpenWindowMessage>(
                         new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kEditQuestion, Argument = arg });
                 else
