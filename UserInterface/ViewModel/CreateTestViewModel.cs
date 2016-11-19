@@ -450,7 +450,7 @@ namespace Wojtasik.UserInterface.ViewModel
         
         private void CreateAndSaveQuestion()
         {
-            if (IsMultiCheck == "True")
+            if (IsMultiCheck == "True" || IsMultiCheck == "true")
             {
                 Messenger.Default.Send<Helpers.OpenWindowMessage>(
                     new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kNewQuestion, Argument = QuestionsCount.ToString() });

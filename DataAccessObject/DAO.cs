@@ -267,7 +267,7 @@ namespace Wojtasik.DataAccessObject
                 {
                     int id = Int32.Parse(reader["ID"].ToString());
                     List<int> questionsIds = SelectQuestionsIds(id).ToList();
-
+                    string multiCheck = reader["MULTICHECK"].ToString();
                     tests.Add(
                     new DataObjects.Test()
                     {
@@ -276,7 +276,7 @@ namespace Wojtasik.DataAccessObject
                         Length = new TimeSpan(Int32.Parse(reader["LENGTH"].ToString()) / 60, Int32.Parse(reader["LENGTH"].ToString()) % 60, 0),
                         MaximumPoints = Int32.Parse(reader["MAXPOINTS"].ToString()),
                         QuestionsIds = questionsIds,
-                        MultiCheck = reader["MULTICHECK"].ToString() == "1" ? true : false
+                        MultiCheck = reader["MULTICHECK"].ToString() == "True" ? true : false
                     });
                 }
                 connection.Close();
@@ -841,8 +841,12 @@ namespace Wojtasik.DataAccessObject
             foreach (var history in _histories)
                 Ids.Add(history.Id);
 
-            Ids.Sort();
-            minId = Ids.Max() + 1;
+            if (Ids.Count > 0)
+            {
+                Ids.Sort();
+                minId = Ids.Max() + 1;
+            }
+           
 
 
             return minId;
@@ -884,5 +888,22 @@ namespace Wojtasik.DataAccessObject
         #endregion             
     
 
+    
+
+        public bool? IsEditor(string UserName)
+        {
+            IUser user = _users.Find(x => x.Name == UserName);
+
+            if (user == null)
+                return null;
+            else
+            {
+                if (user.Type == true)
+                    return true;
+                else 
+                    return false;
+            }
+            
+        }
     }        
 }

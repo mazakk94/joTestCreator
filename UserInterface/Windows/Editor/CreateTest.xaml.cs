@@ -35,9 +35,9 @@ namespace UserInterface.Windows.Editor
                 {
                     #region new question
                     case WindowType.kNewQuestion:
-                        //var modalWindowVM = SimpleIoc.Default.GetInstance<CreateTestViewModel>();
+
                         var modalWindowVM = SimpleIoc.Default.GetInstance<CreateQuestionViewModel>();
-                        //modalWindowVM.MyText = message.Argument;
+
                         var modalWindow = new CreateQuestion()
                         {
                             DataContext = modalWindowVM
@@ -131,7 +131,7 @@ namespace UserInterface.Windows.Editor
                         {
                             EditSingleQuestionWindowVM.QuestionString.Add(item);
                         }
-                        //EditSingleQuestionWindowVM.QuestionString = unparsed; //questionString
+
 
                         var EditSingleQuestionWindow = new CreateSingleQuestion()
                         {

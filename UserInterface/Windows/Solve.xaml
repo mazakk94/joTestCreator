@@ -24,7 +24,7 @@
                 <RowDefinition Height="0.15*"></RowDefinition>
             </Grid.RowDefinitions>
 
-            <Label Content="{Binding User.Name}" 
+            <Label Visibility="Hidden" Content="{Binding User.Name}" 
                    Grid.Column="0" Grid.Row="0" />
             
             <Label VerticalAlignment="Center" Grid.ColumnSpan="2" 

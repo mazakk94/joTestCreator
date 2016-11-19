@@ -43,10 +43,6 @@ namespace Wojtasik.Interfaces
         int GetNextHistoryId();
         int GetNewQuestionId();
         bool InsertQuestion(IQuestion question);
-
-
-
-
-        
+        bool? IsEditor(string UserName);
     }
 }

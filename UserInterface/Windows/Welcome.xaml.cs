@@ -46,16 +46,7 @@ namespace UserInterface
               });
         
         }
-
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            var textBox = sender as TextBox;
-            this.Title = textBox.Text +
-            "[Length = " + textBox.Text.Length.ToString() + "]";
-        }
-
-
-
+        
         bool UserOrEditor()
         {
             return (this.RadioEditor.IsChecked ?? false) && (!this.RadioUser.IsChecked ?? false);

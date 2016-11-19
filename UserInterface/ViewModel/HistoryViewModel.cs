@@ -15,18 +15,7 @@ namespace Wojtasik.UserInterface.ViewModel
 
         private readonly IDataService _dataService;
         private IDAO _dao = new Wojtasik.DataAccessObject.DAO();
-
-        private string _userName;
-        public string UserName
-        {
-            get { return _userName; }
-            set
-            {
-                _userName = value;
-                RaisePropertyChanged("UserName");
-            }
-        }
-
+             
         private List<IHistory> _solvedTests;
         public List<IHistory> SolvedTests
         {
@@ -106,7 +95,40 @@ namespace Wojtasik.UserInterface.ViewModel
                 UpdateAnswersList();
             }
         }
-           
+
+        private string _userName;
+        public string UserName
+        {
+            get { return _userName; }
+            set
+            {
+                _userName = value;
+                RaisePropertyChanged("UserName");
+            }
+        }
+
+        private int _score;
+        public int Score
+        {
+            get { return _score; }
+            set
+            {
+                _score = value;
+                RaisePropertyChanged("Score");
+            }
+        }
+
+        private TimeSpan _duration;
+        public TimeSpan Duration
+        {
+            get { return _duration; }
+            set
+            {
+                _duration = value;
+                RaisePropertyChanged("Duration");
+            }
+        }
+
         #endregion
 
         public HistoryViewModel(IDataService dataService)
@@ -138,7 +160,7 @@ namespace Wojtasik.UserInterface.ViewModel
             SolvedTests.Clear();
             foreach (var history in _dao.GetAllHistories())
             {
-                if (history.User.Name == UserName)
+                if (history.User.Name == UserName || _dao.IsEditor(UserName) == true)
                 {
                     //gonna do a function from that
                     List<List<int>> checkedAnswers = _dao.SelectCheckedAnswers(history.Id);
@@ -185,6 +207,10 @@ namespace Wojtasik.UserInterface.ViewModel
                     }
                     if (changed)
                         Questions = new List<IQuestion>(questions);
+
+                    UserName = SolvedTests[TestIndex].User.Name;
+                    Score = SolvedTests[TestIndex].Score;
+                    Duration = SolvedTests[TestIndex].Duration;
                 }
         }
 

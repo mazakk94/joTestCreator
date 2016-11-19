@@ -23,10 +23,11 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="0.3*"></RowDefinition>
                 <RowDefinition ></RowDefinition>
+                <RowDefinition Height="0.3*"></RowDefinition>
                 <RowDefinition Height="0.15*"></RowDefinition>
             </Grid.RowDefinitions>
 
-            <Label Content="{Binding UserName}" 
+            <Label Visibility="Hidden" Content="{Binding UserName}" 
                    Grid.Column="0" Grid.Row="0" />
             
             <Label VerticalAlignment="Center"  HorizontalAlignment="Center" 
@@ -37,7 +38,7 @@
                 <Button Width="100" IsCancel="True" Content="Close"  />           
             </StackPanel>
 
-            <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="0">
+            <StackPanel Visibility="Hidden" Orientation="Vertical" Grid.Row="1" Grid.Column="0">
                 <Label Content="{Binding TestIndex}" />
                 <Label Content="{Binding QuestionIndex}" />
             </StackPanel>
@@ -85,7 +86,20 @@
                           VerticalAlignment="Center" IsChecked="{Binding CheckBoxes[4]}" />
             </StackPanel>
 
-
+            <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="1">
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="UserName: " />
+                    <Label Content="{Binding UserName}" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Score: " />
+                    <Label Content="{Binding Score}" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Duration: " />
+                    <Label Content="{Binding Duration}" />
+                </StackPanel>
+            </StackPanel>
 <!--
             <ListBox Grid.Row="1" Grid.Column="5"
                      ItemsSource="{Binding CheckBoxes}"  >
