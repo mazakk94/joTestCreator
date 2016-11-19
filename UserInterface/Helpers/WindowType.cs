@@ -14,6 +14,7 @@
         kHistory,
         kNewSingleTest,
         kNewSingleQuestion,
-        kEditSingleQuestion
+        kEditSingleQuestion,
+        kSolveSingleTest
     }
 }

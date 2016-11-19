@@ -33,6 +33,7 @@ namespace UserInterface
               {
                   switch (message.Type)
                   {
+                      #region solve test
                       case WindowType.kSolveTest:
 
                           var solveTestVM = SimpleIoc.Default.GetInstance<SolveTestViewModel>();
@@ -63,6 +64,40 @@ namespace UserInterface
                           }
                           
                           break;
+                      #endregion
+
+                      #region solve single test
+                      case WindowType.kSolveSingleTest:
+
+                          var solveSingleTestVM = SimpleIoc.Default.GetInstance<SolveTestViewModel>();
+                          var solveSingleTestWindow = new SolveSingleTest()
+                          {
+                              DataContext = solveSingleTestVM
+                          };
+                          parsedMessage = message.Argument.Split('+');
+                          solveSingleTestVM.ClearWindow();
+                          solveSingleTestVM.Test.Id = Int32.Parse(parsedMessage[0]);
+                          solveSingleTestVM.UserName = parsedMessage[1];
+                          solveSingleTestVM.RefreshDAO();
+                          solveSingleTestVM.LoadData();
+
+                          if (solveSingleTestVM.FillWindow())
+                          {
+                              var result = solveSingleTestWindow.ShowDialog();
+
+                              if (result.HasValue && result.Value)
+                                  result = true;
+                              else
+                                  solveSingleTestVM.Timer.Stop();
+                          }
+                          else
+                          {
+                              solveSingleTestVM.Timer.Stop();
+                              MessageBox.Show("This test does not have any question!");
+                          }
+
+                          break;
+                      #endregion
                   }
 
               });

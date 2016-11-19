@@ -131,6 +131,9 @@
     <Compile Include="Windows\Editor\CreateTest.xaml.cs">
       <DependentUpon>CreateTest.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\Solve\SolveSingleTest.xaml.cs">
+      <DependentUpon>SolveSingleTest.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\Solve\SubmitTest.xaml.cs">
       <DependentUpon>SubmitTest.xaml</DependentUpon>
     </Compile>
@@ -173,6 +176,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\Editor\CreateTest.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\Solve\SolveSingleTest.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

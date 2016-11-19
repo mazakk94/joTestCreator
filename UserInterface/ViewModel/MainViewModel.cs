@@ -362,8 +362,17 @@ namespace Wojtasik.UserInterface.ViewModel
         private void SolveTest()
         {
             if (Index >= 0)
-                Messenger.Default.Send<Helpers.OpenWindowMessage>(
-                   new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kSolveTest, Argument = GetSelectedTestId().ToString() + "+" + User.Name });
+            {
+                if(IsMultiCheck == "True" || IsMultiCheck == "true")
+                    Messenger.Default.Send<Helpers.OpenWindowMessage>(
+                      new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kSolveTest, 
+                          Argument = GetSelectedTestId().ToString() + "+" + User.Name });
+                else
+                    Messenger.Default.Send<Helpers.OpenWindowMessage>(
+                     new Helpers.OpenWindowMessage() { Type = Helpers.WindowType.kSolveSingleTest,
+                         Argument = GetSelectedTestId().ToString() + "+" + User.Name });
+            }
+               
         }
 
         private void DeleteTest(int testId)

@@ -10,11 +10,11 @@ none
 false
 CODE_ANALYSIS;DEBUG;TRACE
 C:\Users\Mazi\Documents\Visual Studio 2013\siszarpProjects\joTestCreator\UserInterface\App.xaml
-11191059013
+12-1398796483
 
-281374442014
+291472069437
 231133007432
-Windows\Editor\CreateSingleQuestion.xaml;Windows\Menu.xaml;Windows\History.xaml;Windows\Solve.xaml;Windows\Editor.xaml;Skins\MainSkin.xaml;Windows\Editor\CreateQuestion.xaml;Windows\Editor\CreateTest.xaml;Windows\Solve\SubmitTest.xaml;Windows\Solve\SolveTest.xaml;Windows\Welcome.xaml;
+Windows\Editor\CreateSingleQuestion.xaml;Windows\Menu.xaml;Windows\History.xaml;Windows\Solve.xaml;Windows\Editor.xaml;Skins\MainSkin.xaml;Windows\Editor\CreateQuestion.xaml;Windows\Editor\CreateTest.xaml;Windows\Solve\SolveSingleTest.xaml;Windows\Solve\SubmitTest.xaml;Windows\Solve\SolveTest.xaml;Windows\Welcome.xaml;
 
 False
 
